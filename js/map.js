@@ -53,7 +53,7 @@ function switchMapTiles() {
 
 function setUserLocation(lat, lng) {
   userLocation = { lat, lng };
-  suppressExplore = true;
+  suppressNextExplore();
   userMarker.setLatLng([lat, lng]);
   map.setView([lat, lng], 14);
   lastExploreCenter = { lat, lng };
@@ -138,15 +138,16 @@ function fitBounds(venues) {
 // Explore zone: auto-search on map move
 let exploreTimeout;
 let lastExploreCenter = null;
-let suppressExplore = false;
+let suppressExploreCount = 0;
+
+function suppressNextExplore() { suppressExploreCount++; }
 
 function enableExploreMode() {
   map.on('moveend', () => {
-    if (suppressExplore) { suppressExplore = false; return; }
+    if (suppressExploreCount > 0) { suppressExploreCount--; return; }
     clearTimeout(exploreTimeout);
     exploreTimeout = setTimeout(() => {
-      if (!userLocation) return;
-      if (suppressExplore) { suppressExplore = false; return; }
+      if (suppressExploreCount > 0 || !userLocation) return;
       const c = map.getCenter();
       const dist = lastExploreCenter ? haversineKm(
         { lat: lastExploreCenter.lat, lng: lastExploreCenter.lng },
