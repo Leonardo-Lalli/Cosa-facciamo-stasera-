@@ -369,6 +369,12 @@ function showVenueDetail(venue, routes) {
   const routeLabels = { walking: '🚶 A piedi', cycling: '🚲 In bici', driving: '🚗 In auto' };
   const routesHtml = Object.entries(r).filter(([,v]) => v).map(([mode,v]) => `<div class="detail-route">${routeLabels[mode]||mode}<br><span class="time">${v.duration} min</span> · ${v.distance} km</div>`).join('') || '<div style="font-size:13px;color:var(--text-secondary)">Calcolo percorso...</div>';
 
+  // Lazy description
+  if (!venue.description && venue.tags) {
+    venue.description = describeVenue(venue, venue.tags);
+  }
+  const desc = venue.description;
+
   const allEvents = window._events || [];
   const venueEvents = allEvents.filter(ev => {
     const vn = (ev.venue || '').toLowerCase(), nn = venue.name.toLowerCase();
@@ -393,7 +399,7 @@ function showVenueDetail(venue, routes) {
       <button class="detail-share-btn" onclick="navigator.clipboard.writeText(decodeURIComponent('${shareText}').split('%20').join(' ')+' '+window.location.href);this.textContent='✅ Copiato!';setTimeout(()=>this.textContent='📋 Copia',2000)">📋 Copia</button>
       <button class="detail-share-btn fav-detail-btn${isFav?' active':''}" id="fav-detail-btn">${isFav?'⭐':'☆'} Preferito</button>
     </div>
-    ${venue.description ? `<div style="margin-top:14px;padding:12px 14px;background:var(--bg-secondary);border-radius:12px;font-size:13px;line-height:1.6;color:var(--text);"><div style="font-weight:600;margin-bottom:4px;">📝 Il locale</div>${venue.description.description}</div>${(venue.description.pros.length||venue.description.cons.length) ? `<div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;">${venue.description.pros.length ? `<div style="flex:1;min-width:180px;padding:10px 14px;background:#e8f5e9;border-radius:12px;font-size:12px;"><div style="font-weight:600;color:#2e7d32;margin-bottom:4px;">✅ Pro</div>${venue.description.pros.map(p => `<div style="color:#388e3c;line-height:1.5;">• ${p}</div>`).join('')}</div>` : ''}${venue.description.cons.length ? `<div style="flex:1;min-width:180px;padding:10px 14px;background:#fce4e4;border-radius:12px;font-size:12px;"><div style="font-weight:600;color:#c62828;margin-bottom:4px;">❌ Contro</div>${venue.description.cons.map(c => `<div style="color:#d32f2f;line-height:1.5;">• ${c}</div>`).join('')}</div>` : ''}</div>` : ''}` : ''}
+    ${desc ? `<div style="margin-top:14px;padding:12px 14px;background:var(--bg-secondary);border-radius:12px;font-size:13px;line-height:1.6;color:var(--text);"><div style="font-weight:600;margin-bottom:4px;">📝 Il locale</div>${desc.description}</div>${(desc.pros.length||desc.cons.length) ? `<div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;">${desc.pros.length ? `<div style="flex:1;min-width:180px;padding:10px 14px;background:#e8f5e9;border-radius:12px;font-size:12px;"><div style="font-weight:600;color:#2e7d32;margin-bottom:4px;">✅ Pro</div>${desc.pros.map(p => `<div style="color:#388e3c;line-height:1.5;">• ${p}</div>`).join('')}</div>` : ''}${desc.cons.length ? `<div style="flex:1;min-width:180px;padding:10px 14px;background:#fce4e4;border-radius:12px;font-size:12px;"><div style="font-weight:600;color:#c62828;margin-bottom:4px;">❌ Contro</div>${desc.cons.map(c => `<div style="color:#d32f2f;line-height:1.5;">• ${c}</div>`).join('')}</div>` : ''}</div>` : ''}` : ''}
     ${venue.website ? `<a class="detail-website" href="${venue.website.startsWith('http') ? venue.website : 'https://' + venue.website}" target="_blank">🌐 Vai al sito del locale</a>` : `<a class="detail-website" href="${googleSearchUrl}" target="_blank">🔍 Cerca su Google</a>`}
     ${venue.phone ? `<div style="margin-top:10px;font-size:13px;color:var(--text-secondary)">📞 ${venue.phone}</div>` : ''}
     ${venue.openingHours ? `<div style="margin-top:4px;font-size:13px;color:var(--text-secondary)">🕐 ${venue.openingHours}</div>` : ''}

@@ -57,7 +57,7 @@ async function fetchVenues(center, radiusKm, selectedTypes) {
         console.warn('Batch failed, continuing...', e.message);
       }
       // Delay between batches to avoid rate limiting
-      await new Promise(r => setTimeout(r, 800));
+      await new Promise(r => setTimeout(r, 200));
     }
 
     const seen = new Set();
@@ -118,7 +118,6 @@ async function fetchVenuesBatch(center, radiusMeters, types) {
             openingHours: tags.opening_hours || null,
             tags: tags,
           };
-          venue.description = describeVenue(venue, tags);
           return venue;
         })
         .filter(v => v.lat != null && v.lng != null);

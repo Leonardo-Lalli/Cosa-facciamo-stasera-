@@ -172,10 +172,12 @@ async function performSearch() {
     if (typeof suppressNextExplore !== 'undefined') suppressNextExplore();
     fitBounds(venues);
 
-    // BACKGROUND: fetch real routes (non-blocking)
+    // BACKGROUND: fetch real routes
     updateRoutesInBackground(venues);
-    // BACKGROUND: load AI plan (non-blocking)
-    autoLoadPlan();
+    // BACKGROUND: load AI plan (deferred to avoid blocking)
+    setTimeout(() => autoLoadPlan(), 500);
+    // BACKGROUND: show trending  
+    setTimeout(() => showTrending(), 1000);
     searchInProgress = false;
 
   } catch (err) {
@@ -200,34 +202,7 @@ async function updateRoutesInBackground(venues) {
     const realRoutes = {};
     venues.forEach((v, i) => { realRoutes[v.id] = batchRoutes[i] || {}; });
     window._venueRoutes = realRoutes;
-    // Update the list in-place silently (don't full re-render)
-    updateVenueTimes(venues, realRoutes);
   } catch {}
-}
-
-function updateVenueTimes(venues, routes) {
-  // Update times in existing cards without full re-render
-  document.querySelectorAll('.venue-card').forEach(card => {
-    const nameEl = card.querySelector('.venue-name');
-    if (!nameEl) return;
-    const venue = venues.find(v => v.name === nameEl.textContent);
-    if (!venue) return;
-    const r = routes[venue.id];
-    if (!r) return;
-    const metaEl = card.querySelector('.venue-meta');
-    const tagsEl = card.querySelector('.venue-tags');
-    if (metaEl) {
-      const walkEl = metaEl.querySelector('span:nth-child(2)');
-      const driveEl = metaEl.querySelector('span:nth-child(3)');
-      if (walkEl) walkEl.textContent = `🚶 ${r.walking?.duration || '—'}min`;
-      if (driveEl) driveEl.textContent = `🚗 ${r.driving?.duration || '—'}min`;
-    }
-    if (tagsEl) {
-      const bestTime = Math.min(...Object.values(r).filter(Boolean).map(x => x.duration));
-      const timeEl = tagsEl.querySelector('.venue-tag');
-      if (timeEl && bestTime < Infinity) timeEl.textContent = `⏱ ${bestTime} min`;
-    }
-  });
 }
 
 function saveScrollPosition() {
