@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosa facciamo stasera?</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="app">
+    <!-- Sidebar -->
+    <aside id="sidebar">
+      <div class="sidebar-header">
+        <h1 class="logo">Cosa facciamo<br><span>stasera?</span></h1>
+      </div>
+
+      <!-- Location search -->
+      <div class="search-box">
+        <input type="text" id="location-input" placeholder="Dove ti trovi? (es. Milano, Roma...)">
+        <button id="locate-btn" title="Usa posizione attuale">📍</button>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters">
+        <div class="filter-group">
+          <label>Raggio (km)</label>
+          <div class="range-wrap">
+            <input type="range" id="radius-slider" min="1" max="50" value="10">
+            <span id="radius-value">10 km</span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label>Mezzo di trasporto</label>
+          <div class="transport-options">
+            <button class="transport-btn active" data-mode="walking" title="A piedi">🚶</button>
+            <button class="transport-btn" data-mode="cycling" title="In bici">🚲</button>
+            <button class="transport-btn" data-mode="driving" title="In auto">🚗</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label>Tempo massimo (minuti)</label>
+          <div class="range-wrap">
+            <input type="range" id="time-slider" min="5" max="120" value="60">
+            <span id="time-value">60 min</span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label>Tipo locale</label>
+          <div class="chip-container" id="type-filters">
+            <button class="chip active" data-type="nightclub">Discoteche</button>
+            <button class="chip active" data-type="bar">Bar / Pub</button>
+            <button class="chip active" data-type="cinema">Cinema</button>
+            <button class="chip active" data-type="theatre">Teatri</button>
+            <button class="chip active" data-type="restaurant">Ristoranti</button>
+            <button class="chip" data-type="live_music">Musica dal vivo</button>
+            <button class="chip" data-type="bowling">Bowling</button>
+          </div>
+        </div>
+      </div>
+
+      <button id="search-btn" class="btn-primary">🔍 Cerca locali</button>
+
+      <!-- Results count & sort -->
+      <div id="results-header" class="results-header hidden">
+        <span id="results-count">0 locali trovati</span>
+        <select id="sort-select">
+          <option value="distance">Più vicini</option>
+          <option value="time">Tempo minore</option>
+          <option value="name">Nome A-Z</option>
+        </select>
+      </div>
+
+      <!-- Venue list -->
+      <div id="venue-list" class="venue-list"></div>
+
+      <!-- Loading -->
+      <div id="loading" class="loading hidden">Cercando i locali migliori...</div>
+    </aside>
+
+    <!-- Map -->
+    <main id="map-container">
+      <div id="map"></div>
+    </main>
+
+    <!-- Venue detail panel (hidden by default) -->
+    <div id="venue-detail" class="venue-detail hidden">
+      <button id="close-detail" class="close-btn">✕</button>
+      <div id="detail-content"></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/routing.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

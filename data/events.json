@@ -1,0 +1,35 @@
+[
+  {
+    "name": "Saturday Night Fever",
+    "venue": "Discoteca Hollywood",
+    "city": "Milano",
+    "date": "2026-06-27",
+    "type": "nightclub",
+    "description": "Serata revival anni '70 con DJ set dal vivo",
+    "ticketUrl": "https://example.com/tickets/saturday-fever",
+    "lat": 45.4642,
+    "lng": 9.1900
+  },
+  {
+    "name": "Cinema sotto le stelle",
+    "venue": "Arena Estiva Roma",
+    "city": "Roma",
+    "date": "2026-06-28",
+    "type": "cinema",
+    "description": "Proiezione all'aperto di film cult",
+    "ticketUrl": "https://example.com/tickets/cinema-stelle",
+    "lat": 41.9028,
+    "lng": 12.4964
+  },
+  {
+    "name": "Tech House Night",
+    "venue": "Club 99",
+    "city": "Bologna",
+    "date": "2026-06-26",
+    "type": "nightclub",
+    "description": "Serata tech house con ospiti internazionali",
+    "ticketUrl": "https://example.com/tickets/tech-house",
+    "lat": 44.4949,
+    "lng": 11.3426
+  }
+]
