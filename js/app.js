@@ -441,24 +441,29 @@ window.addEventListener('DOMContentLoaded', () => {
   // Filters toggle
   const filtersToggle = document.getElementById('filters-toggle');
   const filtersWrap = document.getElementById('filters-wrap');
-  filtersToggle.addEventListener('click', () => {
-    if (window.innerWidth <= 768) {
-      filtersWrap.classList.toggle('mobile-visible');
-      filtersToggle.textContent = filtersWrap.classList.contains('mobile-visible') ? '⚙️ Chiudi filtri' : '⚙️ Filtri ▸';
-    } else {
-      filtersWrap.classList.toggle('collapsed');
-      filtersToggle.textContent = filtersWrap.classList.contains('collapsed') ? '⚙️ Filtri ▸' : '⚙️ Filtri ▾';
-    }
-  });
+  if (filtersToggle && filtersWrap) {
+    filtersToggle.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        filtersWrap.classList.toggle('mobile-visible');
+        filtersToggle.textContent = filtersWrap.classList.contains('mobile-visible') ? '⚙️ Chiudi filtri' : '⚙️ Filtri ▸';
+      } else {
+        filtersWrap.classList.toggle('collapsed');
+        filtersToggle.textContent = filtersWrap.classList.contains('collapsed') ? '⚙️ Filtri ▸' : '⚙️ Filtri ▾';
+      }
+    });
+  }
 
-  // Planner button: just toggle visibility
-  document.getElementById('planner-btn').addEventListener('click', () => {
-    const po = document.getElementById('planner-output');
-    if (!po) return;
-    const isHidden = po.style.display === 'none';
-    po.style.display = isHidden ? '' : 'none';
-    document.getElementById('planner-btn').textContent = isHidden ? 'Nascondi' : 'Mostra';
-  });
+  // Planner button
+  const plannerBtn = document.getElementById('planner-btn');
+  if (plannerBtn) {
+    plannerBtn.addEventListener('click', () => {
+      const po = document.getElementById('planner-output');
+      if (!po) return;
+      const isHidden = po.style.display === 'none';
+      po.style.display = isHidden ? '' : 'none';
+      plannerBtn.textContent = isHidden ? 'Nascondi' : 'Mostra';
+    });
+  }
 
   // Mobile drawer
   const drawer = document.getElementById('results-drawer');
