@@ -13,7 +13,7 @@ document.querySelectorAll('.transport-btn').forEach(btn => {
   });
 });
 
-// Type chips
+// Type chips with typewriter animation
 const VERB_MAP = {
   cinema: 'guardiamo', restaurant: 'mangiamo', nightclub: 'balliamo',
   bar: 'beviamo', pub: 'beviamo', theatre: 'vediamo',
@@ -22,39 +22,50 @@ const VERB_MAP = {
   events_venue: 'festeggiamo',
 };
 
-let typewriterLock = false;
+let typewriterTimer;
+let typewriterAbort;
 
 function animateVerb(newVerb) {
   const el = document.getElementById('verb');
-  if (!el) return;
-  if (typewriterLock) return;
-  typewriterLock = true;
+  if (!el || !document.body.contains(el)) return;
+
+  // Abort any running animation
+  if (typewriterAbort) { typewriterAbort(); typewriterAbort = null; }
+  if (typewriterTimer) { clearTimeout(typewriterTimer); typewriterTimer = null; }
 
   const current = el.textContent;
-  if (current === newVerb) { typewriterLock = false; return; }
+  if (current === newVerb) return;
 
   el.classList.add('typing');
-
   let i = current.length;
-  const erase = setInterval(() => {
+  let cancelled = false;
+  typewriterAbort = () => { cancelled = true; el.classList.remove('typing'); };
+
+  function erase() {
+    if (cancelled) return;
     if (i <= 0) {
-      clearInterval(erase);
+      el.textContent = '';
       let j = 0;
-      const write = setInterval(() => {
+      function write() {
+        if (cancelled) return;
         if (j <= newVerb.length) {
           el.textContent = newVerb.slice(0, j);
           j++;
+          typewriterTimer = setTimeout(write, 50);
         } else {
-          clearInterval(write);
           el.classList.remove('typing');
-          typewriterLock = false;
+          typewriterTimer = null;
+          typewriterAbort = null;
         }
-      }, 40);
+      }
+      write();
       return;
     }
-    el.textContent = current.slice(0, i - 1);
+    el.textContent = current.slice(0, i - 1) + '\u200B';
     i--;
-  }, 30);
+    typewriterTimer = setTimeout(erase, 35);
+  }
+  erase();
 }
 
 document.querySelectorAll('.chip').forEach(chip => {
@@ -63,19 +74,24 @@ document.querySelectorAll('.chip').forEach(chip => {
     selectedTypes = Array.from(document.querySelectorAll('.chip.active'))
       .map(c => c.dataset.type);
 
-    // Animate logo verb
-    if (selectedTypes.length === 1) {
-      animateVerb(VERB_MAP[selectedTypes[0]] || 'facciamo');
-    } else {
-      animateVerb('facciamo');
-    }
+    setTimeout(() => {
+      if (selectedTypes.length === 1) {
+        animateVerb(VERB_MAP[selectedTypes[0]] || 'facciamo');
+      } else {
+        animateVerb('facciamo');
+      }
+    }, 100);
   });
 });
 
-// Radius slider
+// Radius slider (debounced)
+let radiusDebounce;
 document.getElementById('radius-slider').addEventListener('input', (e) => {
   document.getElementById('radius-value').textContent = `${e.target.value} km`;
-  if (userLocation) drawRadiusCircle(userLocation, parseInt(e.target.value));
+  clearTimeout(radiusDebounce);
+  radiusDebounce = setTimeout(() => {
+    if (userLocation) drawRadiusCircle(userLocation, parseInt(e.target.value));
+  }, 100);
 });
 
 // Time slider
@@ -94,7 +110,6 @@ function getFilters() {
 
 function showLoading() {
   document.getElementById('loading').classList.remove('hidden');
-  document.getElementById('venue-list').innerHTML = '';
 }
 
 function hideLoading() {
@@ -111,9 +126,11 @@ function renderVenueList(venues, routes, onClick, events) {
   hideLoading();
   count.textContent = `${venues.length} locali trovati`;
   header.classList.remove('hidden');
-  list.innerHTML = '';
 
-  // Show events first
+  // Build new content in a fragment
+  const frag = document.createDocumentFragment();
+
+  // Events section
   if (events && events.length > 0) {
     const eventSection = document.createElement('div');
     eventSection.className = 'events-section';
@@ -127,7 +144,7 @@ function renderVenueList(venues, routes, onClick, events) {
         <div class="venue-info">
           <div class="venue-name">${ev.name}</div>
           <div class="venue-meta">
-            <span>📅 ${ev.date || 'Data da definirsi'}</span>
+            <span>📅 ${ev.date || 'TBA'}</span>
             <span>📍 ${ev.venue}${ev.city ? ', ' + ev.city : ''}</span>
           </div>
         </div>
@@ -141,8 +158,7 @@ function renderVenueList(venues, routes, onClick, events) {
       });
       eventSection.appendChild(card);
     });
-
-    list.appendChild(eventSection);
+    frag.appendChild(eventSection);
   }
 
   if (venues.length === 0 && (!events || events.length === 0)) {
@@ -170,23 +186,38 @@ function renderVenueList(venues, routes, onClick, events) {
           ${r ? `<span class="venue-tag">📏 ${Object.values(r).find(x => x)?.distance || '—'} km</span>` : ''}
         </div>
       </div>
-      ${venue.website ? `<button class="venue-go-btn" data-url="${venue.website}" title="Vai al sito">🌐 Sito</button>` : ''}
+      ${venue.website ? `<button class="venue-go-btn" data-url="${venue.website}" title="Vai al sito">🌐 Sito</button>` : `<button class="venue-go-btn gsearch-btn" data-name="${encodeURIComponent(venue.name)}" data-city="${encodeURIComponent(userLocation?.city || '')}" title="Cerca su Google">🔍 Cerca</button>`}
     `;
 
     card.addEventListener('click', (e) => {
       if (e.target.classList.contains('venue-go-btn')) {
         e.stopPropagation();
-        window.open(e.target.dataset.url, '_blank');
+        if (e.target.classList.contains('gsearch-btn')) {
+          window.open(`https://www.google.com/search?q=${e.target.dataset.name}+${e.target.dataset.city}`, '_blank');
+        } else {
+          window.open(e.target.dataset.url, '_blank');
+        }
         return;
       }
       onClick(venue);
-      // Highlight
       document.querySelectorAll('.venue-card.active').forEach(c => c.classList.remove('active'));
       card.classList.add('active');
     });
 
-    list.appendChild(card);
+    frag.appendChild(card);
   });
+
+  // Replace content
+  list.innerHTML = '';
+  list.appendChild(frag);
+
+  // Restore scroll if saved
+  if (list.dataset.scrollTop) {
+    requestAnimationFrame(() => {
+      list.scrollTop = parseInt(list.dataset.scrollTop);
+      delete list.dataset.scrollTop;
+    });
+  }
 }
 
 function showVenueDetail(venue, routes) {
@@ -230,6 +261,8 @@ function showVenueDetail(venue, routes) {
     </div>
   ` : '';
 
+  const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(venue.name)}+${encodeURIComponent(userLocation?.city || '')}`;
+
   content.innerHTML = `
     <h2 id="detail-name">${venue.icon} ${venue.name}${venue.rating ? `<span style="font-size:14px;color:#f5a623;"> ★${venue.rating}</span>` : ''}</h2>
     <div id="detail-address">📍 ${venue.address}</div>
@@ -255,7 +288,7 @@ function showVenueDetail(venue, routes) {
     </div>` : ''}
     ` : ''}
 
-    ${venue.website ? `<a class="detail-website" href="${venue.website.startsWith('http') ? venue.website : 'https://' + venue.website}" target="_blank">🌐 Vai al sito del locale</a>` : ''}
+    ${venue.website ? `<a class="detail-website" href="${venue.website.startsWith('http') ? venue.website : 'https://' + venue.website}" target="_blank">🌐 Vai al sito del locale</a>` : `<a class="detail-website" href="${googleSearchUrl}" target="_blank">🔍 Cerca su Google</a>`}
     ${venue.phone ? `<div style="margin-top:10px;font-size:13px;color:var(--text-secondary)">📞 ${venue.phone}</div>` : ''}
     ${venue.openingHours ? `<div style="margin-top:4px;font-size:13px;color:var(--text-secondary)">🕐 ${venue.openingHours}</div>` : ''}
     ${eventsHtml}

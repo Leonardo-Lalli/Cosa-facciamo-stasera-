@@ -17,9 +17,7 @@ async function loadEnrichedVenues(cityName) {
     if (!resp.ok) return [];
     const data = await resp.json();
     return data.venues || [];
-  } catch {
-    return [];
-  }
+  } catch { return []; }
 }
 
 async function loadEvents(cityName) {
@@ -31,9 +29,7 @@ async function loadEvents(cityName) {
     return events.filter(e =>
       (e.city || '').toLowerCase().includes(cn) || cn.includes((e.city || '').toLowerCase())
     );
-  } catch {
-    return [];
-  }
+  } catch { return []; }
 }
 
 function mergeVenues(osmVenues, enriched) {
@@ -45,21 +41,12 @@ function mergeVenues(osmVenues, enriched) {
     seen.add(key);
     return true;
   });
-  // Add OSM-compatible fields to enriched venues
   const unified = extra.map(v => ({
-    id: v.id,
-    lat: v.lat,
-    lng: v.lng,
-    name: v.name,
-    address: v.address || '',
-    type: v.type,
-    icon: getEnrichedIcon(v.type),
-    label: getEnrichedLabel(v.type),
-    website: v.website || null,
-    phone: null,
-    openingHours: null,
-    rating: v.rating || null,
-    source: 'google',
+    id: v.id, lat: v.lat, lng: v.lng, name: v.name,
+    address: v.address || '', type: v.type,
+    icon: getEnrichedIcon(v.type), label: getEnrichedLabel(v.type),
+    website: v.website || null, phone: null, openingHours: null,
+    rating: v.rating || null, source: 'google',
   }));
   return [...osmVenues, ...unified];
 }
@@ -86,13 +73,11 @@ function getEnrichedLabel(type) {
   return m[type] || type;
 }
 
+let debounceTimer;
+
 async function performSearch() {
   const filters = getFilters();
-
-  if (filters.types.length === 0) {
-    alert('Seleziona almeno un tipo di locale');
-    return;
-  }
+  if (filters.types.length === 0) { alert('Seleziona almeno un tipo di locale'); return; }
 
   const locationInput = document.getElementById('location-input').value.trim();
   if (!locationInput && !userLocation) {
@@ -105,7 +90,6 @@ async function performSearch() {
   hideVenueDetail();
 
   try {
-    // Geocode
     if (locationInput && (!userLocation || userLocation.display !== locationInput)) {
       const loc = await geocode(locationInput);
       userLocation = loc;
@@ -115,62 +99,49 @@ async function performSearch() {
       drawRadiusCircle(userLocation, filters.radius);
     }
 
-    // Fetch venues from Overpass
     const osmVenues = await fetchVenues(userLocation, filters.radius, filters.types);
 
-    // Try to load Google Places enriched data for this city
-    let enriched = [];
-    const enrichedPromise = loadEnrichedVenues(userLocation.city).then(v => { enriched = v; }).catch(() => {});
+    const [enriched, events] = await Promise.all([
+      loadEnrichedVenues(userLocation.city).catch(() => []),
+      loadEvents(userLocation.city).catch(() => []),
+    ]);
 
-    // Try to load events
-    let events = [];
-    const eventsPromise = loadEvents(userLocation.city).then(e => { events = e; }).catch(() => {});
-
-    await enrichedPromise;
-    await eventsPromise;
-
-    // Merge OSM + Google
     const venues = mergeVenues(osmVenues, enriched);
+    window._events = events.length > 0 ? events : window._events || [];
 
     if (venues.length === 0) {
       hideLoading();
-      renderVenueList([], {}, () => {});
+      renderVenueList([], {}, () => {}, []);
       clearVenueMarkers();
       return;
     }
 
-    // Show venues immediately with estimated distances
-    const estimatedRoutes = {};
+    // Show immediately with estimated distances
+    const estRoutes = {};
     venues.forEach(v => {
-      estimatedRoutes[v.id] = {
-        walking: estimate({ lat: userLocation.lat, lng: userLocation.lng }, { lat: v.lat, lng: v.lng }, 'walking'),
-      };
+      estRoutes[v.id] = { walking: estimate({ lat: userLocation.lat, lng: userLocation.lng }, { lat: v.lat, lng: v.lng }, 'walking') };
     });
 
-    sortAndRender(venues, estimatedRoutes);
-    // Show events in sidebar
-    if (events.length > 0) {
-      window._events = events;
-    }
+    saveScrollPosition();
+    sortAndRender(venues, estRoutes);
+    restoreScrollPosition();
 
     addVenueMarkers(venues, venue => {
-      const routes = window._venueRoutes || estimatedRoutes;
+      const routes = window._venueRoutes || estRoutes;
       showVenueDetail(venue, routes);
       highlightVenueCard(venue);
+      highlightMarker(venue.id);
     });
     fitBounds(venues);
 
-    // Then get real OSRM routes in batch
+    // Batch OSRM routes
     const dests = venues.map(v => ({ lat: v.lat, lng: v.lng }));
     const batchRoutes = await getRoutesForModes(
-      { lat: userLocation.lat, lng: userLocation.lng },
-      dests
+      { lat: userLocation.lat, lng: userLocation.lng }, dests
     );
 
     const realRoutes = {};
-    venues.forEach((v, i) => {
-      realRoutes[v.id] = batchRoutes[i] || {};
-    });
+    venues.forEach((v, i) => { realRoutes[v.id] = batchRoutes[i] || {}; });
     window._venueRoutes = realRoutes;
 
     // Filter by max time
@@ -182,7 +153,9 @@ async function performSearch() {
       return Math.min(...times) <= filters.maxTime;
     });
 
+    saveScrollPosition();
     sortAndRender(filtered, realRoutes);
+    restoreScrollPosition();
 
   } catch (err) {
     hideLoading();
@@ -191,42 +164,45 @@ async function performSearch() {
   }
 }
 
+function saveScrollPosition() {
+  const list = document.getElementById('venue-list');
+  if (list) list.dataset.scrollTop = list.scrollTop;
+}
+
+function restoreScrollPosition() {
+  const list = document.getElementById('venue-list');
+  if (list && list.dataset.scrollTop) {
+    requestAnimationFrame(() => { list.scrollTop = parseInt(list.dataset.scrollTop); });
+  }
+}
+
 function sortAndRender(venues, routes) {
   const sortBy = document.getElementById('sort-select').value;
   const sorted = [...venues];
 
-  if (sortBy === 'name') {
-    sorted.sort((a, b) => a.name.localeCompare(b.name, 'it'));
-  } else if (sortBy === 'time') {
-    sorted.sort((a, b) => getBestTime(routes[a.id]) - getBestTime(routes[b.id]));
-  } else {
-    sorted.sort((a, b) => getBestDist(routes[a.id]) - getBestDist(routes[b.id]));
-  }
+  if (sortBy === 'name') sorted.sort((a, b) => a.name.localeCompare(b.name, 'it'));
+  else if (sortBy === 'time') sorted.sort((a, b) => getBestTime(routes[a.id]) - getBestTime(routes[b.id]));
+  else sorted.sort((a, b) => getBestDist(routes[a.id]) - getBestDist(routes[b.id]));
 
   renderVenueList(sorted, routes, venue => {
     showVenueDetail(venue, routes);
     highlightVenueCard(venue);
+    highlightMarker(venue.id);
   }, window._events || []);
 
   if (!sortListenerAttached) {
     sortListenerAttached = true;
     document.getElementById('sort-select').addEventListener('change', () => {
+      saveScrollPosition();
       sortAndRender(window._lastVenues || sorted, window._venueRoutes || routes);
+      restoreScrollPosition();
     });
   }
-
   window._lastVenues = sorted;
 }
 
-function getBestTime(r) {
-  if (!r || Object.keys(r).length === 0) return Infinity;
-  return Math.min(...Object.values(r).filter(Boolean).map(x => x.duration));
-}
-
-function getBestDist(r) {
-  if (!r || Object.keys(r).length === 0) return Infinity;
-  return Math.min(...Object.values(r).filter(Boolean).map(x => parseFloat(x.distance)));
-}
+function getBestTime(r) { if (!r || Object.keys(r).length === 0) return Infinity; return Math.min(...Object.values(r).filter(Boolean).map(x => x.duration)); }
+function getBestDist(r) { if (!r || Object.keys(r).length === 0) return Infinity; return Math.min(...Object.values(r).filter(Boolean).map(x => parseFloat(x.distance))); }
 
 function highlightVenueCard(venue) {
   document.querySelectorAll('.venue-card.active').forEach(c => c.classList.remove('active'));
@@ -254,9 +230,7 @@ document.getElementById('locate-btn').addEventListener('click', async () => {
       if (city) document.getElementById('location-input').value = city;
     } catch {}
     performSearch();
-  } catch (err) {
-    alert(err.message);
-  }
+  } catch (err) { alert(err.message); }
 });
 
 document.getElementById('location-input').addEventListener('keydown', e => {

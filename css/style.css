@@ -109,10 +109,14 @@ body {
 }
 
 #verb.typing::after {
-  content: '|';
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--primary);
+  margin-left: 2px;
+  vertical-align: text-bottom;
   animation: blink 0.7s infinite;
-  color: var(--primary);
-  margin-left: 1px;
 }
 
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
