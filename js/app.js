@@ -153,34 +153,28 @@ async function performSearch() {
       estRoutes[v.id] = { walking: estimate({ lat: userLocation.lat, lng: userLocation.lng }, { lat: v.lat, lng: v.lng }, 'walking') };
     });
 
+    // RENDER ONCE — show estimated times immediately
     saveScrollPosition();
     sortAndRender(venues, estRoutes);
     restoreScrollPosition();
+    window._venueRoutes = estRoutes;
 
+    // UI: show results-mode sections
     document.getElementById('planner-section').classList.remove('hidden');
     document.getElementById('heatmap-toggle').classList.remove('hidden');
     document.getElementById('heatmap-fab').classList.remove('hidden');
 
-    // Auto-load AI plan
-    autoLoadPlan();
-
     addVenueMarkers(venues, venue => {
-      const routes = window._venueRoutes || estRoutes;
-      showVenueDetail(venue, routes);
+      showVenueDetail(venue, window._venueRoutes);
       highlightVenueCard(venue);
       highlightMarker(venue.id);
     });
     fitBounds(venues);
 
-    const dests = venues.map(v => ({ lat: v.lat, lng: v.lng }));
-    const batchRoutes = await getRoutesForModes({ lat: userLocation.lat, lng: userLocation.lng }, dests);
-    const realRoutes = {};
-    venues.forEach((v, i) => { realRoutes[v.id] = batchRoutes[i] || {}; });
-    window._venueRoutes = realRoutes;
-
-    saveScrollPosition();
-    sortAndRender(venues, realRoutes);
-    restoreScrollPosition();
+    // BACKGROUND: fetch real routes (non-blocking)
+    updateRoutesInBackground(venues);
+    // BACKGROUND: load AI plan (non-blocking)
+    autoLoadPlan();
     searchInProgress = false;
 
   } catch (err) {
@@ -196,6 +190,43 @@ async function performSearch() {
       alert('Errore: ' + msg);
     }
   }
+}
+
+async function updateRoutesInBackground(venues) {
+  try {
+    const dests = venues.map(v => ({ lat: v.lat, lng: v.lng }));
+    const batchRoutes = await getRoutesForModes({ lat: userLocation.lat, lng: userLocation.lng }, dests);
+    const realRoutes = {};
+    venues.forEach((v, i) => { realRoutes[v.id] = batchRoutes[i] || {}; });
+    window._venueRoutes = realRoutes;
+    // Update the list in-place silently (don't full re-render)
+    updateVenueTimes(venues, realRoutes);
+  } catch {}
+}
+
+function updateVenueTimes(venues, routes) {
+  // Update times in existing cards without full re-render
+  document.querySelectorAll('.venue-card').forEach(card => {
+    const nameEl = card.querySelector('.venue-name');
+    if (!nameEl) return;
+    const venue = venues.find(v => v.name === nameEl.textContent);
+    if (!venue) return;
+    const r = routes[venue.id];
+    if (!r) return;
+    const metaEl = card.querySelector('.venue-meta');
+    const tagsEl = card.querySelector('.venue-tags');
+    if (metaEl) {
+      const walkEl = metaEl.querySelector('span:nth-child(2)');
+      const driveEl = metaEl.querySelector('span:nth-child(3)');
+      if (walkEl) walkEl.textContent = `🚶 ${r.walking?.duration || '—'}min`;
+      if (driveEl) driveEl.textContent = `🚗 ${r.driving?.duration || '—'}min`;
+    }
+    if (tagsEl) {
+      const bestTime = Math.min(...Object.values(r).filter(Boolean).map(x => x.duration));
+      const timeEl = tagsEl.querySelector('.venue-tag');
+      if (timeEl && bestTime < Infinity) timeEl.textContent = `⏱ ${bestTime} min`;
+    }
+  });
 }
 
 function saveScrollPosition() {
@@ -305,45 +336,51 @@ async function autoLoadPlan() {
   const plannerBtn = document.getElementById('planner-btn');
   if (!plannerOutput || !plannerBtn) return;
 
-  plannerOutput.textContent = '🔄 Preparo il tuo piano...';
+  plannerOutput.textContent = '🔄 Preparo il piano...';
   plannerOutput.style.display = '';
-  plannerBtn.style.display = 'none';
+  plannerBtn.textContent = 'Attendi...';
+  plannerBtn.disabled = true;
 
-  const result = await loadCityPlan(userLocation?.city);
-  let plans = null;
+  try {
+    const result = await loadCityPlan(userLocation?.city);
+    let plans = null;
 
-  if (result?.plans && Object.keys(result.plans).length > 0) {
-    plans = result.plans;
-  } else {
-    const smart = buildSmartPlan(window._lastVenues || [], userLocation?.city);
-    if (smart?.plans) plans = smart.plans;
-  }
+    if (result?.plans && Object.keys(result.plans).length > 0) {
+      plans = result.plans;
+    } else {
+      const smart = buildSmartPlan(window._lastVenues || [], userLocation?.city);
+      if (smart?.plans) plans = smart.plans;
+    }
 
-  if (plans) {
-    const keys = Object.keys(plans);
-    const types = getFilters().types;
-    let bestKey = keys[0];
-    if (types.every(t => ['nightclub','bar','pub','live_music'].includes(t))) bestKey = 'party';
-    else if (types.every(t => ['cinema','theatre','live_music','events_venue'].includes(t))) bestKey = 'culture';
-    else if (types.every(t => ['restaurant','bar','pub'].includes(t))) bestKey = 'foodie';
-    if (!plans[bestKey]) bestKey = keys[0];
+    if (plans) {
+      const keys = Object.keys(plans);
+      const types = getFilters().types;
+      let bestKey = keys[0];
+      if (types.every(t => ['nightclub','bar','pub','live_music'].includes(t))) bestKey = 'party';
+      else if (types.every(t => ['cinema','theatre','live_music','events_venue'].includes(t))) bestKey = 'culture';
+      else if (types.every(t => ['restaurant','bar','pub'].includes(t))) bestKey = 'foodie';
+      if (!plans[bestKey]) bestKey = keys[0];
 
-    const tabsHtml = keys.map(k => {
-      const p = plans[k];
-      return `<button class="plan-tab${k === bestKey ? ' active' : ''}" data-tab="${k}">${p.emoji} ${p.label}</button>`;
-    }).join('');
-    plannerOutput.innerHTML = `<div class="plan-tabs">${tabsHtml}</div><div class="plan-content">${plans[bestKey].text}</div>`;
+      const tabsHtml = keys.map(k => `<button class="plan-tab${k === bestKey ? ' active' : ''}" data-tab="${k}">${plans[k].emoji} ${plans[k].label}</button>`).join('');
+      plannerOutput.innerHTML = `<div class="plan-tabs">${tabsHtml}</div><div class="plan-content">${plans[bestKey].text}</div>`;
 
-    plannerOutput.querySelectorAll('.plan-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        plannerOutput.querySelectorAll('.plan-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        plannerOutput.querySelector('.plan-content').textContent = plans[tab.dataset.tab].text;
+      plannerOutput.querySelectorAll('.plan-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          plannerOutput.querySelectorAll('.plan-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          plannerOutput.querySelector('.plan-content').textContent = plans[tab.dataset.tab].text;
+        });
       });
-    });
-  } else {
-    plannerOutput.innerHTML = '<div style="padding:6px;text-align:center;font-size:11px;color:var(--text-secondary)">Cerca per vedere il piano serata</div>';
+      plannerBtn.textContent = 'Nascondi';
+    } else {
+      plannerOutput.textContent = '😅 Nessun piano per questa zona. Prova a cercare in una grande città.';
+      plannerBtn.textContent = 'OK';
+    }
+  } catch {
+    plannerOutput.textContent = '😅 Piano non disponibile.';
+    plannerBtn.textContent = 'OK';
   }
+  plannerBtn.disabled = false;
 }
 
 // Event listeners

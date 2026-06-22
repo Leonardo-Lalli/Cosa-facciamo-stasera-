@@ -69,10 +69,12 @@ async function getRoutesForModes(origin, destinations) {
   const batches = modes.map(mode =>
     getRoutesBatch(origin, destinations, mode)
       .then(results => { routes[mode] = results; })
-      .catch(() => { routes[mode] = destinations.map(d => estimate(origin, d, mode)); })
   );
-
   await Promise.allSettled(batches);
+  // Fill missing with estimates
+  modes.forEach(mode => {
+    if (!routes[mode]) routes[mode] = destinations.map(d => estimate(origin, d, mode));
+  });
 
   const mapped = {};
   destinations.forEach((_, i) => {

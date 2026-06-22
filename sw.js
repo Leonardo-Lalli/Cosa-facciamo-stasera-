@@ -1,4 +1,4 @@
-const CACHE = 'stasera-v2';
+const CACHE = 'stasera-v3';
 const ASSETS = [
   '/Cosa-facciamo-stasera-/',
   '/Cosa-facciamo-stasera-/index.html',
@@ -14,7 +14,19 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
+  e.waitUntil(
+    caches.open(CACHE).then(cache => cache.addAll(ASSETS))
+  );
+  // Force new SW to activate immediately
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys => Promise.all(
+      keys.filter(k => k !== CACHE).map(k => caches.delete(k))
+    ))
+  );
 });
 
 self.addEventListener('fetch', e => {

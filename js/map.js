@@ -90,7 +90,7 @@ function addVenueMarkers(venues, onClick) {
     });
 
     const marker = L.marker([venue.lat, venue.lng], { icon }).addTo(map);
-    marker.bindPopup(`<b>${venue.name}</b><br>${venue.address}`);
+    marker.bindPopup(`<b>${sanitize(venue.name)}</b><br>${sanitize(venue.address)}`);
     marker.on('click', () => onClick(venue));
 
     venueMarkers.push(marker);
@@ -135,15 +135,23 @@ function fitBounds(venues) {
 
 // Explore zone: auto-search on map move
 let exploreTimeout;
+let lastExploreCenter = null;
 function enableExploreMode() {
   map.on('moveend', () => {
     clearTimeout(exploreTimeout);
     exploreTimeout = setTimeout(() => {
       if (!userLocation) return;
       const c = map.getCenter();
+      // Only trigger if moved more than 500m from last search
+      const dist = lastExploreCenter ? haversineKm(
+        { lat: lastExploreCenter.lat, lng: lastExploreCenter.lng },
+        { lat: c.lat, lng: c.lng }
+      ) : 999;
+      if (dist < 0.5) return;
+      lastExploreCenter = { lat: c.lat, lng: c.lng };
       userLocation = { lat: c.lat, lng: c.lng, city: userLocation.city || '', display: userLocation.display || '' };
       document.getElementById('location-input').value = `${c.lat.toFixed(4)}, ${c.lng.toFixed(4)}`;
-      if (typeof performSearch === 'function' && !searchInProgress) performSearch();
+      if (typeof performSearch === 'function' && !(typeof searchInProgress !== 'undefined' && searchInProgress)) performSearch();
     }, 800);
   });
 }

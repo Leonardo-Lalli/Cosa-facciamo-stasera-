@@ -71,7 +71,8 @@ function describeVenue(venue, tags) {
     if (closingTime && closingTime >= 26) {
       pros.push('Aperto fino a tarda notte');
     } else if (closingTime && closingTime < 22) {
-      cons.push(`Chiude presto (verso le ${closingTime}:00)`);
+      const displayHour = closingTime >= 24 ? closingTime - 24 : closingTime;
+      cons.push(`Chiude presto (verso le ${displayHour}:00)`);
     }
   } else {
     cons.push('Orari di apertura non disponibili');
@@ -148,8 +149,10 @@ function buildDescription(name, type, label, t) {
     `${name} ti aspetta${street ? ' in ' + street : ''}${city ? ', ' + city : ''}. Questo ${localeLabel}${adjectives.length ? ' ' + adjectives.join(' e ') : ''} è la scelta giusta per ${idealFor(type)}.`,
   ];
 
-  return templates[Math.floor(Math.random() * templates.length)];
+  return templates[Math.abs(hashCode(name)) % templates.length];
 }
+
+function hashCode(s) { let h=0; for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;} return h; }
 
 function idealFor(type) {
   const map = {
