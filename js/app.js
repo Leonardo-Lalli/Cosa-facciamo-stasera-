@@ -170,7 +170,7 @@ async function performSearch() {
       highlightVenueCard(venue);
       highlightMarker(venue.id);
     });
-    if (typeof suppressNextExplore !== 'undefined') suppressNextExplore();
+    if (typeof blockExplore !== 'undefined') blockExplore(5000);
     fitBounds(venues);
 
     // BACKGROUND: fetch real routes

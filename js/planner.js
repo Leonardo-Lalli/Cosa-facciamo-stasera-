@@ -17,6 +17,7 @@ async function loadCityPlan(cityName) {
 
 function buildSmartPlan(venues, city) {
   if (!venues || venues.length === 0) return null;
+  const cityName = city || 'zona';
 
   const bars = venues.filter(v => ['bar', 'pub'].includes(v.type));
   const rests = venues.filter(v => v.type === 'restaurant');
@@ -38,7 +39,7 @@ function buildSmartPlan(venues, city) {
   if (topBar || topClub || topRest) {
     plans.party = {
       emoji: '🪩', label: 'Party',
-      text: `🎉 Serata a ${city}:\n\n` +
+      text: `🎉 Serata a ${cityName}:\n\n` +
         (topBar ? `🍺 Aperitivo da ${topBar.name}\n` : '') +
         (topRest ? `🍽️ Cena da ${topRest.name}\n` : '') +
         (topClub ? `🪩 Serata al ${topClub.name}\n` : '') +
@@ -49,7 +50,7 @@ function buildSmartPlan(venues, city) {
   if (topCulture || topBar) {
     plans.culture = {
       emoji: '🎭', label: 'Cultura',
-      text: `🎭 Serata culturale a ${city}:\n\n` +
+      text: `🎭 Serata culturale a ${cityName}:\n\n` +
         (topCulture ? `🎬 ${topCulture.name}\n` : '') +
         (topBar ? `🍸 Drink post-spettacolo da ${topBar.name}\n` : '') +
         '\nBuona serata! ✨',
@@ -59,7 +60,7 @@ function buildSmartPlan(venues, city) {
   if (topRest || topBar) {
     plans.foodie = {
       emoji: '🍝', label: 'Food & Drink',
-      text: `🍷 Percorso gastronomico a ${city}:\n\n` +
+      text: `🍷 Percorso gastronomico a ${cityName}:\n\n` +
         (topBar ? `🍺 Aperitivo da ${topBar.name}\n` : '') +
         (topRest ? `🍽️ Cena da ${topRest.name}\n` : '') +
         (topBar && venues.filter(v => ['bar', 'pub'].includes(v.type)).length > 1

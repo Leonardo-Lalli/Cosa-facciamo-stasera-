@@ -53,7 +53,7 @@ function switchMapTiles() {
 
 function setUserLocation(lat, lng) {
   userLocation = { lat, lng };
-  suppressNextExplore();
+  exploreBlockedUntil = Date.now() + 3000;
   userMarker.setLatLng([lat, lng]);
   map.setView([lat, lng], 14);
   lastExploreCenter = { lat, lng };
@@ -138,16 +138,16 @@ function fitBounds(venues) {
 // Explore zone: auto-search on map move
 let exploreTimeout;
 let lastExploreCenter = null;
-let suppressExploreCount = 0;
+let exploreBlockedUntil = 0;
 
-function suppressNextExplore() { suppressExploreCount++; }
+function blockExplore(ms) { exploreBlockedUntil = Date.now() + (ms || 3000); }
 
 function enableExploreMode() {
   map.on('moveend', () => {
-    if (suppressExploreCount > 0) { suppressExploreCount--; return; }
+    if (Date.now() < exploreBlockedUntil) return;
     clearTimeout(exploreTimeout);
     exploreTimeout = setTimeout(() => {
-      if (suppressExploreCount > 0 || !userLocation) return;
+      if (Date.now() < exploreBlockedUntil || !userLocation) return;
       const c = map.getCenter();
       const dist = lastExploreCenter ? haversineKm(
         { lat: lastExploreCenter.lat, lng: lastExploreCenter.lng },
@@ -156,8 +156,9 @@ function enableExploreMode() {
       if (dist < 0.5) return;
       lastExploreCenter = { lat: c.lat, lng: c.lng };
       userLocation = { lat: c.lat, lng: c.lng, city: userLocation.city || '', display: userLocation.display || '' };
+      if (typeof searchInProgress !== 'undefined' && searchInProgress) return;
       document.getElementById('location-input').value = `${c.lat.toFixed(4)}, ${c.lng.toFixed(4)}`;
-      if (typeof performSearch === 'function' && !(typeof searchInProgress !== 'undefined' && searchInProgress)) performSearch();
+      if (typeof performSearch === 'function') performSearch();
     }, 800);
   });
 }
