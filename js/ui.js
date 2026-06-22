@@ -236,9 +236,32 @@ function trackClick(venue) {
   try {
     const clicks = JSON.parse(localStorage.getItem('stasera_clicks') || '{}');
     clicks[venue.id] = (clicks[venue.id] || 0) + 1;
-    // Keep only last 100
     const sorted = Object.entries(clicks).sort((a, b) => b[1] - a[1]).slice(0, 100);
     localStorage.setItem('stasera_clicks', JSON.stringify(Object.fromEntries(sorted)));
+    const total = Object.values(clicks).reduce((a, b) => a + b, 0);
+    if (total === 1) showAchievement('🎉 Prima scoperta!');
+    if (total === 5) showAchievement('🔍 Esploratore: 5 locali visti');
+    if (total === 10) showAchievement('🏆 Cacciatore: 10 locali!');
+  } catch {}
+}
+
+function showAchievement(msg) {
+  const existing = document.querySelector('.achievement-toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.className = 'achievement-toast';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+function trackCity(city) {
+  if (!city) return;
+  try {
+    const cities = JSON.parse(localStorage.getItem('stasera_cities') || '{}');
+    cities[city] = (cities[city] || 0) + 1;
+    const sorted = Object.entries(cities).sort((a, b) => b[1] - a[1]).slice(0, 20);
+    localStorage.setItem('stasera_cities', JSON.stringify(Object.fromEntries(sorted)));
   } catch {}
 }
 

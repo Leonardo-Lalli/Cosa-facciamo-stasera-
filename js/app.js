@@ -114,6 +114,7 @@ async function performSearch() {
     const venues = mergeVenues(osmVenues, enriched);
     window._allVenues = venues;
     window._events = events;
+    if (typeof trackCity === 'function') trackCity(userLocation.city);
 
     if (!venues.length) {
       hideEl('loading');
