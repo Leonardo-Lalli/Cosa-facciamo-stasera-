@@ -250,6 +250,7 @@ function showVenueDetail(venue, routes) {
       <h3>🎟️ Prossime serate</h3>
       ${venueEvents.map(ev => `
         <div class="detail-event-item">
+          ${ev.image ? `<img src="${ev.image}" class="detail-event-img" alt="${ev.name}" loading="lazy">` : ''}
           <div class="detail-event-info">
             <div class="detail-event-name">${ev.name}</div>
             <div class="detail-event-meta">📅 ${ev.date || 'TBA'}${ev.time ? ' · 🕐 ' + ev.time : ''}</div>
@@ -262,11 +263,18 @@ function showVenueDetail(venue, routes) {
   ` : '';
 
   const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(venue.name)}+${encodeURIComponent(userLocation?.city || '')}`;
+  const shareText = encodeURIComponent(`Stasera vado al ${venue.name} (${venue.label}) — ${venue.address}\nScoperto con Cosa facciamo stasera?\n`);
+  const shareUrl = encodeURIComponent(window.location.href);
 
   content.innerHTML = `
     <h2 id="detail-name">${venue.icon} ${venue.name}${venue.rating ? `<span style="font-size:14px;color:#f5a623;"> ★${venue.rating}</span>` : ''}</h2>
     <div id="detail-address">📍 ${venue.address}</div>
     <div class="detail-routes">${routesHtml}</div>
+    <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+      <a href="https://wa.me/?text=${shareText}%20${shareUrl}" target="_blank" class="detail-share-btn" title="Condividi su WhatsApp">📱 WhatsApp</a>
+      <a href="https://t.me/share/url?url=${shareUrl}&text=${shareText}" target="_blank" class="detail-share-btn" title="Condividi su Telegram">✈️ Telegram</a>
+      <button class="detail-share-btn" onclick="navigator.clipboard.writeText('${venue.name} — ' + decodeURIComponent('${shareText}').split('%20').join(' ') + ' ' + window.location.href);this.textContent='✅ Copiato!';setTimeout(()=>this.textContent='📋 Copia',2000)" title="Copia link">📋 Copia</button>
+    </div>
 
     ${venue.description ? `
     <div style="margin-top:14px;padding:12px 14px;background:var(--bg-secondary);border-radius:12px;font-size:13px;line-height:1.6;color:var(--text);">

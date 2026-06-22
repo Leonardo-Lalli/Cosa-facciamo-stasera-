@@ -546,6 +546,113 @@ body {
 }
 .detail-event-btn:hover { background: var(--primary-dark); }
 
+.detail-share-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-secondary);
+  color: var(--text);
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.detail-share-btn:hover { background: var(--border); }
+
+.detail-event-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* ===== AI Planner ===== */
+.planner-section {
+  margin: 0 16px 8px;
+  border: 1px solid #c4b5fd;
+  border-radius: var(--radius);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.planner-section.hidden { display: none; }
+
+.planner-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+  font-size: 13px;
+  font-weight: 600;
+  color: #5b21b6;
+}
+
+.planner-generate-btn {
+  margin-left: auto;
+  padding: 4px 12px;
+  border: none;
+  border-radius: 12px;
+  background: #7c3aed;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.planner-generate-btn:hover { background: #6d28d9; }
+
+.planner-key-btn {
+  padding: 2px 6px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.planner-output {
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  max-height: 200px;
+  overflow-y: auto;
+  white-space: pre-line;
+}
+
+.planner-key-input {
+  padding: 8px 12px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  background: var(--bg-secondary);
+}
+.planner-key-input.hidden { display: none; }
+
+.planner-key-input input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.planner-key-input button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.planner-key-input small { font-size: 11px; width: 100%; }
+.planner-key-input a { color: var(--primary); }
+
 /* ===== Loading ===== */
 .loading {
   display: flex;

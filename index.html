@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cosa facciamo stasera?</title>
+  <meta name="description" content="Scopri locali, eventi e serate vicino a te">
+  <meta name="theme-color" content="#1a73e8">
+  <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,20 +14,17 @@
 </head>
 <body>
   <div id="app">
-    <!-- Sidebar -->
     <aside id="sidebar">
       <div class="sidebar-header">
         <h1 class="logo">Cosa <span id="verb">facciamo</span><br><span class="logo-highlight">stasera?</span></h1>
         <button id="theme-toggle" title="Dark mode">🌙</button>
       </div>
 
-      <!-- Location search -->
       <div class="search-box">
         <input type="text" id="location-input" placeholder="Dove ti trovi? (es. Milano, Roma...)">
         <button id="locate-btn" title="Usa posizione attuale">📍</button>
       </div>
 
-      <!-- Filters -->
       <div class="filters">
         <div class="filter-group">
           <label>Raggio (km)</label>
@@ -73,7 +73,21 @@
 
       <button id="search-btn" class="btn-primary">🔍 Cerca locali</button>
 
-      <!-- Results count & sort -->
+      <!-- AI Planner -->
+      <div id="planner-section" class="planner-section hidden">
+        <div class="planner-header">
+          <span>🤖 Programma per stasera</span>
+          <button id="planner-btn" class="planner-generate-btn">Genera</button>
+          <button id="planner-key-btn" class="planner-key-btn" title="Inserisci chiave Gemini API">🔑</button>
+        </div>
+        <div id="planner-output" class="planner-output"></div>
+        <div id="planner-key-input" class="planner-key-input hidden">
+          <input type="text" id="gemini-key-input" placeholder="Incolla qui la chiave Gemini API...">
+          <button id="gemini-key-save">Salva</button>
+          <small><a href="https://aistudio.google.com/apikey" target="_blank">Ottieni chiave gratis (no carta)</a></small>
+        </div>
+      </div>
+
       <div id="results-header" class="results-header hidden">
         <span id="results-count">0 locali trovati</span>
         <select id="sort-select">
@@ -83,19 +97,14 @@
         </select>
       </div>
 
-      <!-- Venue list -->
       <div id="venue-list" class="venue-list"></div>
-
-      <!-- Loading -->
       <div id="loading" class="loading hidden">Cercando i locali migliori...</div>
     </aside>
 
-    <!-- Map -->
     <main id="map-container">
       <div id="map"></div>
     </main>
 
-    <!-- Venue detail panel (hidden by default) -->
     <div id="venue-detail" class="venue-detail hidden">
       <button id="close-detail" class="close-btn">✕</button>
       <div id="detail-content"></div>
@@ -106,6 +115,7 @@
   <script src="js/api.js"></script>
   <script src="js/routing.js"></script>
   <script src="js/describer.js"></script>
+  <script src="js/planner.js"></script>
   <script src="js/map.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/app.js"></script>
