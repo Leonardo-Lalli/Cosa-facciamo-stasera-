@@ -132,3 +132,18 @@ function fitBounds(venues) {
   if (userLocation) bounds.extend([userLocation.lat, userLocation.lng]);
   map.fitBounds(bounds, { padding: [40, 40], maxZoom: 16 });
 }
+
+// Explore zone: auto-search on map move
+let exploreTimeout;
+function enableExploreMode() {
+  map.on('moveend', () => {
+    clearTimeout(exploreTimeout);
+    exploreTimeout = setTimeout(() => {
+      if (!userLocation) return;
+      const c = map.getCenter();
+      userLocation = { lat: c.lat, lng: c.lng, city: userLocation.city, display: userLocation.display };
+      document.getElementById('location-input').value = `${c.lat.toFixed(4)}, ${c.lng.toFixed(4)}`;
+      if (typeof performSearch === 'function') performSearch();
+    }, 800);
+  });
+}

@@ -129,6 +129,20 @@ async function performSearch() {
     document.getElementById('filters-toggle').textContent = '⚙️ Filtri ▸';
     document.getElementById('filters-wrap').classList.add('collapsed');
 
+    // Show trending section
+    showTrending();
+
+    // New events badge
+    const newEvents = checkNewEvents(userLocation?.city, events);
+    if (newEvents.length > 0) {
+      const badge = document.createElement('span');
+      badge.className = 'new-events-badge';
+      badge.textContent = `🆕 ${newEvents.length} nuovi eventi`;
+      badge.style.cssText = 'font-size:11px;background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:10px;margin-left:8px;';
+      document.getElementById('results-count').appendChild(badge);
+      markEventsSeen(newEvents);
+    }
+
     const estRoutes = {};
     venues.forEach(v => {
       estRoutes[v.id] = { walking: estimate({ lat: userLocation.lat, lng: userLocation.lng }, { lat: v.lat, lng: v.lng }, 'walking') };
@@ -212,7 +226,48 @@ function highlightVenueCard(venue) {
   });
 }
 
-// ===== Random Picker =====
+// ===== Trending =====
+function showTrending() {
+  const trending = getTrending();
+  if (trending.length === 0) return;
+  const venues = window._allVenues || [];
+  const items = trending
+    .map(([id, count]) => venues.find(v => v.id == id))
+    .filter(Boolean)
+    .slice(0, 3);
+
+  if (items.length === 0) return;
+
+  let section = document.getElementById('trending-section');
+  if (!section) {
+    section = document.createElement('div');
+    section.id = 'trending-section';
+    section.className = 'trending-section';
+    const resultsHeader = document.getElementById('results-header');
+    resultsHeader.parentNode.insertBefore(section, resultsHeader.nextSibling);
+  }
+
+  section.innerHTML = `
+    <div class="trending-header">🔥 I più cliccati</div>
+    ${items.map(v => `
+      <div class="trending-item" style="cursor:pointer" data-id="${v.id}">
+        <span>${v.icon}</span> <span>${v.name}</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">${v.label}</span>
+      </div>
+    `).join('')}
+  `;
+
+  section.querySelectorAll('.trending-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const v = venues.find(v => v.id == el.dataset.id);
+      if (v) {
+        showVenueDetail(v, window._venueRoutes || {});
+        highlightVenueCard(v);
+        highlightMarker(v.id);
+      }
+    });
+  });
+}
 function pickRandom() {
   const venues = window._allVenues;
   if (!venues || venues.length === 0) { alert('Prima cerca dei locali!'); return; }
@@ -346,6 +401,7 @@ function toggleHeatmap() {
 window.addEventListener('DOMContentLoaded', () => {
   initTheme();
   initMap();
+  enableExploreMode();
   if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').catch(() => {}); }
 
   // Filters toggle

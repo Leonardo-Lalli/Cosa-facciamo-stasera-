@@ -171,7 +171,74 @@ function isNextWeekend() {
   return false;
 }
 
-// Sliders
+// ===== Smart Tags =====
+function getSmartTags(venue) {
+  const tags = [];
+  const t = venue.tags || {};
+  const d = venue.description;
+  const r = venue.rating || 0;
+
+  if (r >= 4.5) tags.push({ e: '⭐', l: 'Top' });
+  else if (r >= 4) tags.push({ e: '👍', l: 'Apprezzato' });
+
+  if ((t.capacity && parseInt(t.capacity) > 50) || t.brewery === 'yes') tags.push({ e: '👥', l: 'Gruppi' });
+
+  if (r >= 4.5 && ['restaurant', 'theatre'].includes(venue.type)) tags.push({ e: '🕯️', l: 'Romantico' });
+
+  if (t['payment:cash'] === 'only' || (!t['payment:cards'] && !t['payment:credit_cards'])) tags.push({ e: '💶', l: 'Contanti' });
+
+  if (t.outdoor_seating === 'yes' || t.outdoor_seating === 'terrace') tags.push({ e: '🌿', l: 'Terrazza' });
+
+  if (t.wifi === 'yes' || t['internet_access'] === 'wlan') tags.push({ e: '📶', l: 'WiFi' });
+
+  if (t.smoking === 'no') tags.push({ e: '🚭', l: 'No fumo' });
+
+  if (t.live_music === 'yes') tags.push({ e: '🎸', l: 'Live' });
+
+  if (venue.openingHours && isOpenNow(venue.openingHours)) tags.push({ e: '🟢', l: 'Aperto' });
+
+  if (d?.cons?.some(c => c.includes('rumoroso'))) tags.push({ e: '🔊', l: 'Alto volume' });
+
+  return tags.slice(0, 4);
+}
+
+// ===== Trending =====
+function trackClick(venue) {
+  try {
+    const clicks = JSON.parse(localStorage.getItem('stasera_clicks') || '{}');
+    clicks[venue.id] = (clicks[venue.id] || 0) + 1;
+    // Keep only last 100
+    const sorted = Object.entries(clicks).sort((a, b) => b[1] - a[1]).slice(0, 100);
+    localStorage.setItem('stasera_clicks', JSON.stringify(Object.fromEntries(sorted)));
+  } catch {}
+}
+
+function getTrending() {
+  try {
+    const clicks = JSON.parse(localStorage.getItem('stasera_clicks') || '{}');
+    return Object.entries(clicks).sort((a, b) => b[1] - a[1]).slice(0, 3);
+  } catch { return []; }
+}
+
+// ===== Notify =====
+function checkNewEvents(cityName, events) {
+  try {
+    const seen = JSON.parse(localStorage.getItem('stasera_seen_events') || '[]');
+    const newEv = events.filter(e => !seen.includes(e.id) && e.city?.toLowerCase().includes(cityName?.toLowerCase()));
+    if (newEv.length > 0) {
+      return newEv;
+    }
+  } catch { return []; }
+  return [];
+}
+
+function markEventsSeen(events) {
+  try {
+    const seen = JSON.parse(localStorage.getItem('stasera_seen_events') || '[]');
+    events.forEach(e => { if (!seen.includes(e.id)) seen.push(e.id); });
+    localStorage.setItem('stasera_seen_events', JSON.stringify(seen.slice(-200)));
+  } catch {}
+}
 let radiusDebounce;
 document.getElementById('radius-slider').addEventListener('input', (e) => {
   document.getElementById('radius-value').textContent = `${e.target.value} km`;
@@ -236,6 +303,7 @@ function renderVenueList(venues, routes, onClick, events) {
     const r = routes[venue.id];
     const bestTime = r ? Math.min(...Object.values(r).filter(Boolean).map(x => x.duration)) : null;
     const isFav = isFavorite(venue.id);
+    const smartTags = getSmartTags(venue);
 
     const card = document.createElement('div');
     card.className = 'venue-card';
@@ -251,7 +319,7 @@ function renderVenueList(venues, routes, onClick, events) {
         <div class="venue-tags">
           ${bestTime ? `<span class="venue-tag">⏱ ${bestTime} min</span>` : ''}
           ${r ? `<span class="venue-tag">📏 ${Object.values(r).find(x => x)?.distance || '—'} km</span>` : ''}
-          ${isOpenNow(venue.openingHours) ? '<span class="venue-tag open-tag">🟢 Aperto</span>' : ''}
+          ${smartTags.map(st => `<span class="venue-tag smart-tag">${st.e} ${st.l}</span>`).join('')}
         </div>
       </div>
       <div class="venue-actions">
@@ -271,6 +339,7 @@ function renderVenueList(venues, routes, onClick, events) {
         t.textContent = favs.some(f => f.id === venue.id) ? '⭐' : '☆';
         return;
       }
+      trackClick(venue);
       onClick(venue);
       document.querySelectorAll('.venue-card.active').forEach(c => c.classList.remove('active'));
       card.classList.add('active');

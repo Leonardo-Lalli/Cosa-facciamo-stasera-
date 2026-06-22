@@ -1,7 +1,6 @@
 // ===== Overpass API – fetch venues from OpenStreetMap =====
 const OVERPASS_URLS = [
   'https://overpass-api.de/api/interpreter',
-  'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
   'https://overpass.kumi.systems/api/interpreter',
 ];
 
@@ -33,7 +32,7 @@ function buildOverpassQuery(center, radiusMeters, types) {
     });
   });
 
-  return `[out:json][timeout:20];(\n${blocks.join('\n')}\n);out center 100;`;
+  return `[out:json][timeout:30];(\n${blocks.join('\n')}\n);out center 100;`;
 }
 
 async function fetchVenues(center, radiusKm, selectedTypes) {

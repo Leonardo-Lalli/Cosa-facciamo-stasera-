@@ -840,6 +840,36 @@ body {
 .heatmap-fab.hidden { display: none; }
 .heatmap-fab.active { background: #ff5722; border-color: #ff5722; }
 
+.smart-tag { background: var(--primary-light) !important; color: var(--primary) !important; font-weight: 500; }
+
+.trending-section {
+  margin: 0 16px 8px;
+  border: 1px solid #ff9800;
+  border-radius: var(--radius);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.trending-header {
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+  font-size: 11px;
+  font-weight: 700;
+  color: #e65100;
+}
+.trending-item {
+  display: flex;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  background: var(--bg);
+  transition: background 0.15s;
+  align-items: center;
+}
+.trending-item:hover { background: var(--hover); }
+
+.new-events-badge { animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+
 /* ===== Loading ===== */
 .loading {
   display: flex;

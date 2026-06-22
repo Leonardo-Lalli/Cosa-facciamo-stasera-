@@ -51,13 +51,33 @@ def find_website(page, name, city):
             if any(skip in href for skip in ['google.com', 'facebook.com', 'instagram.com', 'tripadvisor', 'yelp', 'justeat', 'deliveroo', 'thefork', 'youtube']):
                 continue
             try:
-                from urllib.parse import urlparse
                 parsed = urlparse(href)
                 if parsed.netloc and '.' in parsed.netloc:
                     return f"{parsed.scheme}://{parsed.netloc}"
             except:
                 continue
         return None
+    except:
+        return None
+
+def scrape_venue_photos(page, name, city, max_photos=3):
+    """Cerca foto del locale su Google Immagini"""
+    photos = []
+    try:
+        query = f"{name} {city} locale interno"
+        url = f"https://www.google.com/search?q={query.replace(' ', '+')}&tbm=isch&hl=it"
+        page.goto(url, timeout=15000)
+        human_delay(1, 2)
+
+        imgs = page.query_selector_all('img[src^="http"]')
+        for img in imgs:
+            src = img.get_attribute('src') or ''
+            if src and 'http' in src and 'google' not in src and 'gstatic' not in src:
+                photos.append(src)
+                if len(photos) >= max_photos: break
+    except:
+        pass
+    return photos
     except:
         return None
 
