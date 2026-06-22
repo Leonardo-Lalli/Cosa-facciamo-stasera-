@@ -326,6 +326,35 @@ body {
 
 .venue-go-btn:hover { background: var(--primary-dark); }
 
+/* ===== Events Section ===== */
+.events-section {
+  margin-bottom: 12px;
+  border: 1px solid #f0c040;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.events-header {
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #fff7e0, #ffecb3);
+  font-size: 13px;
+  font-weight: 700;
+  color: #b45309;
+}
+
+.event-card {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+  background: #fffdf5;
+}
+
+.event-card:hover {
+  background: #fff8e1;
+}
+
 /* ===== Map ===== */
 #map-container {
   flex: 1;

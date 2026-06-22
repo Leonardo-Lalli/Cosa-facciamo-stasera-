@@ -5,7 +5,63 @@ async function geocode(query) {
   const resp = await fetch(url, { headers: { 'Accept-Language': 'it' } });
   const data = await resp.json();
   if (data.length === 0) throw new Error('Luogo non trovato');
-  return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon), display: data[0].display_name };
+  const addr = data[0];
+  const city = addr.address?.city || addr.address?.town || addr.address?.village || query;
+  return { lat: parseFloat(addr.lat), lng: parseFloat(addr.lon), display: addr.display_name, city };
+}
+
+async function loadEnrichedVenues(cityName) {
+  const safeName = cityName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  try {
+    const resp = await fetch(`data/cities/${safeName}.json`);
+    if (!resp.ok) return [];
+    const data = await resp.json();
+    return data.venues || [];
+  } catch {
+    return [];
+  }
+}
+
+async function loadEvents(cityName) {
+  try {
+    const resp = await fetch('data/events.json');
+    if (!resp.ok) return [];
+    const events = await resp.json();
+    const cn = cityName.toLowerCase();
+    return events.filter(e =>
+      (e.city || '').toLowerCase().includes(cn) || cn.includes((e.city || '').toLowerCase())
+    );
+  } catch {
+    return [];
+  }
+}
+
+function mergeVenues(osmVenues, enriched) {
+  const seen = new Set();
+  osmVenues.forEach(v => seen.add(`${v.name}|${v.lat?.toFixed(4)}|${v.lng?.toFixed(4)}`));
+  const extra = enriched.filter(v => {
+    const key = `${v.name}|${v.lat?.toFixed(4)}|${v.lng?.toFixed(4)}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  // Add OSM-compatible fields to enriched venues
+  const unified = extra.map(v => ({
+    id: v.id,
+    lat: v.lat,
+    lng: v.lng,
+    name: v.name,
+    address: v.address || '',
+    type: v.type,
+    icon: getEnrichedIcon(v.type),
+    label: getEnrichedLabel(v.type),
+    website: v.website || null,
+    phone: null,
+    openingHours: null,
+    rating: v.rating || null,
+    source: 'google',
+  }));
+  return [...osmVenues, ...unified];
 }
 
 function getCurrentPosition() {
@@ -19,6 +75,16 @@ function getCurrentPosition() {
 }
 
 let sortListenerAttached = false;
+
+function getEnrichedIcon(type) {
+  const m = { nightclub:'🪩', pub:'🍻', bar:'🍺', cinema:'🎬', theatre:'🎭', live_music:'🎵', dance_hall:'💃', events_venue:'🎪', restaurant:'🍽️', bowling:'🎳', casino:'🎰', arcade:'🕹️', karaoke:'🎤' };
+  return m[type] || '📍';
+}
+
+function getEnrichedLabel(type) {
+  const m = { nightclub:'Discoteca', pub:'Pub', bar:'Bar', cinema:'Cinema', theatre:'Teatro', live_music:'Musica dal vivo', dance_hall:'Ballo', events_venue:'Sale eventi', restaurant:'Ristorante', bowling:'Bowling', casino:'Casinò', arcade:'Sala giochi', karaoke:'Karaoke' };
+  return m[type] || type;
+}
 
 async function performSearch() {
   const filters = getFilters();
@@ -50,7 +116,21 @@ async function performSearch() {
     }
 
     // Fetch venues from Overpass
-    const venues = await fetchVenues(userLocation, filters.radius, filters.types);
+    const osmVenues = await fetchVenues(userLocation, filters.radius, filters.types);
+
+    // Try to load Google Places enriched data for this city
+    let enriched = [];
+    const enrichedPromise = loadEnrichedVenues(userLocation.city).then(v => { enriched = v; }).catch(() => {});
+
+    // Try to load events
+    let events = [];
+    const eventsPromise = loadEvents(userLocation.city).then(e => { events = e; }).catch(() => {});
+
+    await enrichedPromise;
+    await eventsPromise;
+
+    // Merge OSM + Google
+    const venues = mergeVenues(osmVenues, enriched);
 
     if (venues.length === 0) {
       hideLoading();
@@ -68,6 +148,11 @@ async function performSearch() {
     });
 
     sortAndRender(venues, estimatedRoutes);
+    // Show events in sidebar
+    if (events.length > 0) {
+      window._events = events;
+    }
+
     addVenueMarkers(venues, venue => {
       const routes = window._venueRoutes || estimatedRoutes;
       showVenueDetail(venue, routes);
@@ -121,7 +206,7 @@ function sortAndRender(venues, routes) {
   renderVenueList(sorted, routes, venue => {
     showVenueDetail(venue, routes);
     highlightVenueCard(venue);
-  });
+  }, window._events || []);
 
   if (!sortListenerAttached) {
     sortListenerAttached = true;

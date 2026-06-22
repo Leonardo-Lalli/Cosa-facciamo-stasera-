@@ -51,7 +51,7 @@ function hideLoading() {
   document.getElementById('loading').classList.add('hidden');
 }
 
-function renderVenueList(venues, routes, onClick) {
+function renderVenueList(venues, routes, onClick, events) {
   const list = document.getElementById('venue-list');
   const header = document.getElementById('results-header');
   const count = document.getElementById('results-count');
@@ -63,7 +63,39 @@ function renderVenueList(venues, routes, onClick) {
   header.classList.remove('hidden');
   list.innerHTML = '';
 
-  if (venues.length === 0) {
+  // Show events first
+  if (events && events.length > 0) {
+    const eventSection = document.createElement('div');
+    eventSection.className = 'events-section';
+    eventSection.innerHTML = '<div class="events-header">🎟️ Eventi in zona</div>';
+
+    events.forEach(ev => {
+      const card = document.createElement('div');
+      card.className = 'event-card';
+      card.innerHTML = `
+        <div class="venue-icon">🎟️</div>
+        <div class="venue-info">
+          <div class="venue-name">${ev.name}</div>
+          <div class="venue-meta">
+            <span>📅 ${ev.date || 'Data da definirsi'}</span>
+            <span>📍 ${ev.venue}${ev.city ? ', ' + ev.city : ''}</span>
+          </div>
+        </div>
+        ${ev.url ? `<button class="venue-go-btn" data-url="${ev.url}" title="Biglietti">🎫 Biglietti</button>` : ''}
+      `;
+      card.addEventListener('click', (e) => {
+        if (e.target.classList.contains('venue-go-btn')) {
+          e.stopPropagation();
+          window.open(e.target.dataset.url, '_blank');
+        }
+      });
+      eventSection.appendChild(card);
+    });
+
+    list.appendChild(eventSection);
+  }
+
+  if (venues.length === 0 && (!events || events.length === 0)) {
     list.innerHTML = '<div class="loading">Nessun locale trovato. Prova ad aumentare il raggio.</div>';
     return;
   }
