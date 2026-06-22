@@ -59,8 +59,6 @@ function getCurrentPosition() {
   });
 }
 
-let plannerLoaded = false;
-
 function getEnrichedIcon(type) {
   const m = { nightclub:'🪩', pub:'🍻', bar:'🍺', cinema:'🎬', theatre:'🎭', live_music:'🎵', dance_hall:'💃', events_venue:'🎪', restaurant:'🍽️', bowling:'🎳', casino:'🎰', arcade:'🕹️', karaoke:'🎤' };
   return m[type] || '📍';
@@ -123,6 +121,12 @@ async function performSearch() {
 
     if (venues.length === 0) { hideLoading(); renderVenueList([], {}, () => {}, []); clearVenueMarkers(); return; }
 
+    // Enter results mode
+    document.getElementById('sidebar').classList.add('results-mode');
+    document.getElementById('filters-toggle').classList.remove('hidden');
+    document.getElementById('filters-toggle').textContent = '⚙️ Filtri ▸';
+    document.getElementById('filters-wrap').classList.add('collapsed');
+
     const estRoutes = {};
     venues.forEach(v => {
       estRoutes[v.id] = { walking: estimate({ lat: userLocation.lat, lng: userLocation.lng }, { lat: v.lat, lng: v.lng }, 'walking') };
@@ -133,15 +137,11 @@ async function performSearch() {
     restoreScrollPosition();
 
     document.getElementById('planner-section').classList.remove('hidden');
-    const po = document.getElementById('planner-output'); if (po) { po.innerHTML = ''; po.style.display = ''; }
-    const pb = document.getElementById('planner-btn'); if (pb) pb.textContent = 'Mostra';
-    plannerLoaded = false;
-    // Collapse filters to give venue list more space
-    const fw = document.getElementById('filters-wrap'); const ft = document.getElementById('filters-toggle');
-    if (fw) fw.classList.add('collapsed');
-    if (ft) { ft.classList.remove('hidden'); ft.textContent = '⚙️ Filtri ▸'; }
     document.getElementById('heatmap-toggle').classList.remove('hidden');
     document.getElementById('heatmap-fab').classList.remove('hidden');
+
+    // Auto-load AI plan
+    autoLoadPlan();
 
     addVenueMarkers(venues, venue => {
       const routes = window._venueRoutes || estRoutes;
@@ -220,7 +220,53 @@ function pickRandom() {
   showVenueDetail(pick, window._venueRoutes || {});
   highlightVenueCard(pick);
   highlightMarker(pick.id);
-  document.getElementById('venue-detail').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ===== Auto-load AI Plan =====
+async function autoLoadPlan() {
+  const plannerOutput = document.getElementById('planner-output');
+  const plannerBtn = document.getElementById('planner-btn');
+  if (!plannerOutput || !plannerBtn) return;
+
+  plannerOutput.textContent = '🔄 Preparo il tuo piano...';
+  plannerOutput.style.display = '';
+  plannerBtn.style.display = 'none';
+
+  const result = await loadCityPlan(userLocation?.city);
+  let plans = null;
+
+  if (result?.plans && Object.keys(result.plans).length > 0) {
+    plans = result.plans;
+  } else {
+    const smart = buildSmartPlan(window._lastVenues || [], userLocation?.city);
+    if (smart?.plans) plans = smart.plans;
+  }
+
+  if (plans) {
+    const keys = Object.keys(plans);
+    const types = getFilters().types;
+    let bestKey = keys[0];
+    if (types.every(t => ['nightclub','bar','pub','live_music'].includes(t))) bestKey = 'party';
+    else if (types.every(t => ['cinema','theatre','live_music','events_venue'].includes(t))) bestKey = 'culture';
+    else if (types.every(t => ['restaurant','bar','pub'].includes(t))) bestKey = 'foodie';
+    if (!plans[bestKey]) bestKey = keys[0];
+
+    const tabsHtml = keys.map(k => {
+      const p = plans[k];
+      return `<button class="plan-tab${k === bestKey ? ' active' : ''}" data-tab="${k}">${p.emoji} ${p.label}</button>`;
+    }).join('');
+    plannerOutput.innerHTML = `<div class="plan-tabs">${tabsHtml}</div><div class="plan-content">${plans[bestKey].text}</div>`;
+
+    plannerOutput.querySelectorAll('.plan-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        plannerOutput.querySelectorAll('.plan-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        plannerOutput.querySelector('.plan-content').textContent = plans[tab.dataset.tab].text;
+      });
+    });
+  } else {
+    plannerOutput.innerHTML = '<div style="padding:6px;text-align:center;font-size:11px;color:var(--text-secondary)">Cerca per vedere il piano serata</div>';
+  }
 }
 
 // Event listeners
@@ -247,6 +293,22 @@ document.getElementById('locate-btn').addEventListener('click', async () => {
 
 document.getElementById('location-input').addEventListener('keydown', e => { if (e.key === 'Enter') performSearch(); });
 document.getElementById('close-detail').addEventListener('click', hideVenueDetail);
+
+// Back button - exit results mode
+document.getElementById('back-btn').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.remove('results-mode');
+  document.getElementById('filters-wrap').classList.remove('collapsed');
+  document.getElementById('filters-toggle').classList.add('hidden');
+  document.getElementById('planner-section').classList.add('hidden');
+  document.getElementById('heatmap-toggle').classList.add('hidden');
+  document.getElementById('heatmap-fab').classList.add('hidden');
+  document.getElementById('weather-widget').classList.add('hidden');
+  document.getElementById('results-header').classList.add('hidden');
+  document.getElementById('venue-list').innerHTML = '';
+  clearVenueMarkers();
+  hideVenueDetail();
+  if (heatmapLayer) { map.removeLayer(heatmapLayer); heatmapLayer = null; }
+});
 
 // Dark mode
 function initTheme() {
@@ -284,69 +346,20 @@ window.addEventListener('DOMContentLoaded', () => {
   initMap();
   if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').catch(() => {}); }
 
-  // Filter toggle
+  // Filters toggle
   const filtersToggle = document.getElementById('filters-toggle');
   const filtersWrap = document.getElementById('filters-wrap');
   filtersToggle.addEventListener('click', () => {
     filtersWrap.classList.toggle('collapsed');
     filtersToggle.textContent = filtersWrap.classList.contains('collapsed') ? '⚙️ Filtri ▸' : '⚙️ Filtri ▾';
-    if (!filtersWrap.classList.contains('collapsed')) filtersToggle.classList.add('hidden');
   });
 
-  // AI Planner
-  const plannerSection = document.getElementById('planner-section');
-  const plannerBtn = document.getElementById('planner-btn');
-  const plannerOutput = document.getElementById('planner-output');
-  let currentPlans = null;
-
-  plannerBtn.addEventListener('click', async () => {
-    if (plannerLoaded) {
-      plannerOutput.style.display = plannerOutput.style.display === 'none' ? '' : 'none';
-      plannerBtn.textContent = plannerOutput.style.display === 'none' ? 'Mostra' : 'Nascondi';
-      return;
-    }
-
-    plannerOutput.textContent = '🔄 Caricamento...';
-    plannerOutput.style.display = '';
-    const result = await loadCityPlan(userLocation?.city);
-
-    if (result?.plans && Object.keys(result.plans).length > 0) {
-      currentPlans = result.plans;
-      showPlanTabs(currentPlans);
-    } else {
-      const smart = buildSmartPlan(window._lastVenues || [], userLocation?.city);
-      if (smart?.plans) {
-        currentPlans = smart.plans;
-        showPlanTabs(currentPlans);
-      } else {
-        plannerOutput.innerHTML = '<div style="padding:10px;text-align:center;color:var(--text-secondary)">😅 Nessun piano disponibile.<br>Prova con Roma, Milano o cerca prima dei locali.</div>';
-      }
-    }
-    plannerLoaded = true;
-    plannerBtn.textContent = 'Nascondi';
+  // Planner button: just toggle visibility
+  document.getElementById('planner-btn').addEventListener('click', () => {
+    const po = document.getElementById('planner-output');
+    if (!po) return;
+    const isHidden = po.style.display === 'none';
+    po.style.display = isHidden ? '' : 'none';
+    document.getElementById('planner-btn').textContent = isHidden ? 'Nascondi' : 'Mostra';
   });
-
-  function showPlanTabs(plans) {
-    const keys = Object.keys(plans);
-    if (keys.length === 0) return;
-    const types = getFilters().types;
-    let bestKey = keys[0];
-    if (types.every(t => ['nightclub','bar','pub','live_music'].includes(t))) bestKey = 'party';
-    else if (types.every(t => ['cinema','theatre','live_music','events_venue'].includes(t))) bestKey = 'culture';
-    else if (types.every(t => ['restaurant','bar','pub'].includes(t))) bestKey = 'foodie';
-    if (!plans[bestKey]) bestKey = keys[0];
-
-    const tabsHtml = keys.map(k => {
-      const p = plans[k];
-      return `<button class="plan-tab${k === bestKey ? ' active' : ''}" data-tab="${k}">${p.emoji} ${p.label}</button>`;
-    }).join('');
-    plannerOutput.innerHTML = `<div class="plan-tabs">${tabsHtml}</div><div class="plan-content">${plans[bestKey].text}</div>`;
-    plannerOutput.querySelectorAll('.plan-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        plannerOutput.querySelectorAll('.plan-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        plannerOutput.querySelector('.plan-content').textContent = plans[tab.dataset.tab].text;
-      });
-    });
-  }
 });

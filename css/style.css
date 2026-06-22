@@ -138,7 +138,30 @@ body {
 
 #theme-toggle:hover { background: var(--hover); }
 
-/* ===== Search ===== */
+/* ===== Results Mode ===== */
+#sidebar.results-mode #filters-wrap { display: none; }
+#sidebar.results-mode .sidebar-header { padding: 10px 16px 4px; }
+#sidebar.results-mode .sidebar-header .logo { font-size: 16px; }
+#sidebar.results-mode .search-box { padding: 6px 16px; }
+#sidebar.results-mode .search-box input { padding: 8px 12px; font-size: 13px; }
+#sidebar.results-mode #locate-btn { width: 34px; height: 34px; font-size: 16px; }
+#sidebar.results-mode .action-bar { padding: 4px 16px; margin: 0; }
+#sidebar.results-mode .btn-primary { padding: 8px; font-size: 13px; margin: 0; flex: 1; }
+#sidebar.results-mode .btn-random { width: 36px; height: 36px; font-size: 16px; }
+#sidebar.results-mode .filters-toggle { display: block !important; margin: 4px 16px; }
+#sidebar.results-mode .filters-toggle.hidden { display: block !important; }
+#sidebar.results-mode #weather-widget { margin: 0 16px 4px; font-size: 11px; }
+#sidebar.results-mode #planner-section { margin: 0 16px 4px; font-size: 12px; }
+#sidebar.results-mode #planner-section .planner-header { padding: 6px 10px; font-size: 12px; }
+#sidebar.results-mode #planner-section .planner-output { font-size: 12px; }
+#sidebar.results-mode .planner-generate-btn { padding: 3px 8px; font-size: 11px; }
+#sidebar.results-mode #heatmap-toggle { margin: 0 16px 2px; font-size: 11px; }
+#sidebar.results-mode #heatmap-toggle button { padding: 4px; font-size: 11px; }
+#sidebar.results-mode #results-header { padding: 6px 16px 8px; }
+#sidebar.results-mode .results-header-inner { display: flex; align-items: center; gap: 8px; }
+#back-btn { display: none; }
+#sidebar.results-mode #back-btn { display: flex; align-items: center; gap: 4px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 16px; background: var(--bg); color: var(--text); font-size: 12px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+#sidebar.results-mode #back-btn:hover { background: var(--hover); }
 .search-box {
   display: flex;
   gap: 8px;

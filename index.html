@@ -99,12 +99,15 @@
       </div>
 
       <div id="results-header" class="results-header hidden">
-        <span id="results-count">0 locali trovati</span>
-        <select id="sort-select">
-          <option value="distance">Più vicini</option>
-          <option value="time">Tempo minore</option>
-          <option value="name">Nome A-Z</option>
-        </select>
+        <div class="results-header-inner">
+          <button id="back-btn">← Indietro</button>
+          <span id="results-count">0 locali trovati</span>
+          <select id="sort-select" style="margin-left:auto">
+            <option value="distance">Più vicini</option>
+            <option value="time">Tempo minore</option>
+            <option value="name">Nome A-Z</option>
+          </select>
+        </div>
       </div>
 
       <div id="venue-list" class="venue-list"></div>
