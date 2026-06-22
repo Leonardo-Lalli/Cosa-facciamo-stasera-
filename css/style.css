@@ -688,6 +688,103 @@ body {
   white-space: pre-line;
 }
 
+/* ===== Action Bar ===== */
+.action-bar {
+  display: flex;
+  gap: 8px;
+  margin: 8px 20px 12px;
+  flex-shrink: 0;
+}
+
+.btn-random {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--bg);
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.btn-random:hover { background: var(--hover); transform: scale(1.1); }
+
+/* ===== Special Chips ===== */
+.special-chip { border-style: dashed; }
+
+/* ===== Venue Favorites ===== */
+.venue-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+}
+
+.fav-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 2px;
+  transition: transform 0.15s;
+  color: var(--text-muted);
+}
+.fav-btn:hover { transform: scale(1.2); }
+.fav-btn.active { color: #f5a623; }
+
+.fav-detail-btn.active { background: #f5a623; color: #fff; border-color: #f5a623; }
+
+.open-tag { background: #e8f5e9 !important; color: #2e7d32 !important; font-weight: 600; }
+
+/* ===== Weather ===== */
+.weather-widget {
+  margin: 0 20px 4px;
+  padding: 6px 12px;
+  background: var(--bg-secondary);
+  border-radius: 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+.weather-widget.hidden { display: none; }
+
+/* ===== Heatmap ===== */
+.heatmap-toggle {
+  margin: 0 16px 4px;
+  flex-shrink: 0;
+}
+.heatmap-toggle.hidden { display: none; }
+.heatmap-toggle button {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+}
+.heatmap-toggle button:hover { background: var(--border); }
+
+.heatmap-fab {
+  position: absolute;
+  bottom: 20px;
+  right: 70px;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: var(--shadow);
+  transition: all 0.15s;
+}
+.heatmap-fab.hidden { display: none; }
+.heatmap-fab.active { background: #ff5722; border-color: #ff5722; }
+
 /* ===== Loading ===== */
 .loading {
   display: flex;
