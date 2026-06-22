@@ -301,9 +301,10 @@ function hideLoading() {
 }
 
 function renderVenueList(venues, routes, onClick, events) {
-  const list = document.getElementById('venue-list');
-  const header = document.getElementById('results-header');
-  const count = document.getElementById('results-count');
+  const list = S('venue-list');
+  const header = S('results-header');
+  const count = S('results-count');
+  if (!list) return;
   currentRoutes = routes;
 
   hideLoading();
@@ -312,8 +313,8 @@ function renderVenueList(venues, routes, onClick, events) {
   let filtered = getFilteredVenues(venues);
   currentVenues = filtered;
 
-  count.textContent = `${filtered.length} locali trovati`;
-  header.classList.remove('hidden');
+  if (count) count.textContent = `${filtered.length} locali trovati`;
+  if (header) header.classList.remove('hidden');
 
   const frag = document.createDocumentFragment();
 
@@ -408,8 +409,9 @@ function renderVenueList(venues, routes, onClick, events) {
 }
 
 function showVenueDetail(venue, routes) {
-  const detail = document.getElementById('venue-detail');
-  const content = document.getElementById('detail-content');
+  const detail = S('venue-detail');
+  const content = S('detail-content');
+  if (!detail || !content) return;
   detail.classList.remove('hidden');
 
   const r = routes[venue.id] || {};
