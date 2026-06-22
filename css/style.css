@@ -162,6 +162,17 @@ body {
 #back-btn { display: none; }
 #sidebar.results-mode #back-btn { display: flex; align-items: center; gap: 4px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 16px; background: var(--bg); color: var(--text); font-size: 12px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
 #sidebar.results-mode #back-btn:hover { background: var(--hover); }
+
+.btn-random-small {
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg);
+  font-size: 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.btn-random-small:hover { background: var(--hover); }
 .search-box {
   display: flex;
   gap: 8px;
@@ -294,12 +305,12 @@ body {
 /* ===== Search Button ===== */
 .btn-primary {
   margin: 8px 20px 12px;
-  padding: 12px;
+  padding: 14px;
   border: none;
   border-radius: 24px;
   background: var(--primary);
   color: #fff;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;

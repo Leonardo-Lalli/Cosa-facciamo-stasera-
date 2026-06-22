@@ -68,6 +68,8 @@ function getEnrichedLabel(type) {
   return m[type] || type;
 }
 
+let sortListenerAttached = false;
+
 // ===== Weather (Open-Meteo, free, no API key) =====
 async function fetchWeather(lat, lng) {
   try {
