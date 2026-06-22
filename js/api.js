@@ -70,7 +70,7 @@ async function fetchVenues(center, radiusKm, selectedTypes) {
         .map(el => {
           const tags = el.tags || {};
           const cat = findCategory(tags, selectedTypes);
-          return {
+          const venue = {
             id: el.id,
             lat: el.lat ?? el.center?.lat,
             lng: el.lon ?? el.center?.lon,
@@ -82,7 +82,10 @@ async function fetchVenues(center, radiusKm, selectedTypes) {
             website: tags.website || tags['contact:website'] || tags['contact:facebook'] || null,
             phone: tags.phone || tags['contact:phone'] || null,
             openingHours: tags.opening_hours || null,
+            tags: tags,
           };
+          venue.description = describeVenue(venue, tags);
+          return venue;
         })
         .filter(v => v.lat != null && v.lng != null);
 

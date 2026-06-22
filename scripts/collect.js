@@ -1,10 +1,11 @@
 // ===== Data Collector =====
 // Runs via GitHub Actions (2x/day) or manually: node scripts/collect.js
-// Merges Google Places + Ticketmaster into per-city JSON files + events.json
+// Merges Google Places + Ticketmaster + Songkick into per-city JSON files + events.json
 const fs = require('fs');
 const path = require('path');
 const { fetchGooglePlaces } = require('./sources/google');
 const { fetchTicketmasterEvents } = require('./sources/events');
+const { fetchSongkickEvents } = require('./sources/songkick');
 
 const DATA_DIR = path.join(__dirname, '..', 'data', 'cities');
 const EVENTS_FILE = path.join(__dirname, '..', 'data', 'events.json');
@@ -15,6 +16,7 @@ async function main() {
 
   const googleKey = process.env.GOOGLE_API_KEY || '';
   const ticketmasterKey = process.env.TICKETMASTER_API_KEY || '';
+  const songkickKey = process.env.SONGKICK_API_KEY || '';
 
   // Ensure data dirs exist
   fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -40,7 +42,19 @@ async function main() {
     eventData = await fetchTicketmasterEvents(ticketmasterKey);
   } catch (err) {
     console.error(`[collect] Ticketmaster failed: ${err.message}`);
-    // Load existing events as fallback
+    eventData = [];
+  }
+
+  // --- Songkick ---
+  try {
+    const skEvents = await fetchSongkickEvents(songkickKey);
+    eventData = [...eventData, ...skEvents];
+  } catch (err) {
+    console.error(`[collect] Songkick failed: ${err.message}`);
+  }
+
+  // Fallback to existing events if nothing fetched
+  if (eventData.length === 0) {
     try {
       eventData = JSON.parse(fs.readFileSync(EVENTS_FILE, 'utf-8'));
     } catch {

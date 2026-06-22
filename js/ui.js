@@ -184,6 +184,27 @@ function showVenueDetail(venue, routes) {
     <h2 id="detail-name">${venue.icon} ${venue.name}${venue.rating ? `<span style="font-size:14px;color:#f5a623;"> ★${venue.rating}</span>` : ''}</h2>
     <div id="detail-address">📍 ${venue.address}</div>
     <div class="detail-routes">${routesHtml}</div>
+
+    ${venue.description ? `
+    <div style="margin-top:14px;padding:12px 14px;background:var(--bg-secondary);border-radius:12px;font-size:13px;line-height:1.6;color:var(--text);">
+      <div style="font-weight:600;margin-bottom:4px;">📝 Il locale</div>
+      ${venue.description.description}
+    </div>
+    ${(venue.description.pros.length || venue.description.cons.length) ? `
+    <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;">
+      ${venue.description.pros.length ? `
+      <div style="flex:1;min-width:180px;padding:10px 14px;background:#e8f5e9;border-radius:12px;font-size:12px;">
+        <div style="font-weight:600;color:#2e7d32;margin-bottom:4px;">✅ Pro</div>
+        ${venue.description.pros.map(p => `<div style="color:#388e3c;line-height:1.5;">• ${p}</div>`).join('')}
+      </div>` : ''}
+      ${venue.description.cons.length ? `
+      <div style="flex:1;min-width:180px;padding:10px 14px;background:#fce4e4;border-radius:12px;font-size:12px;">
+        <div style="font-weight:600;color:#c62828;margin-bottom:4px;">❌ Contro</div>
+        ${venue.description.cons.map(c => `<div style="color:#d32f2f;line-height:1.5;">• ${c}</div>`).join('')}
+      </div>` : ''}
+    </div>` : ''}
+    ` : ''}
+
     ${venue.website ? `<a class="detail-website" href="${venue.website.startsWith('http') ? venue.website : 'https://' + venue.website}" target="_blank">🌐 Vai al sito del locale</a>` : ''}
     ${venue.phone ? `<div style="margin-top:10px;font-size:13px;color:var(--text-secondary)">📞 ${venue.phone}</div>` : ''}
     ${venue.openingHours ? `<div style="margin-top:4px;font-size:13px;color:var(--text-secondary)">🕐 ${venue.openingHours}</div>` : ''}

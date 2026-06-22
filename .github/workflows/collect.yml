@@ -21,6 +21,7 @@ jobs:
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           TICKETMASTER_API_KEY: ${{ secrets.TICKETMASTER_API_KEY }}
+          SONGKICK_API_KEY: ${{ secrets.SONGKICK_API_KEY }}
 
       - name: Commit updated data
         run: |
