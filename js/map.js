@@ -157,7 +157,7 @@ function enableExploreMode() {
       lastExploreCenter = { lat: c.lat, lng: c.lng };
       userLocation = { lat: c.lat, lng: c.lng, city: userLocation.city || '', display: userLocation.display || '' };
       if (typeof searchInProgress !== 'undefined' && searchInProgress) return;
-      document.getElementById('location-input').value = `${c.lat.toFixed(4)}, ${c.lng.toFixed(4)}`;
+      const locInput = S('location-input'); if (locInput) locInput.value = `${c.lat.toFixed(4)}, ${c.lng.toFixed(4)}`;
       if (typeof performSearch === 'function') performSearch();
     }, 800);
   });

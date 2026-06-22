@@ -68,16 +68,16 @@ document.querySelectorAll('#type-filters .chip').forEach(chip => {
 
 // Special chips: open now, weekend, favorites
 function updateSpecialChips() {
-  document.getElementById('chip-opennow').classList.toggle('active', openNowActive);
-  document.getElementById('chip-weekend').classList.toggle('active', weekendActive);
-  document.getElementById('chip-favorites').classList.toggle('active', favoritesActive);
+  toggleClass('chip-opennow', 'active', openNowActive);
+  toggleClass('chip-weekend', 'active', weekendActive);
+  toggleClass('chip-favorites', 'active', favoritesActive);
   if (favoritesActive) {
     document.querySelectorAll('#type-filters .chip.active').forEach(c => c.classList.remove('active'));
     selectedTypes = [];
   }
 }
 
-document.getElementById('chip-opennow').addEventListener('click', () => {
+document.getElementById('chip-opennow')?.addEventListener('click', () => {
   openNowActive = !openNowActive;
   if (openNowActive) { weekendActive = false; favoritesActive = false; }
   updateSpecialChips();
@@ -87,7 +87,7 @@ document.getElementById('chip-opennow').addEventListener('click', () => {
   }
 });
 
-document.getElementById('chip-weekend').addEventListener('click', () => {
+document.getElementById('chip-weekend')?.addEventListener('click', () => {
   weekendActive = !weekendActive;
   if (weekendActive) { openNowActive = false; favoritesActive = false; }
   updateSpecialChips();
@@ -97,7 +97,7 @@ document.getElementById('chip-weekend').addEventListener('click', () => {
   }
 });
 
-document.getElementById('chip-favorites').addEventListener('click', () => {
+document.getElementById('chip-favorites')?.addEventListener('click', () => {
   favoritesActive = !favoritesActive;
   if (favoritesActive) { openNowActive = false; weekendActive = false; }
   updateSpecialChips();
@@ -269,35 +269,35 @@ function markEventsSeen(events) {
   } catch {}
 }
 let radiusDebounce;
-document.getElementById('radius-slider').addEventListener('input', (e) => {
-  document.getElementById('radius-value').textContent = `${e.target.value} km`;
+S('radius-slider')?.addEventListener('input', (e) => {
+  setText('radius-value', `${e.target.value} km`);
   clearTimeout(radiusDebounce);
   radiusDebounce = setTimeout(() => { if (typeof userLocation !== 'undefined' && userLocation) drawRadiusCircle(userLocation, parseInt(e.target.value)); }, 100);
 });
-document.getElementById('time-slider').addEventListener('input', (e) => {
-  document.getElementById('time-value').textContent = `${e.target.value} min`;
+S('time-slider')?.addEventListener('input', (e) => {
+  setText('time-value', `${e.target.value} min`);
 });
 
 function getFilters() {
   return {
-    radius: parseInt(document.getElementById('radius-slider').value),
+    radius: parseInt(S('radius-slider')?.value || 10),
     modes: selectedModes,
     types: selectedTypes.length > 0 ? selectedTypes : ['nightclub','bar','pub','cinema','theatre','restaurant'],
-    maxTime: parseInt(document.getElementById('time-slider').value),
+    maxTime: parseInt(S('time-slider')?.value || 60),
     openNow: openNowActive,
     weekend: weekendActive,
   };
 }
 
 function showLoading() {
-  document.getElementById('loading').classList.remove('hidden');
+  S('loading')?.classList.remove('hidden');
   // Safety: hide after 20s even if something goes wrong
   clearTimeout(window._loadingTimeout);
   window._loadingTimeout = setTimeout(() => { hideLoading(); }, 20000);
 }
 function hideLoading() {
   clearTimeout(window._loadingTimeout);
-  document.getElementById('loading').classList.add('hidden');
+  S('loading')?.classList.add('hidden');
 }
 
 function renderVenueList(venues, routes, onClick, events) {
@@ -462,23 +462,22 @@ function showVenueDetail(venue, routes) {
     ${eventsHtml}
   `;
 
-  document.getElementById('fav-detail-btn').addEventListener('click', () => {
+  S('fav-detail-btn')?.addEventListener('click', () => {
     toggleFavorite(venue);
-    const btn = document.getElementById('fav-detail-btn');
+    const btn = S('fav-detail-btn');
     const fav = isFavorite(venue.id);
-    btn.classList.toggle('active', fav);
-    btn.textContent = fav ? '⭐ Preferito' : '☆ Preferito';
+    if (btn) { btn.classList.toggle('active', fav); btn.textContent = fav ? '⭐ Preferito' : '☆ Preferito'; }
     if (window._lastVenues) sortAndRender(window._lastVenues, window._venueRoutes || {});
   });
 }
 
 function hideVenueDetail() {
-  document.getElementById('venue-detail').classList.add('hidden');
+  S('venue-detail')?.classList.add('hidden');
   document.querySelectorAll('.venue-card.active').forEach(c => c.classList.remove('active'));
 }
 
 function clearResults() {
-  document.getElementById('venue-list').innerHTML = '';
-  document.getElementById('results-header').classList.add('hidden');
-  document.getElementById('venue-detail').classList.add('hidden');
+  const vl = S('venue-list'); if (vl) vl.innerHTML = '';
+  S('results-header')?.classList.add('hidden');
+  S('venue-detail')?.classList.add('hidden');
 }
