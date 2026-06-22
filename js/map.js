@@ -84,16 +84,10 @@ function addVenueMarkers(venues, onClick) {
   clearVenueMarkers();
 
   venues.forEach(venue => {
-    const icon = L.divIcon({
-      className: 'venue-marker',
-      html: MARKER_HTML(venue.icon, false),
-      iconSize: [36, 36],
-      iconAnchor: [18, 18],
-    });
-
-    const marker = L.marker([venue.lat, venue.lng], { icon }).addTo(map);
+    const marker = L.marker([venue.lat, venue.lng], { icon: L.divIcon({ className: 'venue-marker', html: MARKER_HTML(venue.icon, false), iconSize: [36, 36], iconAnchor: [18, 18] }) }).addTo(map);
     marker.bindPopup(`<b>${sanitize(venue.name)}</b><br>${sanitize(venue.address)}`);
     marker.on('click', () => onClick(venue));
+    marker._venueIcon = venue.icon;
 
     venueMarkers.push(marker);
     venueMarkerMap[venue.id] = marker;
@@ -101,26 +95,24 @@ function addVenueMarkers(venues, onClick) {
 }
 
 function highlightMarker(venueId) {
-  Object.values(venueMarkerMap).forEach(m => {
+  // Reset all markers to default
+  venueMarkers.forEach(m => {
     const div = m.getElement();
     if (div) {
       const inner = div.querySelector('div');
-      if (inner) inner.outerHTML = MARKER_HTML(venueMarkers.find(vm => venueMarkerMap[vm] === m)?.icon || '📍', false);
+      if (inner) inner.outerHTML = MARKER_HTML(m._venueIcon || '📍', false);
       div.style.zIndex = '';
     }
   });
 
+  // Highlight clicked marker
   const marker = venueMarkerMap[venueId];
   if (!marker) return;
 
   const div = marker.getElement();
   if (div) {
     const inner = div.querySelector('div');
-    if (inner) {
-      const venue = Object.entries(venueMarkerMap).find(([, m]) => m === marker);
-      const icon = venue ? venueMarkers.find(v => venueMarkerMap[v.id] === marker)?.icon || '📍' : '📍';
-      inner.outerHTML = MARKER_HTML(icon, true);
-    }
+    if (inner) inner.outerHTML = MARKER_HTML(marker._venueIcon || '📍', true);
     div.style.zIndex = '1000';
   }
 
