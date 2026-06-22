@@ -14,11 +14,61 @@ document.querySelectorAll('.transport-btn').forEach(btn => {
 });
 
 // Type chips
+const VERB_MAP = {
+  cinema: 'guardiamo', restaurant: 'mangiamo', nightclub: 'balliamo',
+  bar: 'beviamo', pub: 'beviamo', theatre: 'vediamo',
+  live_music: 'ascoltiamo', bowling: 'giochiamo', dance_hall: 'balliamo',
+  casino: 'giochiamo', arcade: 'giochiamo', karaoke: 'cantiamo',
+  events_venue: 'festeggiamo',
+};
+
+let typewriterLock = false;
+
+function animateVerb(newVerb) {
+  const el = document.getElementById('verb');
+  if (!el) return;
+  if (typewriterLock) return;
+  typewriterLock = true;
+
+  const current = el.textContent;
+  if (current === newVerb) { typewriterLock = false; return; }
+
+  el.classList.add('typing');
+
+  let i = current.length;
+  const erase = setInterval(() => {
+    if (i <= 0) {
+      clearInterval(erase);
+      let j = 0;
+      const write = setInterval(() => {
+        if (j <= newVerb.length) {
+          el.textContent = newVerb.slice(0, j);
+          j++;
+        } else {
+          clearInterval(write);
+          el.classList.remove('typing');
+          typewriterLock = false;
+        }
+      }, 40);
+      return;
+    }
+    el.textContent = current.slice(0, i - 1);
+    i--;
+  }, 30);
+}
+
 document.querySelectorAll('.chip').forEach(chip => {
   chip.addEventListener('click', () => {
     chip.classList.toggle('active');
     selectedTypes = Array.from(document.querySelectorAll('.chip.active'))
       .map(c => c.dataset.type);
+
+    // Animate logo verb
+    if (selectedTypes.length === 1) {
+      animateVerb(VERB_MAP[selectedTypes[0]] || 'facciamo');
+    } else {
+      animateVerb('facciamo');
+    }
   });
 });
 

@@ -13,7 +13,7 @@ const VENUE_TYPES = {
   theatre:       { tags: ['["amenity"="theatre"]'],                                      icon: '🎭', label: 'Teatro' },
   restaurant:    { tags: ['["amenity"="restaurant"]'],                                   icon: '🍽️', label: 'Ristorante' },
   live_music:    { tags: ['["amenity"="music_venue"]'],                                  icon: '🎵', label: 'Musica dal vivo' },
-  bowling:       { tags: ['["amenity"="bowling"', '"leisure"="bowling_alley"'],          icon: '🎳', label: 'Bowling' },
+  bowling:       { tags: ['["amenity"="bowling"]', '"leisure"="bowling_alley"'],         icon: '🎳', label: 'Bowling' },
   events_venue:  { tags: ['["amenity"="community_centre"]'],                             icon: '🎪', label: 'Sale eventi' },
   dance_hall:    { tags: ['["leisure"="dance"', '"amenity"="dancing_school"'],           icon: '💃', label: 'Ballo' },
   casino:        { tags: ['["amenity"="casino"'],                                        icon: '🎰', label: 'Casinò' },
