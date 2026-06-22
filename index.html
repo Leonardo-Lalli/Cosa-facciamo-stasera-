@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Cosa facciamo stasera?</title>
   <meta name="description" content="Scopri locali, eventi e serate vicino a te">
   <meta name="theme-color" content="#1a73e8">
@@ -21,14 +21,13 @@
       </div>
 
       <div class="search-box">
-        <input type="text" id="location-input" placeholder="Dove ti trovi? (es. Milano, Roma...)">
+        <input type="text" id="location-input" placeholder="Dove ti trovi? (es. Milano, Roma...)" autocomplete="off">
         <button id="locate-btn" title="Usa posizione attuale">📍</button>
       </div>
 
       <div id="weather-widget" class="weather-widget hidden"></div>
 
       <div class="filters" id="filters-wrap">
-        <button id="filters-toggle" class="filters-toggle hidden">⚙️ Filtri ▾</button>
         <div class="filters-inner">
         <div class="filter-group">
           <label>Raggio (km)</label>
@@ -40,9 +39,9 @@
         <div class="filter-group">
           <label>Mezzo di trasporto</label>
           <div class="transport-options">
-            <button class="transport-btn active" data-mode="walking" title="A piedi">🚶</button>
-            <button class="transport-btn" data-mode="cycling" title="In bici">🚲</button>
-            <button class="transport-btn" data-mode="driving" title="In auto">🚗</button>
+            <button class="transport-btn active" data-mode="walking">🚶</button>
+            <button class="transport-btn" data-mode="cycling">🚲</button>
+            <button class="transport-btn" data-mode="driving">🚗</button>
           </div>
         </div>
         <div class="filter-group">
@@ -88,7 +87,7 @@
       <div id="planner-section" class="planner-section hidden">
         <div class="planner-header">
           <span>🤖 Programma per stasera</span>
-          <button id="planner-btn" class="planner-generate-btn">Mostra</button>
+          <button id="planner-btn" class="planner-generate-btn">Nascondi</button>
         </div>
         <div id="planner-output" class="planner-output"></div>
       </div>
@@ -97,36 +96,32 @@
         <button id="heatmap-btn">📊 Mostra heatmap</button>
       </div>
 
-      <!-- Results drawer (mobile) -->
-      <div id="results-drawer">
-        <div class="drawer-handle"></div>
-        <div class="drawer-scroll" id="drawer-scroll">
-
       <div id="results-header" class="results-header hidden">
         <div class="results-header-inner">
-          <button id="back-btn">← Indietro</button>
-          <span id="results-count">0 locali trovati</span>
-          <button id="random-btn" class="btn-random-small" title="Non so cosa fare" style="margin-left:auto">🎰</button>
+          <button id="back-btn">←</button>
+          <span id="results-count">0 locali</span>
+          <button id="random-btn" class="btn-random-small" title="A caso">🎰</button>
           <select id="sort-select">
             <option value="distance">Più vicini</option>
             <option value="time">Tempo minore</option>
-            <option value="name">Nome A-Z</option>
+            <option value="name">A-Z</option>
           </select>
         </div>
       </div>
 
-      <div id="venue-list" class="venue-list"></div>
+      <!-- Mobile drawer -->
+      <div id="results-drawer">
+        <div class="drawer-handle"></div>
+        <div id="venue-list" class="venue-list"></div>
+      </div>
+
       <div id="loading" class="loading hidden">Cercando i locali migliori...</div>
-
-        </div><!-- drawer-scroll -->
-      </div><!-- results-drawer -->
-
-      <button id="mobile-fab" class="mobile-fab" style="display:none">📋 Lista locali</button>
     </aside>
 
     <main id="map-container">
       <div id="map"></div>
-      <button id="heatmap-fab" class="heatmap-fab hidden" title="Heatmap">🔥</button>
+      <button id="heatmap-fab" class="heatmap-fab hidden">🔥</button>
+      <button id="mobile-fab" class="mobile-fab" style="display:none">📋 Lista locali</button>
     </main>
 
     <div id="venue-detail" class="venue-detail hidden">
@@ -136,7 +131,6 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
   <script src="js/api.js"></script>
   <script src="js/routing.js"></script>
   <script src="js/describer.js"></script>

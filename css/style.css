@@ -843,9 +843,15 @@ body {
 .smart-tag { background: var(--primary-light) !important; color: var(--primary) !important; font-weight: 500; }
 
 /* ===== Mobile Drawer ===== */
-#results-drawer { position: static; }
+#results-drawer { position: static; display: contents; }
 #results-drawer .drawer-handle { display: none; }
 .mobile-fab { display: none !important; }
+#venue-list {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 16px 8px;
+}
 
 .trending-section {
   margin: 0 16px 8px;
