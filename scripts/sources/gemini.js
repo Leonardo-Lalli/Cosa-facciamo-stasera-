@@ -1,4 +1,5 @@
 // ===== Gemini Plan Generator for collector =====
+// Generates 3 plan variants per city (party / culture / foodie)
 const { fetchVenuesForCity } = require('./overpass');
 const fs = require('fs');
 const path = require('path');
@@ -21,6 +22,27 @@ const TOP_CITIES = [
   { name: 'Perugia', lat: 43.1107, lng: 12.3908 },
 ];
 
+const PLAN_TYPES = {
+  party: {
+    emoji: '🪩',
+    label: 'Party',
+    types: ['nightclub', 'bar', 'pub', 'live_music'],
+    prompt: 'Crea un piano serata FESTAIOLO: solo discoteche, pub e musica dal vivo. Tono energico.',
+  },
+  culture: {
+    emoji: '🎭',
+    label: 'Cultura',
+    types: ['cinema', 'theatre', 'live_music', 'events_venue'],
+    prompt: 'Crea un piano serata CULTURALE: cinema, teatri e musica dal vivo. Tono elegante e raffinato.',
+  },
+  foodie: {
+    emoji: '🍝',
+    label: 'Food & Drink',
+    types: ['restaurant', 'bar', 'pub'],
+    prompt: 'Crea un piano serata FOODIE: aperitivo, ristoranti e pub. Tono da buongustaio.',
+  },
+};
+
 async function generatePlans(apiKey, events, plansDir) {
   if (!apiKey || apiKey === 'YOUR_KEY_HERE') {
     console.log('[gemini] No API key – skipping plan generation');
@@ -40,56 +62,72 @@ async function generatePlans(apiKey, events, plansDir) {
 
       if (venues.length === 0 && cityEvents.length === 0) continue;
 
-      const venueList = venues.slice(0, 12).map(v => `- ${v.name} (${v.type})`).join('\n');
-      const eventList = cityEvents.slice(0, 8).map(e =>
+      const allVenues = venues.slice(0, 20);
+      const allEvents = cityEvents.slice(0, 10);
+      const venueList = allVenues.map(v => `- ${v.name} (${v.type})`).join('\n');
+      const eventList = allEvents.map(e =>
         `- ${e.name} al ${e.venue} il ${e.date}${e.priceMin ? ', da ' + e.priceMin + '€' : ''}`
       ).join('\n');
 
-      const prompt = `Sei un esperto di vita notturna italiana. Basandoti su questi locali ed eventi a ${city.name}, scrivi un PROGRAMMA PER STASERA in 2-3 tappe (aperitivo → cena → dopo cena). Tono entusiasta e informale, massimo 200 parole, solo testo con emoji, niente markdown.
+      const plans = {};
 
-LOCALI A ${city.name.toUpperCase()}:
-${venueList || '(nessun locale)'}
+      for (const [key, pt] of Object.entries(PLAN_TYPES)) {
+        const filteredVenues = allVenues.filter(v => pt.types.includes(v.type));
+        const fvList = filteredVenues.map(v => `- ${v.name} (${v.type})`).join('\n');
+
+        const prompt = `Sei un esperto di vita notturna. ${pt.prompt} Scrivi un programma in 2-3 tappe per stasera a ${city.name}. Massimo 150 parole, italiano informale con emoji, niente markdown.
+
+LOCALI:
+${fvList || venueList}
 
 EVENTI:
 ${eventList || '(nessun evento)'}
 
-IL PROGRAMMA PER STASERA A ${city.name.toUpperCase()}:`;
+IL PROGRAMMA ${pt.label.toUpperCase()} PER STASERA A ${city.name.toUpperCase()}:`;
 
-      const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.8, maxOutputTokens: 350 },
-        }),
-      });
+        try {
+          const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: { temperature: 0.9, maxOutputTokens: 300 },
+            }),
+          });
 
-      if (!resp.ok) {
-        console.error(`[gemini] API error for ${city.name}: ${resp.status}`);
-        await sleep(2000);
-        continue;
+          if (!resp.ok) {
+            console.error(`[gemini] API error ${city.name}/${key}: ${resp.status}`);
+            await sleep(1000);
+            continue;
+          }
+
+          const data = await resp.json();
+          const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (text) {
+            plans[key] = { emoji: pt.emoji, label: pt.label, text };
+            count++;
+            console.log(`[gemini] ✓ ${city.name} - ${pt.label}`);
+          }
+          await sleep(1500);
+        } catch (err) {
+          console.error(`[gemini] ${city.name}/${key}: ${err.message}`);
+        }
       }
 
-      const data = await resp.json();
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-      if (text) {
+      if (Object.keys(plans).length > 0) {
         const safeName = city.name.toLowerCase().replace(/\s+/g, '-');
         fs.writeFileSync(
           path.join(plansDir, `${safeName}.json`),
-          JSON.stringify({ city: city.name, plan: text, updated: new Date().toISOString() }, null, 2)
+          JSON.stringify({ city: city.name, plans, updated: new Date().toISOString() }, null, 2)
         );
-        count++;
-        console.log(`[gemini] Plan generated for ${city.name}`);
       }
 
-      await sleep(1500);
     } catch (err) {
       console.error(`[gemini] Error for ${city.name}: ${err.message}`);
     }
   }
 
-  console.log(`[gemini] Generated ${count} city plans`);
+  console.log(`[gemini] Generated ${count} plan variants across ${TOP_CITIES.length} cities`);
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }

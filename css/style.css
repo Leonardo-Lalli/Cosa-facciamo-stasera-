@@ -653,6 +653,41 @@ body {
 .planner-key-input small { font-size: 11px; width: 100%; }
 .planner-key-input a { color: var(--primary); }
 
+.plan-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px 10px 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.plan-tab {
+  padding: 5px 12px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.plan-tab:hover { background: var(--bg-secondary); }
+
+.plan-tab.active {
+  background: #7c3aed;
+  color: #fff;
+  border-color: #7c3aed;
+}
+
+.plan-content {
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+  white-space: pre-line;
+}
+
 /* ===== Loading ===== */
 .loading {
   display: flex;
