@@ -179,7 +179,28 @@ body {
   padding: 12px 20px;
   flex-shrink: 0;
   overflow-y: auto;
+  transition: max-height 0.3s;
 }
+
+.filters.collapsed .filters-inner { display: none; }
+.filters.collapsed { padding: 6px 20px; }
+
+.filters-toggle {
+  display: none;
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  margin-bottom: 4px;
+}
+.filters-toggle:hover { background: var(--border); }
+
+.filters.collapsed .filters-toggle { display: block; }
+.filters:not(.collapsed) .filters-toggle { display: none; }
 
 .filter-group { margin-bottom: 14px; }
 

@@ -27,7 +27,9 @@
 
       <div id="weather-widget" class="weather-widget hidden"></div>
 
-      <div class="filters">
+      <div class="filters" id="filters-wrap">
+        <button id="filters-toggle" class="filters-toggle hidden">⚙️ Filtri ▾</button>
+        <div class="filters-inner">
         <div class="filter-group">
           <label>Raggio (km)</label>
           <div class="range-wrap">
@@ -75,6 +77,7 @@
             <button id="chip-weekend" class="chip special-chip">🗓️ Weekend</button>
             <button id="chip-favorites" class="chip special-chip">⭐ Preferiti</button>
           </div>
+        </div>
         </div>
       </div>
 

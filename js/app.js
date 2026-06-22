@@ -133,8 +133,12 @@ async function performSearch() {
     restoreScrollPosition();
 
     document.getElementById('planner-section').classList.remove('hidden');
-    const po = document.getElementById('planner-output'); if (po) { po.innerHTML = ''; po.dataset.loaded = ''; }
+    const po = document.getElementById('planner-output'); if (po) { po.innerHTML = ''; po.style.display = ''; }
     const pb = document.getElementById('planner-btn'); if (pb) pb.textContent = 'Mostra';
+    // Collapse filters to give venue list more space
+    const fw = document.getElementById('filters-wrap'); const ft = document.getElementById('filters-toggle');
+    if (fw) fw.classList.add('collapsed');
+    if (ft) { ft.classList.remove('hidden'); ft.textContent = '⚙️ Filtri ▸'; }
     document.getElementById('heatmap-toggle').classList.remove('hidden');
     document.getElementById('heatmap-fab').classList.remove('hidden');
 
@@ -279,35 +283,47 @@ window.addEventListener('DOMContentLoaded', () => {
   initMap();
   if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').catch(() => {}); }
 
+  // Filter toggle
+  const filtersToggle = document.getElementById('filters-toggle');
+  const filtersWrap = document.getElementById('filters-wrap');
+  filtersToggle.addEventListener('click', () => {
+    filtersWrap.classList.toggle('collapsed');
+    filtersToggle.textContent = filtersWrap.classList.contains('collapsed') ? '⚙️ Filtri ▸' : '⚙️ Filtri ▾';
+    if (!filtersWrap.classList.contains('collapsed')) filtersToggle.classList.add('hidden');
+  });
+
   // AI Planner
   const plannerSection = document.getElementById('planner-section');
   const plannerBtn = document.getElementById('planner-btn');
   const plannerOutput = document.getElementById('planner-output');
   let currentPlans = null;
+  let plannerLoaded = false;
 
   plannerBtn.addEventListener('click', async () => {
-    if (plannerOutput.dataset.loaded === 'true') {
-      plannerOutput.style.display = plannerOutput.style.display === 'none' ? 'block' : 'none';
+    if (plannerLoaded) {
+      plannerOutput.style.display = plannerOutput.style.display === 'none' ? '' : 'none';
       plannerBtn.textContent = plannerOutput.style.display === 'none' ? 'Mostra' : 'Nascondi';
       return;
     }
+
     plannerOutput.textContent = '🔄 Caricamento...';
+    plannerOutput.style.display = '';
     const result = await loadCityPlan(userLocation?.city);
+
     if (result?.plans && Object.keys(result.plans).length > 0) {
       currentPlans = result.plans;
       showPlanTabs(currentPlans);
-      plannerOutput.dataset.loaded = 'true'; plannerBtn.textContent = 'Nascondi';
     } else {
       const smart = buildSmartPlan(window._lastVenues || [], userLocation?.city);
       if (smart?.plans) {
         currentPlans = smart.plans;
         showPlanTabs(currentPlans);
-        plannerOutput.dataset.loaded = 'true'; plannerBtn.textContent = 'Nascondi';
       } else {
-        plannerOutput.innerHTML = '<div style="padding:10px;text-align:center;color:var(--text-secondary)">😅 Nessun piano per questa città.<br>Cerca prima dei locali!</div>';
-        plannerOutput.dataset.loaded = 'true'; plannerBtn.textContent = 'Nascondi';
+        plannerOutput.innerHTML = '<div style="padding:10px;text-align:center;color:var(--text-secondary)">😅 Nessun piano disponibile.<br>Prova con Roma, Milano o cerca prima dei locali.</div>';
       }
     }
+    plannerLoaded = true;
+    plannerBtn.textContent = 'Nascondi';
   });
 
   function showPlanTabs(plans) {
