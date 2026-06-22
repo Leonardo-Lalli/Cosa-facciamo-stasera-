@@ -1,5 +1,7 @@
 // ===== Main App Controller =====
 
+function $(id) { return document.getElementById(id); }
+
 async function geocode(query) {
   const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
   const resp = await fetch(url, { headers: { 'Accept-Language': 'it' } });
@@ -128,10 +130,9 @@ async function performSearch() {
     if (venues.length === 0) { hideLoading(); renderVenueList([], {}, () => {}, []); clearVenueMarkers(); searchInProgress = false; return; }
 
     // Enter results mode
-    document.getElementById('sidebar').classList.add('results-mode');
-    document.getElementById('filters-toggle').classList.remove('hidden');
-    document.getElementById('filters-toggle').textContent = '⚙️ Filtri ▸';
-    document.getElementById('filters-wrap').classList.add('collapsed');
+    $('sidebar')?.classList.add('results-mode');
+    const ft = $('filters-toggle'); if (ft) { ft.classList.remove('hidden'); ft.textContent = '⚙️ Filtri ▸'; }
+    $('filters-wrap')?.classList.add('collapsed');
 
     // Show trending section
     showTrending();
@@ -160,9 +161,9 @@ async function performSearch() {
     window._venueRoutes = estRoutes;
 
     // UI: show results-mode sections
-    document.getElementById('planner-section').classList.remove('hidden');
-    document.getElementById('heatmap-toggle').classList.remove('hidden');
-    document.getElementById('heatmap-fab').classList.remove('hidden');
+    $('planner-section')?.classList.remove('hidden');
+    $('heatmap-toggle')?.classList.remove('hidden');
+    $('heatmap-fab')?.classList.remove('hidden');
 
     addVenueMarkers(venues, venue => {
       showVenueDetail(venue, window._venueRoutes);
@@ -386,15 +387,15 @@ document.getElementById('close-detail').addEventListener('click', hideVenueDetai
 
 // Back button - exit results mode
 document.getElementById('back-btn').addEventListener('click', () => {
-  document.getElementById('sidebar').classList.remove('results-mode');
-  document.getElementById('filters-wrap').classList.remove('collapsed');
-  document.getElementById('filters-toggle').classList.add('hidden');
-  document.getElementById('planner-section').classList.add('hidden');
-  document.getElementById('heatmap-toggle').classList.add('hidden');
-  document.getElementById('heatmap-fab').classList.add('hidden');
-  document.getElementById('weather-widget').classList.add('hidden');
-  document.getElementById('results-header').classList.add('hidden');
-  document.getElementById('venue-list').innerHTML = '';
+  $('sidebar')?.classList.remove('results-mode');
+  $('filters-wrap')?.classList.remove('collapsed');
+  const ft = $('filters-toggle'); if (ft) ft.classList.add('hidden');
+  $('planner-section')?.classList.add('hidden');
+  $('heatmap-toggle')?.classList.add('hidden');
+  $('heatmap-fab')?.classList.add('hidden');
+  $('weather-widget')?.classList.add('hidden');
+  $('results-header')?.classList.add('hidden');
+  $('venue-list').innerHTML = '';
   clearVenueMarkers();
   hideVenueDetail();
   if (heatmapLayer) { map.removeLayer(heatmapLayer); heatmapLayer = null; }
@@ -424,11 +425,11 @@ document.getElementById('heatmap-fab').addEventListener('click', toggleHeatmap);
 function toggleHeatmap() {
   const venues = window._allVenues;
   if (!venues || venues.length === 0) return;
-  if (heatmapLayer) { map.removeLayer(heatmapLayer); heatmapLayer = null; document.getElementById('heatmap-btn').textContent = '📊 Mostra heatmap'; document.getElementById('heatmap-fab').classList.remove('active'); return; }
+  if (heatmapLayer) { map.removeLayer(heatmapLayer); heatmapLayer = null; const hb = $('heatmap-btn'); if (hb) hb.textContent = '📊 Mostra heatmap'; $('heatmap-fab')?.classList.remove('active'); return; }
   const points = venues.map(v => [v.lat, v.lng, 0.5]);
   heatmapLayer = L.heatLayer(points, { radius: 25, blur: 15, maxZoom: 17, max: 1.0 }).addTo(map);
-  document.getElementById('heatmap-btn').textContent = '📊 Nascondi heatmap';
-  document.getElementById('heatmap-fab').classList.add('active');
+  const hb = $('heatmap-btn'); if (hb) hb.textContent = '📊 Nascondi heatmap';
+  $('heatmap-fab')?.classList.add('active');
 }
 
 window.addEventListener('DOMContentLoaded', () => {
