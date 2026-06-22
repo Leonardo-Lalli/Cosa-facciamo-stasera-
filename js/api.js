@@ -1,6 +1,7 @@
 // ===== Overpass API – fetch venues from OpenStreetMap =====
 const OVERPASS_URLS = [
   'https://overpass-api.de/api/interpreter',
+  'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
   'https://overpass.kumi.systems/api/interpreter',
 ];
 
@@ -75,7 +76,7 @@ async function fetchVenuesBatch(center, radiusMeters, types) {
   for (const url of OVERPASS_URLS) {
     try {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 15000);
+      const timeout = setTimeout(() => controller.abort(), 25000);
       const resp = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
@@ -124,7 +125,7 @@ async function fetchVenuesBatch(center, radiusMeters, types) {
 
     } catch (err) {
       if (err.name === 'AbortError') {
-        lastError = new Error('Overpass API timeout (15s)');
+        lastError = new Error('Overpass API timeout (25s)');
       } else {
         lastError = err;
       }
