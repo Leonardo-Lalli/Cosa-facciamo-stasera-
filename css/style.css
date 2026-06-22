@@ -451,6 +451,18 @@ body {
   color: var(--event-header-color);
 }
 
+.collapsible-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.collapse-arrow { font-size: 14px; transition: transform 0.2s; }
+
+.events-body.collapsed { display: none; }
+
 .event-card {
   display: flex;
   gap: 12px;

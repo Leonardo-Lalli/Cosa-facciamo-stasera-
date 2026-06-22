@@ -101,9 +101,38 @@ document.getElementById('chip-favorites').addEventListener('click', () => {
   favoritesActive = !favoritesActive;
   if (favoritesActive) { openNowActive = false; weekendActive = false; }
   updateSpecialChips();
-  if (window._allVenues) {
-    window._lastVenues = window._allVenues;
-    sortAndRender(window._allVenues, window._venueRoutes || {});
+  if (favoritesActive) {
+    // Load favorites as if they were search results
+    const favs = getFavorites();
+    if (favs.length > 0) {
+      window._allVenues = favs;
+      window._lastVenues = favs;
+      window._venueRoutes = {};
+      favs.forEach(f => { window._venueRoutes[f.id] = { walking: null }; });
+      // Enter results mode UI
+      addClass('sidebar', 'results-mode');
+      showEl('filters-toggle');
+      setText('filters-toggle', '⚙️ Filtri ▸');
+      addClass('filters-wrap', 'collapsed');
+      showEl('results-header');
+      document.querySelectorAll('.venue-card.active').forEach(c => c.classList.remove('active'));
+      sortAndRender(favs, window._venueRoutes);
+      addVenueMarkers(favs, venue => {
+        showVenueDetail(venue, window._venueRoutes);
+        highlightVenueCard(venue);
+        highlightMarker(venue.id);
+      });
+      fitBounds(favs);
+    } else {
+      alert('Nessun preferito salvato. Clicca ☆ su un locale per aggiungerlo.');
+      favoritesActive = false;
+      updateSpecialChips();
+    }
+  } else {
+    // Exit favorites, go back to previous results or clear
+    if (window._allVenues && window._allVenues.length > getFavorites().length) {
+      sortAndRender(window._allVenues, window._venueRoutes || {});
+    }
   }
 });
 
@@ -291,14 +320,24 @@ function renderVenueList(venues, routes, onClick, events) {
   if (events && events.length > 0 && !favoritesActive) {
     const eventSection = document.createElement('div');
     eventSection.className = 'events-section';
-    eventSection.innerHTML = '<div class="events-header">🎟️ Eventi in zona</div>';
+    const headerDiv = document.createElement('div');
+    headerDiv.className = 'events-header collapsible-header';
+    headerDiv.innerHTML = '<span>🎟️ Eventi in zona</span><span class="collapse-arrow">▾</span>';
+    const bodyDiv = document.createElement('div');
+    bodyDiv.className = 'events-body';
+    headerDiv.addEventListener('click', () => {
+      bodyDiv.classList.toggle('collapsed');
+      headerDiv.querySelector('.collapse-arrow').textContent = bodyDiv.classList.contains('collapsed') ? '▸' : '▾';
+    });
     events.forEach(ev => {
       const card = document.createElement('div');
       card.className = 'event-card';
       card.innerHTML = `<div class="venue-icon">🎟️</div><div class="venue-info"><div class="venue-name">${ev.name}</div><div class="venue-meta"><span>📅 ${ev.date || 'TBA'}</span><span>📍 ${ev.venue}${ev.city ? ', ' + ev.city : ''}</span></div></div>${ev.url ? `<button class="venue-go-btn" data-url="${ev.url}" title="Biglietti">🎫 Biglietti</button>` : ''}`;
       card.addEventListener('click', (e) => { if (e.target.classList.contains('venue-go-btn')) { e.stopPropagation(); window.open(e.target.dataset.url, '_blank'); } });
-      eventSection.appendChild(card);
+      bodyDiv.appendChild(card);
     });
+    eventSection.appendChild(headerDiv);
+    eventSection.appendChild(bodyDiv);
     frag.appendChild(eventSection);
   }
 
@@ -322,7 +361,7 @@ function renderVenueList(venues, routes, onClick, events) {
         <div class="venue-meta">
           <span>${venue.label}</span>
           ${r ? `<span>🚶 ${r.walking?.duration || '—'}min</span>` : ''}
-          ${r ? `<span>🚗 ${r.driving?.duration || '—'}min</span>` : ''}
+          ${r ? `<span>🚌 ${r.transit?.duration || '—'}min</span>` : ''}
         </div>
         <div class="venue-tags">
           ${bestTime ? `<span class="venue-tag">⏱ ${bestTime} min</span>` : ''}
@@ -374,7 +413,7 @@ function showVenueDetail(venue, routes) {
   detail.classList.remove('hidden');
 
   const r = routes[venue.id] || {};
-  const routeLabels = { walking: '🚶 A piedi', cycling: '🚲 In bici', driving: '🚗 In auto' };
+  const routeLabels = { walking: '🚶 A piedi', cycling: '🚲 In bici', transit: '🚌 Mezzi', driving: '🚗 In auto' };
   const routesHtml = Object.entries(r).filter(([,v]) => v).map(([mode,v]) => `<div class="detail-route">${routeLabels[mode]||mode}<br><span class="time">${v.duration} min</span> · ${v.distance} km</div>`).join('') || '<div style="font-size:13px;color:var(--text-secondary)">Calcolo percorso...</div>';
 
   // Lazy description

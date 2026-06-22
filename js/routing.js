@@ -43,7 +43,7 @@ async function getRoutesBatch(origin, destinations, mode) {
 
 function estimate(origin, dest, mode) {
   const dist = haversineKm(origin, dest);
-  const speeds = { walking: 5, cycling: 15, driving: 40 };
+  const speeds = { walking: 5, cycling: 15, transit: 25, driving: 40 };
   const speed = speeds[mode] || 5;
   return {
     duration: Math.round((dist / speed) * 60),
@@ -63,7 +63,7 @@ function haversineKm(a, b) {
 }
 
 async function getRoutesForModes(origin, destinations) {
-  const modes = ['walking', 'cycling', 'driving'];
+  const modes = ['walking', 'cycling', 'transit', 'driving'];
   const routes = {};
 
   const batches = modes.map(mode =>
