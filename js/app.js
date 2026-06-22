@@ -59,7 +59,7 @@ function getCurrentPosition() {
   });
 }
 
-let sortListenerAttached = false;
+let plannerLoaded = false;
 
 function getEnrichedIcon(type) {
   const m = { nightclub:'🪩', pub:'🍻', bar:'🍺', cinema:'🎬', theatre:'🎭', live_music:'🎵', dance_hall:'💃', events_venue:'🎪', restaurant:'🍽️', bowling:'🎳', casino:'🎰', arcade:'🕹️', karaoke:'🎤' };
@@ -135,6 +135,7 @@ async function performSearch() {
     document.getElementById('planner-section').classList.remove('hidden');
     const po = document.getElementById('planner-output'); if (po) { po.innerHTML = ''; po.style.display = ''; }
     const pb = document.getElementById('planner-btn'); if (pb) pb.textContent = 'Mostra';
+    plannerLoaded = false;
     // Collapse filters to give venue list more space
     const fw = document.getElementById('filters-wrap'); const ft = document.getElementById('filters-toggle');
     if (fw) fw.classList.add('collapsed');
@@ -297,7 +298,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const plannerBtn = document.getElementById('planner-btn');
   const plannerOutput = document.getElementById('planner-output');
   let currentPlans = null;
-  let plannerLoaded = false;
 
   plannerBtn.addEventListener('click', async () => {
     if (plannerLoaded) {

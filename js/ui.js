@@ -2,7 +2,7 @@
 let selectedModes = ['walking'];
 let selectedTypes = ['nightclub', 'bar', 'pub', 'cinema', 'theatre', 'restaurant'];
 let currentVenues = [];
-let currentRoutes = [];
+let currentRoutes = {};
 let openNowActive = false;
 let weekendActive = false;
 let favoritesActive = false;
@@ -176,7 +176,7 @@ let radiusDebounce;
 document.getElementById('radius-slider').addEventListener('input', (e) => {
   document.getElementById('radius-value').textContent = `${e.target.value} km`;
   clearTimeout(radiusDebounce);
-  radiusDebounce = setTimeout(() => { if (window.userLocation || window.userLocation !== undefined) drawRadiusCircle(userLocation, parseInt(e.target.value)); }, 100);
+  radiusDebounce = setTimeout(() => { if (typeof userLocation !== 'undefined' && userLocation) drawRadiusCircle(userLocation, parseInt(e.target.value)); }, 100);
 });
 document.getElementById('time-slider').addEventListener('input', (e) => {
   document.getElementById('time-value').textContent = `${e.target.value} min`;
