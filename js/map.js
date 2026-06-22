@@ -53,8 +53,10 @@ function switchMapTiles() {
 
 function setUserLocation(lat, lng) {
   userLocation = { lat, lng };
+  suppressExplore = true;
   userMarker.setLatLng([lat, lng]);
   map.setView([lat, lng], 14);
+  lastExploreCenter = { lat, lng };
 }
 
 function drawRadiusCircle(center, radiusKm) {
@@ -136,13 +138,16 @@ function fitBounds(venues) {
 // Explore zone: auto-search on map move
 let exploreTimeout;
 let lastExploreCenter = null;
+let suppressExplore = false;
+
 function enableExploreMode() {
   map.on('moveend', () => {
+    if (suppressExplore) { suppressExplore = false; return; }
     clearTimeout(exploreTimeout);
     exploreTimeout = setTimeout(() => {
       if (!userLocation) return;
+      if (suppressExplore) { suppressExplore = false; return; }
       const c = map.getCenter();
-      // Only trigger if moved more than 500m from last search
       const dist = lastExploreCenter ? haversineKm(
         { lat: lastExploreCenter.lat, lng: lastExploreCenter.lng },
         { lat: c.lat, lng: c.lng }

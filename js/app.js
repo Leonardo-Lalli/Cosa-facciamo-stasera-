@@ -169,6 +169,7 @@ async function performSearch() {
       highlightVenueCard(venue);
       highlightMarker(venue.id);
     });
+    if (typeof suppressExplore !== 'undefined') suppressExplore = true;
     fitBounds(venues);
 
     // BACKGROUND: fetch real routes (non-blocking)
