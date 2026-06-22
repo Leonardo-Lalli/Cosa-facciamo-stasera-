@@ -4,6 +4,7 @@
 # Uso: python scripts/scrape_maps.py
 
 import json, time, random, os, re
+from urllib.parse import urlparse
 from playwright.sync_api import sync_playwright
 from pathlib import Path
 
@@ -34,7 +35,39 @@ SEARCHES = [
 def human_delay(min_s=0.3, max_s=1.5):
     time.sleep(random.uniform(min_s, max_s))
 
-def scrape_city(page, city_name, search_query, venue_type):
+def find_website(page, name, city):
+    """Cerca il sito ufficiale di un locale via Google Search"""
+    try:
+        query = f"{name} {city} sito ufficiale"
+        url = f"https://www.google.com/search?q={query.replace(' ', '+')}&hl=it"
+        page.goto(url, timeout=15000)
+        human_delay(1, 3)
+
+        # Prendi tutti i link organici (non ads)
+        links = page.query_selector_all('a[href^="http"]')
+        for link in links:
+            href = link.get_attribute('href') or ''
+            # Salta Google, Facebook, Instagram, TripAdvisor
+            if any(skip in href for skip in ['google.com', 'facebook.com', 'instagram.com', 'tripadvisor', 'yelp', 'justeat', 'deliveroo', 'thefork', 'youtube']):
+                continue
+            try:
+                from urllib.parse import urlparse
+                parsed = urlparse(href)
+                if parsed.netloc and '.' in parsed.netloc:
+                    return f"{parsed.scheme}://{parsed.netloc}"
+            except:
+                continue
+        return None
+    except:
+        return None
+
+def enrich_websites(page, venues, city):
+    """Arricchisce i locali senza sito cercando su Google"""
+    for v in venues:
+        if v.get('website'):
+            continue
+        v['website'] = find_website(page, v['name'], city)
+        human_delay(1, 2)
     """Cerca un tipo di locale in una città e estrae i risultati"""
     query = f"{search_query} a {city_name}"
     url = f"https://www.google.com/maps/search/{query.replace(' ', '+')}"
@@ -75,12 +108,13 @@ def scrape_city(page, city_name, search_query, venue_type):
                     address = address_match.group(1).strip() if address_match else ""
                     
                     venues.append({
-                        "id": f"gm_{hash(name) % 10**10}",
+                        "id": f"gm_{abs(hash(name)) % 10**10}",
                         "name": name,
                         "address": address,
                         "type": venue_type,
                         "rating": rating,
                         "totalRatings": total_ratings,
+                        "website": None,  # Riempito dopo
                         "source": "google_maps",
                     })
                 except:
@@ -150,9 +184,13 @@ def main():
             for search_query, venue_type in SEARCHES:
                 print(f"  🔍 {search_query}...", end=" ", flush=True)
                 venues = scrape_city(page, city_name, search_query, venue_type)
+                if venues:
+                    print(f"{len(venues)} trovati,", end=" ")
+                    enrich_websites(page, venues, city_name)
+                    print(f"{sum(1 for v in venues if v.get('website'))} siti,", end=" ")
                 added = merge_into_city_json(city_name, venues)
                 total_added += added
-                print(f"{len(venues)} trovati, {added} nuovi")
+                print(f"{added} nuovi")
                 human_delay(3, 8)  # Pausa tra ricerche per non farsi beccare
             
             human_delay(5, 15)  # Pausa tra città
