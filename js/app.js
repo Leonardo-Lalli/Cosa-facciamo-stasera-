@@ -99,6 +99,8 @@ async function performSearch() {
       drawRadiusCircle(userLocation, parseInt(S('radius-slider')?.value || 10));
       const w = await fetchWeather(userLocation.lat, userLocation.lng);
       showWeather(w, userLocation.city);
+    } else if (userLocation) {
+      drawRadiusCircle(userLocation, parseInt(S('radius-slider')?.value || 10));
     }
 
     const radius = parseInt(S('radius-slider')?.value || 10);
