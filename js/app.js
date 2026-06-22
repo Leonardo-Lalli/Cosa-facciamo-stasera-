@@ -126,6 +126,10 @@ async function performSearch() {
     sortAndRender(venues, estRoutes);
     restoreScrollPosition();
     document.getElementById('planner-section').classList.remove('hidden');
+    const po = document.getElementById('planner-output');
+    if (po) { po.innerHTML = ''; po.dataset.loaded = ''; }
+    const pb = document.getElementById('planner-btn');
+    if (pb) pb.textContent = 'Mostra';
 
     addVenueMarkers(venues, venue => {
       const routes = window._venueRoutes || estRoutes;
@@ -288,16 +292,28 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     plannerOutput.textContent = '🔄 Caricamento...';
-    currentPlans = await loadCityPlan(userLocation?.city);
+    const result = await loadCityPlan(userLocation?.city);
 
-    if (currentPlans && Object.keys(currentPlans).length > 0) {
+    if (result?.plans && Object.keys(result.plans).length > 0) {
+      currentPlans = result.plans;
       showPlanTabs(currentPlans);
       plannerOutput.dataset.loaded = 'true';
       plannerBtn.textContent = 'Nascondi';
+      plannerOutput.dataset.source = result.source;
     } else {
-      plannerOutput.innerHTML = '<div style="padding:10px;text-align:center;color:var(--text-secondary)">😅 Nessun piano per questa città.<br>Prova Roma, Milano, Napoli...</div>';
-      plannerOutput.dataset.loaded = 'true';
-      plannerBtn.textContent = 'Nascondi';
+      // Smart fallback from current search results
+      const smart = buildSmartPlan(window._lastVenues || [], userLocation?.city);
+      if (smart?.plans) {
+        currentPlans = smart.plans;
+        showPlanTabs(currentPlans);
+        plannerOutput.dataset.loaded = 'true';
+        plannerBtn.textContent = 'Nascondi';
+        plannerOutput.dataset.source = 'smart';
+      } else {
+        plannerOutput.innerHTML = '<div style="padding:10px;text-align:center;color:var(--text-secondary)">😅 Nessun piano per questa città.<br>Cerca prima dei locali!</div>';
+        plannerOutput.dataset.loaded = 'true';
+        plannerBtn.textContent = 'Nascondi';
+      }
     }
   });
 
