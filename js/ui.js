@@ -380,7 +380,7 @@ function showVenueDetail(venue, routes) {
   const shareText = encodeURIComponent(`Stasera vado al ${venue.name} (${venue.label}) — ${venue.address}\nScoperto con Cosa facciamo stasera?\n`);
   const shareUrl = encodeURIComponent(window.location.href);
   const isFav = isFavorite(venue.id);
-  const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(venue.name)}+${encodeURIComponent(window.userLocation?.city || '')}`;
+  const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(venue.name)}+${encodeURIComponent(typeof userLocation !== 'undefined' && userLocation ? userLocation.city || '' : '')}`;
   const openLabel = isOpenNow(venue.openingHours) ? ' 🟢 Aperto ora' : '';
 
   content.innerHTML = `

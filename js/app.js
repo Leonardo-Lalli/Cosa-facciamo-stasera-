@@ -69,6 +69,7 @@ function getEnrichedLabel(type) {
 }
 
 let sortListenerAttached = false;
+let searchInProgress = false;
 
 // ===== Weather (Open-Meteo, free, no API key) =====
 async function fetchWeather(lat, lng) {
@@ -90,11 +91,14 @@ function showWeather(weather, city) {
 
 // ===== Perform Search =====
 async function performSearch() {
+  if (searchInProgress) return;
+  searchInProgress = true;
+
   const filters = getFilters();
-  if (filters.types.length === 0 && !favoritesActive) { alert('Seleziona almeno un tipo di locale'); return; }
+  if (filters.types.length === 0 && !favoritesActive) { alert('Seleziona almeno un tipo di locale'); searchInProgress = false; return; }
 
   const locationInput = document.getElementById('location-input').value.trim();
-  if (!locationInput && !userLocation) { alert('Inserisci una città o clicca 📍'); return; }
+  if (!locationInput && !userLocation) { alert('Inserisci una città o clicca 📍'); searchInProgress = false; return; }
 
   showLoading();
   clearVenueMarkers();
@@ -121,7 +125,7 @@ async function performSearch() {
     window._events = events.length > 0 ? events : window._events || [];
     window._allVenues = venues;
 
-    if (venues.length === 0) { hideLoading(); renderVenueList([], {}, () => {}, []); clearVenueMarkers(); return; }
+    if (venues.length === 0) { hideLoading(); renderVenueList([], {}, () => {}, []); clearVenueMarkers(); searchInProgress = false; return; }
 
     // Enter results mode
     document.getElementById('sidebar').classList.add('results-mode');
@@ -132,7 +136,8 @@ async function performSearch() {
     // Show trending section
     showTrending();
 
-    // New events badge
+    // New events badge (clear old ones first)
+    document.querySelectorAll('.new-events-badge').forEach(b => b.remove());
     const newEvents = checkNewEvents(userLocation?.city, events);
     if (newEvents.length > 0) {
       const badge = document.createElement('span');
@@ -176,8 +181,10 @@ async function performSearch() {
     saveScrollPosition();
     sortAndRender(venues, realRoutes);
     restoreScrollPosition();
+    searchInProgress = false;
 
   } catch (err) {
+    searchInProgress = false;
     hideLoading();
     console.error(err);
     const msg = err.message || '';
@@ -436,28 +443,28 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Mobile drawer
   const drawer = document.getElementById('results-drawer');
-  const drawerHandle = drawer.querySelector('.drawer-handle');
-  const mobileFab = document.getElementById('mobile-fab');
-  let drawerExpanded = false;
+  if (drawer) {
+    const drawerHandle = drawer.querySelector('.drawer-handle');
+    const mobileFab = document.getElementById('mobile-fab');
+    let drawerExpanded = false;
 
-  function toggleDrawer() {
-    drawerExpanded = !drawerExpanded;
-    drawer.classList.toggle('expanded', drawerExpanded);
-    mobileFab.textContent = drawerExpanded ? '🗺️ Mappa' : '📋 Lista locali';
-  }
-
-  drawerHandle.addEventListener('click', toggleDrawer);
-  mobileFab.addEventListener('click', toggleDrawer);
-
-  // Auto-expand drawer when results appear on mobile
-  const origSortAndRender = window.sortAndRender;
-  window._onResultsReady = () => {
-    if (window.innerWidth <= 768) {
-      drawer.classList.remove('hidden');
-      drawerExpanded = true;
-      drawer.classList.add('expanded');
-      mobileFab.style.display = 'flex';
-      mobileFab.textContent = '🗺️ Mappa';
+    function toggleDrawer() {
+      drawerExpanded = !drawerExpanded;
+      drawer.classList.toggle('expanded', drawerExpanded);
+      if (mobileFab) mobileFab.textContent = drawerExpanded ? '🗺️ Mappa' : '📋 Lista locali';
     }
-  };
+
+    if (drawerHandle) drawerHandle.addEventListener('click', toggleDrawer);
+    if (mobileFab) mobileFab.addEventListener('click', toggleDrawer);
+
+    window._onResultsReady = () => {
+      if (window.innerWidth <= 768 && mobileFab) {
+        drawer.classList.remove('hidden');
+        drawerExpanded = true;
+        drawer.classList.add('expanded');
+        mobileFab.style.display = 'flex';
+        mobileFab.textContent = '🗺️ Mappa';
+      }
+    };
+  }
 });

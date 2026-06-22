@@ -141,9 +141,9 @@ function enableExploreMode() {
     exploreTimeout = setTimeout(() => {
       if (!userLocation) return;
       const c = map.getCenter();
-      userLocation = { lat: c.lat, lng: c.lng, city: userLocation.city, display: userLocation.display };
+      userLocation = { lat: c.lat, lng: c.lng, city: userLocation.city || '', display: userLocation.display || '' };
       document.getElementById('location-input').value = `${c.lat.toFixed(4)}, ${c.lng.toFixed(4)}`;
-      if (typeof performSearch === 'function') performSearch();
+      if (typeof performSearch === 'function' && !searchInProgress) performSearch();
     }, 800);
   });
 }

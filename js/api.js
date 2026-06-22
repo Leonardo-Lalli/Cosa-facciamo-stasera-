@@ -103,12 +103,12 @@ async function fetchVenuesBatch(center, radiusMeters, types) {
         })
         .map(el => {
           const tags = el.tags || {};
-          const cat = findCategory(tags, selectedTypes);
+          const cat = findCategory(tags, types);
           const venue = {
             id: el.id,
             lat: el.lat ?? el.center?.lat,
             lng: el.lon ?? el.center?.lon,
-            name: tags.name || tags['name:it'] || VENUE_TYPES[cat]?.label || 'Locale',
+            name: sanitize(tags.name || tags['name:it'] || VENUE_TYPES[cat]?.label || 'Locale'),
             address: formatAddress(tags),
             type: cat,
             icon: VENUE_TYPES[cat]?.icon || '📍',
@@ -146,9 +146,15 @@ function findCategory(tags, selectedTypes) {
 function formatAddress(tags) {
   const parts = [];
   if (tags['addr:street']) {
-    parts.push(tags['addr:housenumber'] ? `${tags['addr:street']} ${tags['addr:housenumber']}` : tags['addr:street']);
+    const num = tags['addr:housenumber'] || '';
+    parts.push(num ? `${tags['addr:street']} ${num}` : tags['addr:street']);
   }
   const city = tags['addr:city'] || tags['addr:town'] || tags['addr:village'];
   if (city) parts.push(city);
   return parts.join(', ') || 'Indirizzo non disponibile';
+}
+
+function sanitize(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }

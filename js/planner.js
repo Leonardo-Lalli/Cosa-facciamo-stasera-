@@ -18,7 +18,7 @@ async function loadCityPlan(cityName) {
 function buildSmartPlan(venues, city) {
   if (!venues || venues.length === 0) return null;
 
-  const bars = venues.filter(v => ['bar', 'pub'].includes(v.type) && v.website);
+  const bars = venues.filter(v => ['bar', 'pub'].includes(v.type));
   const rests = venues.filter(v => v.type === 'restaurant');
   const clubs = venues.filter(v => ['nightclub', 'live_music', 'dance_hall'].includes(v.type));
   const culture = venues.filter(v => ['cinema', 'theatre', 'events_venue'].includes(v.type));
