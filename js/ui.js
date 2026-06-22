@@ -424,8 +424,17 @@ function showVenueDetail(venue, routes) {
 
   const allEvents = window._events || [];
   const venueEvents = allEvents.filter(ev => {
-    const vn = (ev.venue || '').toLowerCase(), nn = venue.name.toLowerCase();
-    return vn.includes(nn) || nn.includes(vn) || (vn && nn && vn.split(' ').some(w => nn.includes(w)));
+    const evVenue = (ev.venue || '').toLowerCase().trim();
+    const vName = venue.name.toLowerCase().trim();
+    // Exact match or one fully contains the other
+    if (evVenue === vName) return true;
+    if (evVenue.includes(vName) || vName.includes(evVenue)) return true;
+    // At least 2 words must match between venue names
+    const evWords = evVenue.split(/\s+/).filter(w => w.length > 2);
+    const vnWords = vName.split(/\s+/).filter(w => w.length > 2);
+    if (evWords.length === 0 || vnWords.length === 0) return false;
+    const matchCount = evWords.filter(w => vnWords.includes(w)).length;
+    return matchCount >= Math.min(2, Math.min(evWords.length, vnWords.length));
   });
 
   const eventsHtml = venueEvents.length > 0 ? `<div class="detail-events"><h3>🎟️ Prossime serate</h3>${venueEvents.map(ev => `<div class="detail-event-item">${ev.image ? `<img src="${ev.image}" class="detail-event-img" alt="${ev.name}" loading="lazy">` : ''}<div class="detail-event-info"><div class="detail-event-name">${ev.name}</div><div class="detail-event-meta">📅 ${ev.date||'TBA'}${ev.time ? ' · 🕐 '+ev.time : ''}</div></div>${ev.priceMin ? `<div class="detail-event-price">da ${ev.priceMin}€</div>` : ''}${ev.url ? `<button class="detail-event-btn" onclick="window.open('${ev.url}','_blank')">Biglietti</button>` : ''}</div>`).join('')}</div>` : '';
