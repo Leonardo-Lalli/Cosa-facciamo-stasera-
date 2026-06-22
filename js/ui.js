@@ -1,6 +1,6 @@
 // ===== UI Module =====
 let selectedModes = ['walking'];
-let selectedTypes = ['nightclub', 'bar', 'cinema', 'theatre', 'restaurant'];
+let selectedTypes = ['nightclub', 'bar', 'pub', 'cinema', 'theatre', 'restaurant'];
 let currentVenues = [];
 let currentRoutes = {};
 

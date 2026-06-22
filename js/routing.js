@@ -1,78 +1,85 @@
-// ===== OSRM Routing – travel time & distance =====
+// ===== OSRM Routing – batched travel time & distance =====
 const OSRM_URL = 'https://router.project-osrm.org';
 
-async function getRoute(origin, dest, mode) {
-  const profiles = {
-    walking: 'foot',
-    cycling: 'bike',
-  };
+const MODE_PROFILE = {
+  walking: 'foot',
+  cycling: 'bike',
+  driving: 'driving',
+};
 
-  if (mode === 'driving') {
-    return getDrivingRoute(origin, dest);
+async function getRoutesBatch(origin, destinations, mode) {
+  const profile = MODE_PROFILE[mode] || 'foot';
+  if (destinations.length === 0) return [];
+
+  const coords = [origin, ...destinations].map(p => `${p.lng},${p.lat}`).join(';');
+  const url = `${OSRM_URL}/table/v1/${profile}/${coords}?annotations=duration,distance`;
+
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error(`OSRM ${resp.status}`);
+    const data = await resp.json();
+
+    if (!data.durations || data.durations.length < 2) throw new Error('No routes');
+
+    const results = [];
+    for (let i = 0; i < destinations.length; i++) {
+      const durationSec = data.durations[0]?.[i + 1];
+      const distanceM = data.distances[0]?.[i + 1];
+      if (durationSec != null) {
+        results.push({
+          duration: Math.round(durationSec / 60),
+          distance: (distanceM / 1000).toFixed(1),
+        });
+      } else {
+        results.push(null);
+      }
+    }
+    return results;
+  } catch {
+    // Fallback: haversine estimation
+    return destinations.map(d => estimate(origin, d, mode));
   }
-
-  const profile = profiles[mode] || 'foot';
-  const url = `${OSRM_URL}/route/v1/${profile}/${origin.lng},${origin.lat};${dest.lng},${dest.lat}?overview=false`;
-
-  const resp = await fetch(url);
-  if (!resp.ok) throw new Error(`OSRM error: ${resp.status}`);
-  const data = await resp.json();
-
-  if (!data.routes || data.routes.length === 0) return null;
-
-  const route = data.routes[0];
-  return {
-    duration: Math.round(route.duration / 60),
-    distance: (route.distance / 1000).toFixed(1),
-  };
 }
 
-async function getDrivingRoute(origin, dest) {
-  const url = `${OSRM_URL}/route/v1/driving/${origin.lng},${origin.lat};${dest.lng},${dest.lat}?overview=false`;
-
-  const resp = await fetch(url);
-  if (!resp.ok) return estimateDriving(origin, dest);
-  const data = await resp.json();
-
-  if (!data.routes || data.routes.length === 0) return estimateDriving(origin, dest);
-
-  const route = data.routes[0];
-  return {
-    duration: Math.round(route.duration / 60),
-    distance: (route.distance / 1000).toFixed(1),
-  };
-}
-
-function estimateDriving(origin, dest) {
-  const dist = haversine(origin, dest);
-  const speed = 40; // km/h average city speed
+function estimate(origin, dest, mode) {
+  const dist = haversineKm(origin, dest);
+  const speeds = { walking: 5, cycling: 15, driving: 40 };
+  const speed = speeds[mode] || 5;
   return {
     duration: Math.round((dist / speed) * 60),
     distance: dist.toFixed(1),
   };
 }
 
-function haversine(a, b) {
+function haversineKm(a, b) {
   const R = 6371;
   const dLat = (b.lat - a.lat) * Math.PI / 180;
   const dLng = (b.lng - a.lng) * Math.PI / 180;
   const sinLat = Math.sin(dLat / 2);
   const sinLng = Math.sin(dLng / 2);
-  const aVal = sinLat * sinLat + Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) * sinLng * sinLng;
-  return R * 2 * Math.atan2(Math.sqrt(aVal), Math.sqrt(1 - aVal));
+  const v = sinLat * sinLat + Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) * sinLng * sinLng;
+  return R * 2 * Math.atan2(Math.sqrt(v), Math.sqrt(1 - v));
 }
 
-async function getRoutesForModes(origin, dest) {
+async function getRoutesForModes(origin, destinations) {
   const modes = ['walking', 'cycling', 'driving'];
-  const results = {};
+  const routes = {};
 
-  for (const mode of modes) {
-    try {
-      results[mode] = await getRoute(origin, dest, mode);
-    } catch {
-      results[mode] = null;
-    }
-  }
+  const batches = modes.map(mode =>
+    getRoutesBatch(origin, destinations, mode)
+      .then(results => { routes[mode] = results; })
+      .catch(() => { routes[mode] = destinations.map(d => estimate(origin, d, mode)); })
+  );
 
-  return results;
+  await Promise.allSettled(batches);
+
+  const mapped = {};
+  destinations.forEach((_, i) => {
+    mapped[i] = {};
+    modes.forEach(mode => {
+      if (routes[mode]?.[i]) mapped[i][mode] = routes[mode][i];
+    });
+  });
+
+  return mapped;
 }

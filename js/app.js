@@ -1,23 +1,16 @@
 // ===== Main App Controller =====
 
-// Geocode address to coordinates using Nominatim (OpenStreetMap)
 async function geocode(query) {
   const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
-  const resp = await fetch(url, {
-    headers: { 'Accept-Language': 'it' },
-  });
+  const resp = await fetch(url, { headers: { 'Accept-Language': 'it' } });
   const data = await resp.json();
   if (data.length === 0) throw new Error('Luogo non trovato');
   return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon), display: data[0].display_name };
 }
 
-// Get user's current location via browser
 function getCurrentPosition() {
   return new Promise((resolve, reject) => {
-    if (!navigator.geolocation) {
-      reject(new Error('Geolocalizzazione non supportata'));
-      return;
-    }
+    if (!navigator.geolocation) return reject(new Error('Geolocalizzazione non supportata'));
     navigator.geolocation.getCurrentPosition(
       pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
       () => reject(new Error('Impossibile ottenere la posizione'))
@@ -25,7 +18,8 @@ function getCurrentPosition() {
   });
 }
 
-// Main search function
+let sortListenerAttached = false;
+
 async function performSearch() {
   const filters = getFilters();
 
@@ -45,7 +39,7 @@ async function performSearch() {
   hideVenueDetail();
 
   try {
-    // Geocode if needed
+    // Geocode
     if (locationInput && (!userLocation || userLocation.display !== locationInput)) {
       const loc = await geocode(locationInput);
       userLocation = loc;
@@ -58,45 +52,57 @@ async function performSearch() {
     // Fetch venues from Overpass
     const venues = await fetchVenues(userLocation, filters.radius, filters.types);
 
-    // Calculate routes for all venues
-    const routes = {};
-    const validVenues = [];
-
-    for (const venue of venues) {
-      try {
-        const r = await getRoutesForModes(
-          { lat: userLocation.lat, lng: userLocation.lng },
-          { lat: venue.lat, lng: venue.lng }
-        );
-        routes[venue.id] = r;
-
-        // Filter by max time
-        const bestTime = Math.min(...Object.values(r).filter(Boolean).map(x => x.duration));
-        if (bestTime <= filters.maxTime) {
-          validVenues.push(venue);
-        }
-      } catch {
-        // If routing fails, still show the venue
-        validVenues.push(venue);
-        routes[venue.id] = {};
-      }
+    if (venues.length === 0) {
+      hideLoading();
+      renderVenueList([], {}, () => {});
+      clearVenueMarkers();
+      return;
     }
 
-    // Sort
-    document.getElementById('sort-select').addEventListener('change', () => sortAndRender(validVenues, routes));
+    // Show venues immediately with estimated distances
+    const estimatedRoutes = {};
+    venues.forEach(v => {
+      estimatedRoutes[v.id] = {
+        walking: estimate({ lat: userLocation.lat, lng: userLocation.lng }, { lat: v.lat, lng: v.lng }, 'walking'),
+      };
+    });
 
-    sortAndRender(validVenues, routes);
-    addVenueMarkers(validVenues, (venue) => {
+    sortAndRender(venues, estimatedRoutes);
+    addVenueMarkers(venues, venue => {
+      const routes = window._venueRoutes || estimatedRoutes;
       showVenueDetail(venue, routes);
       highlightVenueCard(venue);
     });
+    fitBounds(venues);
 
-    if (validVenues.length > 0) fitBounds(validVenues);
+    // Then get real OSRM routes in batch
+    const dests = venues.map(v => ({ lat: v.lat, lng: v.lng }));
+    const batchRoutes = await getRoutesForModes(
+      { lat: userLocation.lat, lng: userLocation.lng },
+      dests
+    );
+
+    const realRoutes = {};
+    venues.forEach((v, i) => {
+      realRoutes[v.id] = batchRoutes[i] || {};
+    });
+    window._venueRoutes = realRoutes;
+
+    // Filter by max time
+    const filtered = venues.filter(v => {
+      const r = realRoutes[v.id];
+      if (!r || Object.keys(r).length === 0) return true;
+      const times = Object.values(r).filter(Boolean).map(x => x.duration);
+      if (times.length === 0) return true;
+      return Math.min(...times) <= filters.maxTime;
+    });
+
+    sortAndRender(filtered, realRoutes);
 
   } catch (err) {
     hideLoading();
     console.error(err);
-    alert('Errore nella ricerca: ' + err.message);
+    alert('Errore: ' + (err.message || 'Qualcosa è andato storto'));
   }
 }
 
@@ -105,41 +111,41 @@ function sortAndRender(venues, routes) {
   const sorted = [...venues];
 
   if (sortBy === 'name') {
-    sorted.sort((a, b) => a.name.localeCompare(b.name));
+    sorted.sort((a, b) => a.name.localeCompare(b.name, 'it'));
   } else if (sortBy === 'time') {
-    sorted.sort((a, b) => {
-      const ta = getBestTime(routes[a.id]);
-      const tb = getBestTime(routes[b.id]);
-      return ta - tb;
-    });
+    sorted.sort((a, b) => getBestTime(routes[a.id]) - getBestTime(routes[b.id]));
   } else {
-    sorted.sort((a, b) => {
-      const da = getBestDist(routes[a.id]);
-      const db = getBestDist(routes[b.id]);
-      return da - db;
-    });
+    sorted.sort((a, b) => getBestDist(routes[a.id]) - getBestDist(routes[b.id]));
   }
 
-  renderVenueList(sorted, routes, (venue) => {
+  renderVenueList(sorted, routes, venue => {
     showVenueDetail(venue, routes);
     highlightVenueCard(venue);
   });
+
+  if (!sortListenerAttached) {
+    sortListenerAttached = true;
+    document.getElementById('sort-select').addEventListener('change', () => {
+      sortAndRender(window._lastVenues || sorted, window._venueRoutes || routes);
+    });
+  }
+
+  window._lastVenues = sorted;
 }
 
 function getBestTime(r) {
-  if (!r) return Infinity;
+  if (!r || Object.keys(r).length === 0) return Infinity;
   return Math.min(...Object.values(r).filter(Boolean).map(x => x.duration));
 }
 
 function getBestDist(r) {
-  if (!r) return Infinity;
+  if (!r || Object.keys(r).length === 0) return Infinity;
   return Math.min(...Object.values(r).filter(Boolean).map(x => parseFloat(x.distance)));
 }
 
 function highlightVenueCard(venue) {
   document.querySelectorAll('.venue-card.active').forEach(c => c.classList.remove('active'));
-  const cards = document.querySelectorAll('.venue-card');
-  cards.forEach(card => {
+  document.querySelectorAll('.venue-card').forEach(card => {
     if (card.querySelector('.venue-name')?.textContent === venue.name) {
       card.classList.add('active');
       card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -155,8 +161,6 @@ document.getElementById('locate-btn').addEventListener('click', async () => {
     const pos = await getCurrentPosition();
     userLocation = pos;
     setUserLocation(pos.lat, pos.lng);
-
-    // Reverse geocode to show city name
     try {
       const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.lat}&lon=${pos.lng}`;
       const resp = await fetch(url, { headers: { 'Accept-Language': 'it' } });
@@ -164,21 +168,16 @@ document.getElementById('locate-btn').addEventListener('click', async () => {
       const city = data.address?.city || data.address?.town || data.address?.village || '';
       if (city) document.getElementById('location-input').value = city;
     } catch {}
-
-    // Auto-search
     performSearch();
   } catch (err) {
     alert(err.message);
   }
 });
 
-document.getElementById('location-input').addEventListener('keydown', (e) => {
+document.getElementById('location-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') performSearch();
 });
 
 document.getElementById('close-detail').addEventListener('click', hideVenueDetail);
 
-// Init map on load
-window.addEventListener('DOMContentLoaded', () => {
-  initMap();
-});
+window.addEventListener('DOMContentLoaded', initMap);
