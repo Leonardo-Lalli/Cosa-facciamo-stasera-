@@ -362,7 +362,7 @@ function renderVenueList(venues, routes, onClick, events) {
         <div class="venue-meta">
           <span>${venue.label}</span>
           ${r ? `<span>🚶 ${r.walking?.duration || '—'}min</span>` : ''}
-          ${r ? `<span>🚌 ${r.transit?.duration || '—'}min</span>` : ''}
+          ${r ? `<span>🚗 ${r.driving?.duration || '—'}min</span>` : ''}
         </div>
         <div class="venue-tags">
           ${bestTime ? `<span class="venue-tag">⏱ ${bestTime} min</span>` : ''}

@@ -991,7 +991,7 @@ body {
 
   .drawer-handle {
     display: flex; justify-content:center; align-items:center;
-    min-height: 32px; flex-shrink:0; cursor:pointer; touch-action:none;
+    min-height: 36px; flex-shrink:0; cursor:pointer; touch-action:none;
   }
   .drawer-handle::after {
     content: ''; width: 40px; height: 5px;
@@ -999,8 +999,10 @@ body {
   }
 
   #results-header {
-    padding:2px 12px; flex-shrink:0; border-bottom:1px solid var(--border);
+    padding:4px 12px; flex-shrink:0;
+    border-bottom:1px solid var(--border);
   }
+  #results-header.hidden { display:none; }
   #results-count { font-size:11px; }
   #sort-select { font-size:10px; margin-left:auto; }
   #back-btn { font-size:10px; padding:2px 6px; }
