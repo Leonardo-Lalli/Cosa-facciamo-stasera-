@@ -1,7 +1,6 @@
 // ===== Main App Controller (stable) =====
 let sortListenerAttached = false;
 let searchInProgress = false;
-let heatmapLayer = null;
 
 // ===== Geocode =====
 async function geocode(query) {
@@ -132,9 +131,6 @@ async function performSearch() {
     showEl('filters-toggle');
     setText('filters-toggle', '⚙️ Filtri ▸');
     addClass('filters-wrap', 'collapsed');
-    showEl('planner-section');
-    showEl('heatmap-toggle');
-    showEl('heatmap-fab');
 
     saveScrollPosition();
     sortAndRender(venues, estRoutes);
@@ -149,8 +145,6 @@ async function performSearch() {
 
     // Background: real routes
     updateRoutesInBackground(venues);
-    // Background: AI plan (deferred)
-    setTimeout(() => { if (typeof autoLoadPlan === 'function') autoLoadPlan(); }, 800);
     searchInProgress = false;
 
   } catch (err) {
@@ -255,33 +249,12 @@ S('back-btn')?.addEventListener('click', () => {
   removeClass('filters-wrap', 'collapsed');
   hideEl('filters-toggle');
   hideEl('planner-section');
-  hideEl('heatmap-toggle');
-  hideEl('heatmap-fab');
   hideEl('weather-widget');
   hideEl('results-header');
   if (S('venue-list')) S('venue-list').innerHTML = '';
   clearVenueMarkers();
   if (typeof hideVenueDetail === 'function') hideVenueDetail();
-  if (heatmapLayer) { map.removeLayer(heatmapLayer); heatmapLayer = null; }
 });
-
-// ===== Heatmap =====
-S('heatmap-btn')?.addEventListener('click', toggleHeatmap);
-S('heatmap-fab')?.addEventListener('click', toggleHeatmap);
-
-function toggleHeatmap() {
-  const venues = window._allVenues;
-  if (!venues?.length || typeof L === 'undefined' || !L.heatLayer) return;
-  if (heatmapLayer) {
-    map.removeLayer(heatmapLayer); heatmapLayer = null;
-    setText('heatmap-btn', '📊 Mostra heatmap');
-    removeClass('heatmap-fab', 'active');
-  } else {
-    heatmapLayer = L.heatLayer(venues.map(v => [v.lat, v.lng, 0.5]), { radius: 25, blur: 15, maxZoom: 17 }).addTo(map);
-    setText('heatmap-btn', '📊 Nascondi heatmap');
-    addClass('heatmap-fab', 'active');
-  }
-}
 
 // ===== Dark mode =====
 function initTheme() {

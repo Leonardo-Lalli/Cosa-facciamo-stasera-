@@ -112,6 +112,14 @@ Aggiungi come GitHub Secrets:
 └── data/                      # JSON auto-generati
 ```
 
+## 🔮 In sviluppo (prossime versioni)
+
+- [ ] 🔥 **Heatmap** — mappa di calore con densità locali (rimossa temporaneamente, bug fixing)
+- [ ] 🗺️ **Esplora zona** — muovi la mappa e i risultati si aggiornano (rimossa temporaneamente)
+- [ ] 🤖 **Pianificatore AI** — in fase di ottimizzazione
+- [ ] 📸 **Foto locali** via scraper Google Maps (in sviluppo)
+- [ ] 🔔 Notifiche nuovi eventi
+
 ## 📄 Licenza
 
 MIT
