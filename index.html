@@ -97,6 +97,11 @@
         <button id="heatmap-btn">📊 Mostra heatmap</button>
       </div>
 
+      <!-- Results drawer (mobile) -->
+      <div id="results-drawer">
+        <div class="drawer-handle"></div>
+        <div class="drawer-scroll" id="drawer-scroll">
+
       <div id="results-header" class="results-header hidden">
         <div class="results-header-inner">
           <button id="back-btn">← Indietro</button>
@@ -112,6 +117,11 @@
 
       <div id="venue-list" class="venue-list"></div>
       <div id="loading" class="loading hidden">Cercando i locali migliori...</div>
+
+        </div><!-- drawer-scroll -->
+      </div><!-- results-drawer -->
+
+      <button id="mobile-fab" class="mobile-fab" style="display:none">📋 Lista locali</button>
     </aside>
 
     <main id="map-container">

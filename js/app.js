@@ -203,6 +203,8 @@ function sortAndRender(venues, routes) {
     highlightMarker(venue.id);
   }, window._events || []);
 
+  if (window._onResultsReady) window._onResultsReady();
+
   if (!sortListenerAttached) {
     sortListenerAttached = true;
     document.getElementById('sort-select').addEventListener('change', () => {
@@ -420,4 +422,31 @@ window.addEventListener('DOMContentLoaded', () => {
     po.style.display = isHidden ? '' : 'none';
     document.getElementById('planner-btn').textContent = isHidden ? 'Nascondi' : 'Mostra';
   });
+
+  // Mobile drawer
+  const drawer = document.getElementById('results-drawer');
+  const drawerHandle = drawer.querySelector('.drawer-handle');
+  const mobileFab = document.getElementById('mobile-fab');
+  let drawerExpanded = false;
+
+  function toggleDrawer() {
+    drawerExpanded = !drawerExpanded;
+    drawer.classList.toggle('expanded', drawerExpanded);
+    mobileFab.textContent = drawerExpanded ? '🗺️ Mappa' : '📋 Lista locali';
+  }
+
+  drawerHandle.addEventListener('click', toggleDrawer);
+  mobileFab.addEventListener('click', toggleDrawer);
+
+  // Auto-expand drawer when results appear on mobile
+  const origSortAndRender = window.sortAndRender;
+  window._onResultsReady = () => {
+    if (window.innerWidth <= 768) {
+      drawer.classList.remove('hidden');
+      drawerExpanded = true;
+      drawer.classList.add('expanded');
+      mobileFab.style.display = 'flex';
+      mobileFab.textContent = '🗺️ Mappa';
+    }
+  };
 });
