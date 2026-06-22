@@ -1,9 +1,11 @@
 # 🎯 Cosa facciamo stasera?
 
-**Scopri cosa fare stasera attorno a te.** Inserisci una città, scegli il raggio e i tuoi interessi — l'app ti mostra discoteche, pub, cinema, ristoranti e molto altro, con tempi di percorrenza a piedi, in bici o in auto.
+**[🌐 Apri il sito](https://leonardo-lalli.github.io/Cosa-facciamo-stasera-/)** — cerca subito cosa fare stasera nella tua zona!
+
+**Scopri locali, eventi e serate vicino a te.** Inserisci una città, scegli il raggio e i tuoi interessi — l'app ti mostra discoteche, pub, cinema, ristoranti e molto altro, con tempi di percorrenza a piedi, in bici o in auto.
 
 <p align="center">
-  <img src="https://img.shields.io/badge/status-active-brightgreen">
+  <img src="https://img.shields.io/badge/sito-online-brightgreen">
   <img src="https://img.shields.io/badge/license-MIT-blue">
   <img src="https://img.shields.io/badge/costo-0€-success">
   <img src="https://img.shields.io/badge/PWA-installabile-orange">
@@ -15,19 +17,50 @@
 
 ## ✨ Funzionalità
 
-- 🔍 **Cerca per città** o usa la geolocalizzazione 📍
-- 📏 **Raggio personalizzabile** da 1 a 50 km
-- 🚶🚲🚗 **3 modalità di trasporto** con tempi reali (OSRM)
-- ⏱ **Filtra per tempo massimo** di percorrenza
-- 🏷️ **13 tipi di locali**: discoteche, bar, pub, cinema, teatri, ristoranti, musica dal vivo, bowling, sale eventi, ballo, casinò, sale giochi, karaoke
-- 🗺️ **Mappa interattiva** stile Google Maps (Leaflet + OpenStreetMap)
-- 📝 **Descrizioni automatiche** con pro e contro per ogni locale (da dati OSM)
-- 🎟️ **Eventi in zona** con prezzi e link biglietti (Ticketmaster + Songkick)
-- 🤖 **Pianificatore AI** che ti crea un programma per la serata (Gemini, gratis)
-- 📱 **Condivisione social** WhatsApp / Telegram / Copia link
+### 🔍 Scoperta locali
+- Cerca per città o geolocalizzazione
+- Raggio 1-50 km personalizzabile
+- 13 tipi di locale: discoteche, bar, pub, cinema, teatri, ristoranti, musica dal vivo, bowling, sale eventi, ballo, casinò, sale giochi, karaoke
+- Mappa interattiva stile Google Maps con marker cliccabili
+
+### 🚶 Routing e filtri
+- 3 modalità di trasporto: 🚶 a piedi, 🚲 bici, 🚗 auto (tempi reali via OSRM)
+- Filtra per tempo massimo di percorrenza
+- 🕐 **Aperto ora** — mostra solo locali aperti in questo momento
+- 🗓️ **Weekend** — filtra per venerdì/sabato
+- 🔥 **Heatmap** — mappa di calore con la densità dei locali
+
+### 📝 Contenuti automatici
+- **Descrizioni con pro/contro** generate dai tag OpenStreetMap (WiFi, terrazza, accessibilità, fumatori, parcheggio...)
+- **Etichette smart** su ogni card (⭐ Top, 👥 Gruppi, 🕯️ Romantico, 🌿 Terrazza...)
+- **🏷️ Logo animato** — "Cosa guardiamo stasera?", "Cosa mangiamo stasera?", "Dove balliamo stasera?"
+
+### 🎟️ Eventi e serate
+- Eventi in zona con date, prezzi e link biglietti (Ticketmaster + Songkick)
+- Badge "🆕 nuovi eventi" quando trovi serate che non avevi ancora visto
+- 🔍 **Ricerca sito** — se il locale non ha il sito, link diretto a Google
+
+### 🤖 AI
+- **Pianificatore automatico** — piano serata in 2-3 tappe (aperitivo → cena → dopocena)
+- 3 varianti: 🪩 Party, 🎭 Cultura, 🍝 Food & Drink
+- Smart fallback per qualsiasi città (anche senza AI pre-generato)
+
+### 🎨 UI/UX
 - 🌙 **Dark mode** con toggle e salvataggio automatico
-- ⌨️ **Logo animato** — "Cosa guardiamo stasera?", "Cosa mangiamo stasera?", etc.
+- 📱 **Condivisione social** WhatsApp / Telegram / Copia link
+- ⭐ **Preferiti** salvati nel browser (localStorage, nessun login)
+- 🎰 **Pesca un locale a caso**
 - 📲 **PWA** — installabile su telefono come app nativa
+- ☀️ **Meteo** in tempo reale nella città cercata
+- 📱 **Layout mobile** con drawer scorrevole dal basso
+
+### 📊 Smart features
+- 🔥 **Trending** — i locali più cliccati
+- 🗺️ **Esplora zona** — muovi la mappa e i risultati si aggiornano
+- **Siti web auto-trovati** via Wikidata + Google (scraper Python)
+- **Collettore dati** ogni 6 ore (GitHub Actions) con Google Places + Ticketmaster + Songkick + Gemini
+
+---
 
 ## 🛠️ Stack
 
@@ -37,12 +70,14 @@
 | Mappa | OpenStreetMap / CARTO | Gratis |
 | Dati locali | Overpass API (OSM) | Gratis |
 | Routing | OSRM | Gratis |
+| Meteo | Open-Meteo | Gratis |
 | Eventi | Ticketmaster + Songkick API | Tier gratuito |
 | AI Planner | Gemini 2.0 Flash | Tier gratuito |
 | Hosting | GitHub Pages | Gratis |
 | Data collector | GitHub Actions | Gratis (2000 min/mese) |
+| Scraper | Python + Playwright | Server casalingo |
 
-**Zero server, zero database, zero costi.**
+**Zero server, zero database, zero costi di hosting.**
 
 ## 🚀 Setup
 
@@ -57,56 +92,25 @@ npx serve .
 
 ### API Keys (per dati arricchiti)
 Aggiungi come GitHub Secrets:
-| Secret | A cosa serve | Come ottenerlo |
-|---|---|---|
-| `GOOGLE_API_KEY` | Google Places (200M+ posti) | [console.cloud.google.com](https://console.cloud.google.com) |
-| `TICKETMASTER_API_KEY` | Eventi/serate/biglietti | [developer.ticketmaster.com](https://developer.ticketmaster.com) |
-| `SONGKICK_API_KEY` | Concerti | [songkick.com/developer](https://www.songkick.com/developer) |
-
-### Gemini API (per il pianificatore AI)
-Ogni utente inserisce la sua chiave nell'interfaccia (o la pre-carichi via localStorage).
+| Secret | A cosa serve |
+|---|---|
+| `GOOGLE_API_KEY` | Google Places (200M+ posti) |
+| `TICKETMASTER_API_KEY` | Eventi/serate/biglietti |
+| `SONGKICK_API_KEY` | Concerti |
+| `GEMINI_API_KEY` | Piani AI pre-generati per 15 città |
 
 ## 📁 Struttura
 
 ```
-├── index.html               # UI principale
-├── manifest.json            # PWA manifest
-├── sw.js                    # Service worker (offline cache)
-├── css/style.css            # Stile + dark mode
-├── js/
-│   ├── api.js               # Overpass API (query locali OSM)
-│   ├── routing.js           # OSRM routing batch
-│   ├── describer.js         # Descrizioni auto + pro/contro
-│   ├── planner.js           # AI pianificatore serata (Gemini)
-│   ├── map.js               # Leaflet map + marker
-│   ├── ui.js                # Sidebar, filtri, card, condivisione
-│   └── app.js               # Controller principale
-├── scripts/                 # Data collector per GitHub Actions
-│   ├── collect.js
-│   └── sources/
-│       ├── google.js        # Google Places
-│       ├── events.js        # Ticketmaster
-│       └── songkick.js      # Songkick
-└── data/
-    ├── events.json          # Eventi/serate (auto-generato)
-    └── cities/              # Dati per città (auto-generato)
+├── index.html, css/, js/      # Frontend
+├── sw.js, manifest.json       # PWA
+├── scripts/
+│   ├── collect.js             # Collector principale
+│   ├── scrape_maps.py         # Scraper Google Maps
+│   ├── setup_scraper.sh       # Setup VM scraper
+│   └── sources/               # Google, Ticketmaster, Songkick, Wikidata, Gemini
+└── data/                      # JSON auto-generati
 ```
-
-## 📈 Monetizzazione
-
-| Strategia | Come funziona | Stima |
-|---|---|---|
-| **Locali sponsorizzati** | Badge "In evidenza" in cima ai risultati | €20-50/mese a locale |
-| **Affiliazione biglietti** | TicketOne/Dice/Eventbrite (3-8% a vendita) | Passivo |
-| **Prenotazione tavoli** | Integrazione con sistemi locali | Commissione |
-
-## 🔮 Prossimi passi
-
-- [ ] Scraping automatico serate da fonti web
-- [ ] Partnership con locali (biglietti, tavoli, guest list)
-- [ ] Notifiche push per nuovi eventi
-- [ ] Modalità "Weekend" (pianifica Venerdì + Sabato)
-- [ ] Form "Segnala locale mancante"
 
 ## 📄 Licenza
 

@@ -260,8 +260,16 @@ function getFilters() {
   };
 }
 
-function showLoading() { document.getElementById('loading').classList.remove('hidden'); }
-function hideLoading() { document.getElementById('loading').classList.add('hidden'); }
+function showLoading() {
+  document.getElementById('loading').classList.remove('hidden');
+  // Safety: hide after 20s even if something goes wrong
+  clearTimeout(window._loadingTimeout);
+  window._loadingTimeout = setTimeout(() => { hideLoading(); }, 20000);
+}
+function hideLoading() {
+  clearTimeout(window._loadingTimeout);
+  document.getElementById('loading').classList.add('hidden');
+}
 
 function renderVenueList(venues, routes, onClick, events) {
   const list = document.getElementById('venue-list');

@@ -74,11 +74,15 @@ async function fetchVenuesBatch(center, radiusMeters, types) {
 
   for (const url of OVERPASS_URLS) {
     try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
       const resp = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
         body: query,
+        signal: controller.signal,
       });
+      clearTimeout(timeout);
 
       if (!resp.ok) {
         lastError = new Error(`Overpass API error ${resp.status}`);
@@ -119,7 +123,11 @@ async function fetchVenuesBatch(center, radiusMeters, types) {
         .filter(v => v.lat != null && v.lng != null);
 
     } catch (err) {
-      lastError = err;
+      if (err.name === 'AbortError') {
+        lastError = new Error('Overpass API timeout (15s)');
+      } else {
+        lastError = err;
+      }
     }
   }
 
