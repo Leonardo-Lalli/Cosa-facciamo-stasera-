@@ -22,13 +22,15 @@ const VENUE_TYPES = {
 
 function buildOverpassQuery(center, radiusMeters, types) {
   const blocks = [];
+  const lat = center.lat.toFixed(5);
+  const lng = center.lng.toFixed(5);
 
   types.forEach(t => {
     const def = VENUE_TYPES[t];
     if (!def) return;
     def.tags.forEach(tag => {
-      blocks.push(`node${tag}(around:${radiusMeters},${center.lat},${center.lng});`);
-      blocks.push(`way${tag}(around:${radiusMeters},${center.lat},${center.lng});`);
+      blocks.push(`node${tag}(around:${radiusMeters},${lat},${lng});`);
+      blocks.push(`way${tag}(around:${radiusMeters},${lat},${lng});`);
     });
   });
 
@@ -37,7 +39,29 @@ function buildOverpassQuery(center, radiusMeters, types) {
 
 async function fetchVenues(center, radiusKm, selectedTypes) {
   const radiusMeters = Math.min(radiusKm * 1000, 50000);
-  const query = buildOverpassQuery(center, radiusMeters, selectedTypes);
+
+  // If too many types, split into batches to avoid query size issues
+  const BATCH = 6;
+  if (selectedTypes.length > BATCH) {
+    const batches = [];
+    for (let i = 0; i < selectedTypes.length; i += BATCH) {
+      batches.push(selectedTypes.slice(i, i + BATCH));
+    }
+    const results = await Promise.all(batches.map(b => fetchVenuesBatch(center, radiusMeters, b)));
+    // Merge and deduplicate
+    const seen = new Set();
+    return results.flat().filter(v => {
+      if (seen.has(v.id)) return false;
+      seen.add(v.id);
+      return true;
+    });
+  }
+
+  return fetchVenuesBatch(center, radiusMeters, selectedTypes);
+}
+
+async function fetchVenuesBatch(center, radiusMeters, types) {
+  const query = buildOverpassQuery(center, radiusMeters, types);
 
   let lastError;
 
