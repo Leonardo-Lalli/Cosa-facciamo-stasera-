@@ -170,7 +170,7 @@
     "lat": 40.827993,
     "lng": 14.193061,
     "url": "https://shop.ticketmaster.it/biglietti/tiziano-ferro-stadi-26-23-giugno-2026-stadio-diego-armando-maradona-napoli-14454.html",
-    "image": "https://s1.ticketm.net/dam/c/fbc/b293c0ad-c904-4215-bc59-8d7f2414dfbc_106141_TABLET_LANDSCAPE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/c/fbc/b293c0ad-c904-4215-bc59-8d7f2414dfbc_106141_RETINA_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -314,7 +314,7 @@
     "lat": 43.850605,
     "lng": 10.572964,
     "url": "https://www.ticketmaster.it/biglietti/fiorella-mannoia-fiorella-canta-fabrizio-e-ivano-anime-salve-capannori-lucca-24-06-2026/event/tpnb822t294v",
-    "image": "https://s1.ticketm.net/dam/a/322/de7a1f36-01c8-42f3-a83b-5673402f3322_SOURCE",
+    "image": "https://s1.ticketm.net/dam/a/322/de7a1f36-01c8-42f3-a83b-5673402f3322_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -2362,7 +2362,7 @@
     "lat": 45.974753,
     "lng": 9.174738,
     "url": "https://www.ticketmaster.it/biglietti/musical-meditation-lacmus-international-music-festival-2026-tremezzina-como-06-07-2026/event/lg8m0aqt6fbu",
-    "image": "https://s1.ticketm.net/dam/a/879/5f8a242f-cd1e-49f5-ad71-1f46a1cff879_RETINA_LANDSCAPE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/879/5f8a242f-cd1e-49f5-ad71-1f46a1cff879_ARTIST_PAGE_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -4033,7 +4033,7 @@
   },
   {
     "id": "ZG9rmIYnyZevv6",
-    "name": "DOGSTAR + THE DAMN TRUTH | 35° PORDENONE BLUES & C. FESTIVAL 2026",
+    "name": "DOGSTAR + THE DAMN TRUTH + FRANO LIVINGSTON | 35° PORDENONE BLUES & C. FESTIVAL 2026",
     "type": "live_music",
     "date": "2026-07-14",
     "time": "21:30:00",
