@@ -88,7 +88,6 @@ async function performSearch() {
 
   const input = (S('location-input')?.value || '').trim();
   if (!input && !userLocation) { alert('Inserisci una città o clicca 📍'); searchInProgress = false; return; }
-  if (typeof blockExplore !== 'undefined') blockExplore(8000);
 
   showEl('loading');
   clearVenueMarkers();
@@ -312,7 +311,8 @@ S('theme-toggle')?.addEventListener('click', () => {
 window.addEventListener('DOMContentLoaded', () => {
   initTheme();
   if (typeof initMap === 'function') initMap();
-  if (typeof enableExploreMode === 'function') enableExploreMode();
+  // Explore mode DISABLED - causes infinite search loops
+  // if (typeof enableExploreMode === 'function') enableExploreMode();
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 
   // Filters toggle
