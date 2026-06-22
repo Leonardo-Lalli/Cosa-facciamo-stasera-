@@ -131,7 +131,7 @@ async function performSearch() {
 
     // Enter results mode
     $('sidebar')?.classList.add('results-mode');
-    const ft = $('filters-toggle'); if (ft) { ft.classList.remove('hidden'); ft.textContent = '⚙️ Filtri ▸'; }
+    const ft = $('filters-toggle'); if (ft) { ft.classList.remove('hidden'); ft.textContent = window.innerWidth <= 768 ? '⚙️ Filtri' : '⚙️ Filtri ▸'; }
     $('filters-wrap')?.classList.add('collapsed');
 
     // Show trending section
@@ -442,8 +442,13 @@ window.addEventListener('DOMContentLoaded', () => {
   const filtersToggle = document.getElementById('filters-toggle');
   const filtersWrap = document.getElementById('filters-wrap');
   filtersToggle.addEventListener('click', () => {
-    filtersWrap.classList.toggle('collapsed');
-    filtersToggle.textContent = filtersWrap.classList.contains('collapsed') ? '⚙️ Filtri ▸' : '⚙️ Filtri ▾';
+    if (window.innerWidth <= 768) {
+      filtersWrap.classList.toggle('mobile-visible');
+      filtersToggle.textContent = filtersWrap.classList.contains('mobile-visible') ? '⚙️ Chiudi filtri' : '⚙️ Filtri ▸';
+    } else {
+      filtersWrap.classList.toggle('collapsed');
+      filtersToggle.textContent = filtersWrap.classList.contains('collapsed') ? '⚙️ Filtri ▸' : '⚙️ Filtri ▾';
+    }
   });
 
   // Planner button: just toggle visibility
@@ -457,28 +462,25 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Mobile drawer
   const drawer = document.getElementById('results-drawer');
-  if (drawer) {
-    const drawerHandle = drawer.querySelector('.drawer-handle');
-    const mobileFab = document.getElementById('mobile-fab');
-    let drawerExpanded = false;
+  if (drawer && window.innerWidth <= 768) {
+    const handle = drawer.querySelector('.drawer-handle');
+    let startY = 0;
 
-    function toggleDrawer() {
-      drawerExpanded = !drawerExpanded;
-      drawer.classList.toggle('expanded', drawerExpanded);
-      if (mobileFab) mobileFab.textContent = drawerExpanded ? '🗺️ Mappa' : '📋 Lista locali';
-    }
+    function expandDrawer() { drawer.classList.add('expanded'); }
+    function collapseDrawer() { drawer.classList.remove('expanded'); }
 
-    if (drawerHandle) drawerHandle.addEventListener('click', toggleDrawer);
-    if (mobileFab) mobileFab.addEventListener('click', toggleDrawer);
+    handle.addEventListener('click', () => {
+      drawer.classList.toggle('expanded');
+    });
 
-    window._onResultsReady = () => {
-      if (window.innerWidth <= 768 && mobileFab) {
-        drawer.classList.remove('hidden');
-        drawerExpanded = true;
-        drawer.classList.add('expanded');
-        mobileFab.style.display = 'flex';
-        mobileFab.textContent = '🗺️ Mappa';
-      }
-    };
+    // Touch gesture
+    handle.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; });
+    handle.addEventListener('touchend', (e) => {
+      const diff = startY - e.changedTouches[0].clientY;
+      if (diff > 30) expandDrawer();      // swipe up = expand
+      else if (diff < -30) collapseDrawer(); // swipe down = collapse
+    });
+
+    window._onResultsReady = () => { expandDrawer(); };
   }
 });
