@@ -316,17 +316,22 @@ window.addEventListener('DOMContentLoaded', () => {
   if (drawer && window.innerWidth <= 768) {
     const handle = drawer.querySelector('.drawer-handle');
     let startY = 0;
-    function expand() { drawer.classList.add('expanded'); }
-    function collapse() { drawer.classList.remove('expanded'); }
+    let expanded = false;
+
+    function expand() { expanded = true; drawer.classList.add('expanded'); }
+    function collapse() { expanded = false; drawer.classList.remove('expanded'); }
+    function toggle() { expanded ? collapse() : expand(); }
+
     if (handle) {
-      handle.addEventListener('click', () => drawer.classList.toggle('expanded'));
-      handle.addEventListener('touchstart', e => { startY = e.touches[0].clientY; });
-      handle.addEventListener('touchend', e => {
-        const diff = startY - e.changedTouches[0].clientY;
-        if (diff > 30) expand();
-        else if (diff < -30) collapse();
-      });
+      handle.addEventListener('click', toggle);
+      handle.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, { passive: true });
+      handle.addEventListener('touchmove', e => {
+        const diff = startY - e.touches[0].clientY;
+        if (diff > 20) expand();
+        else if (diff < -20) collapse();
+      }, { passive: true });
     }
-    window._onResultsReady = () => expand();
+
+    window._onResultsReady = () => { setTimeout(expand, 200); };
   }
 });
