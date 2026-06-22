@@ -22,10 +22,11 @@ jobs:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           TICKETMASTER_API_KEY: ${{ secrets.TICKETMASTER_API_KEY }}
           SONGKICK_API_KEY: ${{ secrets.SONGKICK_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Commit updated data
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add data/cities/ data/events.json
-          git diff --staged --quiet || (git commit -m 'Update venue & event data [skip ci]' && git push)
+          git add data/cities/ data/events.json data/plans/
+          git diff --staged --quiet || (git commit -m 'Update venue, event & AI plan data [skip ci]' && git push)

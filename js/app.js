@@ -273,47 +273,28 @@ window.addEventListener('DOMContentLoaded', () => {
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }
 
-  // AI Planner
+  // AI Planner — auto-load
   const plannerSection = document.getElementById('planner-section');
   const plannerBtn = document.getElementById('planner-btn');
   const plannerOutput = document.getElementById('planner-output');
-  const plannerKeyBtn = document.getElementById('planner-key-btn');
-  const plannerKeyInput = document.getElementById('planner-key-input');
-  const geminiKeyInput = document.getElementById('gemini-key-input');
-  const geminiKeySave = document.getElementById('gemini-key-save');
-
-  if (localStorage.getItem('gemini_key')) {
-    geminiKeyInput.value = localStorage.getItem('gemini_key');
-  }
-
-  plannerKeyBtn.addEventListener('click', () => {
-    plannerKeyInput.classList.toggle('hidden');
-  });
-
-  geminiKeySave.addEventListener('click', () => {
-    const key = geminiKeyInput.value.trim();
-    if (key) localStorage.setItem('gemini_key', key);
-    plannerKeyInput.classList.add('hidden');
-  });
 
   plannerBtn.addEventListener('click', async () => {
-    plannerOutput.textContent = '🤔 Sto preparando il tuo programma...';
-    plannerBtn.disabled = true;
-
-    const result = await generateEveningPlan(
-      window._lastVenues || [],
-      window._events || [],
-      userLocation?.city || 'zona',
-      getFilters().types
-    );
-
-    if (result.needsKey) {
-      plannerOutput.innerHTML = result.text;
-      plannerKeyInput.classList.remove('hidden');
-    } else {
-      plannerOutput.textContent = result.text;
+    if (plannerOutput.textContent && plannerOutput.dataset.loaded === 'true') {
+      plannerOutput.style.display = plannerOutput.style.display === 'none' ? 'block' : 'none';
+      plannerBtn.textContent = plannerOutput.style.display === 'none' ? 'Mostra' : 'Nascondi';
+      return;
     }
 
-    plannerBtn.disabled = false;
+    plannerOutput.textContent = '🔄 Caricamento...';
+    const plan = await loadCityPlan(userLocation?.city);
+    if (plan) {
+      plannerOutput.textContent = plan;
+      plannerOutput.dataset.loaded = 'true';
+      plannerBtn.textContent = 'Nascondi';
+    } else {
+      plannerOutput.textContent = '😅 Nessun piano disponibile per questa città. Prova Roma, Milano, Napoli o un\'altra grande città.';
+      plannerOutput.dataset.loaded = 'true';
+      plannerBtn.textContent = 'Nascondi';
+    }
   });
 });

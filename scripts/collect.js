@@ -6,9 +6,11 @@ const path = require('path');
 const { fetchGooglePlaces } = require('./sources/google');
 const { fetchTicketmasterEvents } = require('./sources/events');
 const { fetchSongkickEvents } = require('./sources/songkick');
+const { generatePlans } = require('./sources/gemini');
 
 const DATA_DIR = path.join(__dirname, '..', 'data', 'cities');
 const EVENTS_FILE = path.join(__dirname, '..', 'data', 'events.json');
+const PLANS_DIR = path.join(__dirname, '..', 'data', 'plans');
 
 async function main() {
   console.log('=== Cosa facciamo stasera? – Data Collector ===');
@@ -17,6 +19,7 @@ async function main() {
   const googleKey = process.env.GOOGLE_API_KEY || '';
   const ticketmasterKey = process.env.TICKETMASTER_API_KEY || '';
   const songkickKey = process.env.SONGKICK_API_KEY || '';
+  const geminiKey = process.env.GEMINI_API_KEY || '';
 
   // Ensure data dirs exist
   fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -55,12 +58,11 @@ async function main() {
 
   // Fallback to existing events if nothing fetched
   if (eventData.length === 0) {
-    try {
-      eventData = JSON.parse(fs.readFileSync(EVENTS_FILE, 'utf-8'));
-    } catch {
-      eventData = [];
-    }
+    try { eventData = JSON.parse(fs.readFileSync(EVENTS_FILE, 'utf-8')); } catch { eventData = []; }
   }
+
+  // --- Gemini AI Plans ---
+  await generatePlans(geminiKey, eventData, PLANS_DIR);
 
   // --- Write per-city venue files ---
   let totalVenues = 0;
