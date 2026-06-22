@@ -156,13 +156,38 @@ function showVenueDetail(venue, routes) {
       </div>
     `).join('') || '<div style="font-size:13px;color:var(--text-secondary)">Calcolo percorso...</div>';
 
+  // Find matching events
+  const allEvents = window._events || [];
+  const venueEvents = allEvents.filter(ev => {
+    const vn = (ev.venue || '').toLowerCase();
+    const nn = venue.name.toLowerCase();
+    return vn.includes(nn) || nn.includes(vn) || (vn && nn && vn.split(' ').some(w => nn.includes(w)));
+  });
+
+  const eventsHtml = venueEvents.length > 0 ? `
+    <div class="detail-events">
+      <h3>🎟️ Prossime serate</h3>
+      ${venueEvents.map(ev => `
+        <div class="detail-event-item">
+          <div class="detail-event-info">
+            <div class="detail-event-name">${ev.name}</div>
+            <div class="detail-event-meta">📅 ${ev.date || 'TBA'}${ev.time ? ' · 🕐 ' + ev.time : ''}</div>
+          </div>
+          ${ev.priceMin ? `<div class="detail-event-price">da ${ev.priceMin}€</div>` : ''}
+          ${ev.url ? `<button class="detail-event-btn" onclick="window.open('${ev.url}','_blank')">Biglietti</button>` : ''}
+        </div>
+      `).join('')}
+    </div>
+  ` : '';
+
   content.innerHTML = `
-    <h2 id="detail-name">${venue.icon} ${venue.name}</h2>
+    <h2 id="detail-name">${venue.icon} ${venue.name}${venue.rating ? `<span style="font-size:14px;color:#f5a623;"> ★${venue.rating}</span>` : ''}</h2>
     <div id="detail-address">📍 ${venue.address}</div>
     <div class="detail-routes">${routesHtml}</div>
     ${venue.website ? `<a class="detail-website" href="${venue.website.startsWith('http') ? venue.website : 'https://' + venue.website}" target="_blank">🌐 Vai al sito del locale</a>` : ''}
     ${venue.phone ? `<div style="margin-top:10px;font-size:13px;color:var(--text-secondary)">📞 ${venue.phone}</div>` : ''}
     ${venue.openingHours ? `<div style="margin-top:4px;font-size:13px;color:var(--text-secondary)">🕐 ${venue.openingHours}</div>` : ''}
+    ${eventsHtml}
   `;
 }
 

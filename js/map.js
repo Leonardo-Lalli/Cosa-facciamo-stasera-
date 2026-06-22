@@ -1,22 +1,27 @@
 // ===== Leaflet Map =====
 let map;
+let tileLayer;
 let userMarker;
 let venueMarkers = [];
 let userLocation = null;
 
-// Default: Rome, Italy
 const DEFAULT_CENTER = [41.9028, 12.4964];
 const DEFAULT_ZOOM = 13;
+
+const TILE_URLS = {
+  light: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+  dark: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+};
 
 function initMap() {
   map = L.map('map').setView(DEFAULT_CENTER, DEFAULT_ZOOM);
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  tileLayer = L.tileLayer(isDark ? TILE_URLS.dark : TILE_URLS.light, {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
     maxZoom: 19,
   }).addTo(map);
 
-  // User marker
   userMarker = L.marker(DEFAULT_CENTER, {
     icon: L.divIcon({
       className: 'user-marker',
@@ -27,6 +32,12 @@ function initMap() {
   }).addTo(map).bindPopup('La tua posizione');
 }
 
+function switchMapTiles() {
+  if (!tileLayer) return;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  tileLayer.setUrl(isDark ? TILE_URLS.dark : TILE_URLS.light);
+}
+
 function setUserLocation(lat, lng) {
   userLocation = { lat, lng };
   userMarker.setLatLng([lat, lng]);
@@ -34,7 +45,6 @@ function setUserLocation(lat, lng) {
 }
 
 function drawRadiusCircle(center, radiusKm) {
-  // Remove existing circle
   map.eachLayer(layer => {
     if (layer._radiusCircle) map.removeLayer(layer);
   });

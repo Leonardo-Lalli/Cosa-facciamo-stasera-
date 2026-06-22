@@ -265,4 +265,31 @@ document.getElementById('location-input').addEventListener('keydown', e => {
 
 document.getElementById('close-detail').addEventListener('click', hideVenueDetail);
 
-window.addEventListener('DOMContentLoaded', initMap);
+// Dark mode toggle
+function initTheme() {
+  const saved = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (saved === 'dark' || (!saved && prefersDark)) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.getElementById('theme-toggle').textContent = '☀️';
+  }
+}
+
+document.getElementById('theme-toggle').addEventListener('click', () => {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    document.documentElement.removeAttribute('data-theme');
+    document.getElementById('theme-toggle').textContent = '🌙';
+    localStorage.setItem('theme', 'light');
+  } else {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.getElementById('theme-toggle').textContent = '☀️';
+    localStorage.setItem('theme', 'dark');
+  }
+  switchMapTiles();
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initMap();
+});
