@@ -177,7 +177,18 @@ async function performSearch() {
     sortAndRender(venues, realRoutes);
     restoreScrollPosition();
 
-  } catch (err) { hideLoading(); console.error(err); alert('Errore: ' + (err.message || 'Qualcosa è andato storto')); }
+  } catch (err) {
+    hideLoading();
+    console.error(err);
+    const msg = err.message || '';
+    if (msg.includes('fetch') || msg.includes('network') || msg.includes('Failed to fetch')) {
+      alert('Errore di connessione. Riprova tra qualche secondo.');
+    } else if (msg.includes('Overpass')) {
+      alert('Server Overpass momentaneamente occupato. Riprova.');
+    } else {
+      alert('Errore: ' + msg);
+    }
+  }
 }
 
 function saveScrollPosition() {

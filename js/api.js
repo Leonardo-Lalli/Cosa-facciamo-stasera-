@@ -40,17 +40,28 @@ function buildOverpassQuery(center, radiusMeters, types) {
 async function fetchVenues(center, radiusKm, selectedTypes) {
   const radiusMeters = Math.min(radiusKm * 1000, 50000);
 
-  // If too many types, split into batches to avoid query size issues
+  // If too many types, split into batches (sequential to avoid rate limiting)
   const BATCH = 6;
   if (selectedTypes.length > BATCH) {
     const batches = [];
     for (let i = 0; i < selectedTypes.length; i += BATCH) {
       batches.push(selectedTypes.slice(i, i + BATCH));
     }
-    const results = await Promise.all(batches.map(b => fetchVenuesBatch(center, radiusMeters, b)));
-    // Merge and deduplicate
+
+    const allResults = [];
+    for (const batch of batches) {
+      try {
+        const results = await fetchVenuesBatch(center, radiusMeters, batch);
+        allResults.push(...results);
+      } catch (e) {
+        console.warn('Batch failed, continuing...', e.message);
+      }
+      // Delay between batches to avoid rate limiting
+      await new Promise(r => setTimeout(r, 800));
+    }
+
     const seen = new Set();
-    return results.flat().filter(v => {
+    return allResults.filter(v => {
       if (seen.has(v.id)) return false;
       seen.add(v.id);
       return true;
