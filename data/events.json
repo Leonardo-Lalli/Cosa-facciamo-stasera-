@@ -16,22 +16,6 @@
     "source": "ticketmaster"
   },
   {
-    "id": "Zf98xZKrZek6FeZup5QQKr",
-    "name": "Locus Experience '26",
-    "type": "events_venue",
-    "date": "2026-06-23",
-    "time": "10:30:00",
-    "venue": "Meeting Point - Agenzia Velo Service",
-    "city": "Bari",
-    "lat": 41.127368,
-    "lng": 16.871248,
-    "url": "https://shop.ticketmaster.it/biglietti/locus-experience-26-23-giugno-2026-meeting-point-agenzia-velo-service-bari-15671.html",
-    "image": "https://s1.ticketm.net/dam/c/f51/ee785ed6-f806-4195-98f4-69f67e09df51_106201_RETINA_PORTRAIT_3_2.jpg",
-    "priceMin": null,
-    "priceMax": null,
-    "source": "ticketmaster"
-  },
-  {
     "id": "Z59rmIYnyZFev",
     "name": "Visita Collezione Arte Ambientale e Giardini Storici",
     "type": "events_venue",
