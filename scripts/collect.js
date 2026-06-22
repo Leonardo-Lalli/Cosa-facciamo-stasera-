@@ -6,6 +6,7 @@ const path = require('path');
 const { fetchGooglePlaces } = require('./sources/google');
 const { fetchTicketmasterEvents } = require('./sources/events');
 const { fetchSongkickEvents } = require('./sources/songkick');
+const { fetchEventbriteEvents } = require('./sources/eventbrite');
 const { generatePlans } = require('./sources/gemini');
 const { findWebsites } = require('./sources/wikidata');
 
@@ -20,6 +21,7 @@ async function main() {
   const googleKey = process.env.GOOGLE_API_KEY || '';
   const ticketmasterKey = process.env.TICKETMASTER_API_KEY || '';
   const songkickKey = process.env.SONGKICK_API_KEY || '';
+  const eventbriteKey = process.env.EVENTBRITE_API_KEY || '';
   const geminiKey = process.env.GEMINI_API_KEY || '';
 
   // Ensure data dirs exist
@@ -55,6 +57,14 @@ async function main() {
     eventData = [...eventData, ...skEvents];
   } catch (err) {
     console.error(`[collect] Songkick failed: ${err.message}`);
+  }
+
+  // --- Eventbrite ---
+  try {
+    const ebEvents = await fetchEventbriteEvents(eventbriteKey);
+    eventData = [...eventData, ...ebEvents];
+  } catch (err) {
+    console.error(`[collect] Eventbrite failed: ${err.message}`);
   }
 
   // Fallback to existing events if nothing fetched

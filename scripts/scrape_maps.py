@@ -219,5 +219,135 @@ def main():
     
     print(f"\n✅ Totale nuovi locali aggiunti: {total_added}")
 
+
+# ===== Venue Event Scraper =====
+def scrape_venue_events(page, venue_name, website, city):
+    """Visita il sito di un locale e cerca la pagina eventi/calendario"""
+    if not website:
+        return []
+    
+    events = []
+    try:
+        # Try common event page URLs
+        urls_to_try = []
+        base = website.rstrip('/')
+        
+        # Common Italian event page patterns
+        for suffix in ['/eventi', '/calendario', '/programmazione', '/serate', '/events', '/calendar', '/agenda', '/date']:
+            urls_to_try.append(base + suffix)
+        
+        # Also try the homepage
+        urls_to_try.append(base)
+        
+        for url in urls_to_try[:3]:  # Try max 3 URLs
+            try:
+                page.goto(url, timeout=15000)
+                human_delay(1, 2)
+                
+                # Look for event-like elements
+                content = page.inner_text().lower()
+                
+                # Only process if page seems to have events
+                event_keywords = ['event', 'serata', 'concerto', 'dj', 'live', 'programma', 'calendario', 'data', 'orario', 'biglietti']
+                if not any(kw in content for kw in event_keywords):
+                    continue
+                
+                # Extract date patterns and nearby text
+                import re
+                date_pattern = r'(\d{1,2}[/-]\d{1,2}[/-]\d{2,4})'
+                dates = re.findall(date_pattern, content)
+                
+                if dates:
+                    # Found events! Extract surrounding text as event names
+                    lines = page.inner_text().split('\n')
+                    for i, line in enumerate(lines):
+                        match = re.search(date_pattern, line)
+                        if match:
+                            event_name = lines[i-1].strip() if i > 0 and len(lines[i-1].strip()) > 3 else venue_name
+                            events.append({
+                                'name': event_name[:80],
+                                'date': match.group(0),
+                                'venue': venue_name,
+                                'city': city,
+                                'url': url,
+                                'source': 'scraped',
+                            })
+                            if len(events) >= 5:
+                                break
+                break  # Found events, stop trying URLs
+            except:
+                continue
+        
+    except Exception as e:
+        pass
+    
+    return events
+
+
+def scrape_all_venue_events(cities=None):
+    """Scrape events from all venues in data/cities JSON files"""
+    import json, glob
+    
+    print("\n=== Venue Event Scraper ===")
+    
+    data_dir = Path(__file__).resolve().parent.parent / "data" / "cities"
+    city_files = list(data_dir.glob("*.json")) if not cities else [data_dir / f"{c.lower().replace(' ', '-')}.json" for c in cities if (data_dir / f"{c.lower().replace(' ', '-')}.json").exists()]
+    
+    all_events = []
+    
+    # Load existing events
+    events_file = data_dir.parent / "events.json"
+    existing = []
+    if events_file.exists():
+        try: existing = json.loads(events_file.read_text(encoding='utf-8'))
+        except: pass
+    
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context(locale="it-IT")
+        page = context.new_page()
+        
+        for city_file in city_files[:20]:  # Limit to 20 cities
+            try:
+                data = json.loads(city_file.read_text(encoding='utf-8'))
+                venues = data.get('venues', [])
+                city_name = data.get('city', city_file.stem)
+                
+                venues_with_sites = [v for v in venues if v.get('website') and not any(e.get('venue') == v.get('name') for e in existing)]
+                if not venues_with_sites:
+                    continue
+                
+                print(f"\n📍 {city_name}: {len(venues_with_sites)} venues with websites to check")
+                
+                for venue in venues_with_sites[:10]:  # Max 10 per city
+                    print(f"  🌐 {venue['name']}...", end=" ", flush=True)
+                    events = scrape_venue_events(page, venue['name'], venue['website'], city_name)
+                    if events:
+                        all_events.extend(events)
+                        print(f"{len(events)} events found")
+                    else:
+                        print("no events")
+                    human_delay(2, 5)
+                
+            except Exception as e:
+                print(f"Error: {e}")
+        
+        browser.close()
+    
+    # Merge with existing events and save
+    if all_events:
+        existing_ids = {e.get('id', '') for e in existing}
+        new_events = [e for e in all_events if e.get('id', str(hash(e['name'] + e['date'])))[:10] not in existing_ids]
+        existing.extend(new_events)
+        events_file.write_text(json.dumps(existing, indent=2, ensure_ascii=False), encoding='utf-8')
+        print(f"\n✅ Added {len(new_events)} new events from venue websites")
+    
+    return all_events
+
+
 if __name__ == "__main__":
-    main()
+    import sys
+    if len(sys.argv) > 1 and sys.argv[1] == '--events':
+        scrape_all_venue_events()
+    else:
+        main()
