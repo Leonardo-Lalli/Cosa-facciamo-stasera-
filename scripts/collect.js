@@ -7,6 +7,7 @@ const { fetchGooglePlaces } = require('./sources/google');
 const { fetchTicketmasterEvents } = require('./sources/events');
 const { fetchSongkickEvents } = require('./sources/songkick');
 const { generatePlans } = require('./sources/gemini');
+const { findWebsites } = require('./sources/wikidata');
 
 const DATA_DIR = path.join(__dirname, '..', 'data', 'cities');
 const EVENTS_FILE = path.join(__dirname, '..', 'data', 'events.json');
@@ -60,6 +61,22 @@ async function main() {
   if (eventData.length === 0) {
     try { eventData = JSON.parse(fs.readFileSync(EVENTS_FILE, 'utf-8')); } catch { eventData = []; }
   }
+
+  // --- Wikidata Website Enrichment ---
+  try {
+    const allVenues = Object.entries(venueData).flatMap(([city, venues]) =>
+      venues.filter(v => !v.website).map(v => ({ ...v, city }))
+    );
+    if (allVenues.length > 0) {
+      const websites = await findWebsites(allVenues);
+      for (const vid of Object.keys(websites)) {
+        for (const venues of Object.values(venueData)) {
+          const v = venues.find(v => v.id === vid);
+          if (v) { v.website = websites[vid]; break; }
+        }
+      }
+    }
+  } catch (err) { console.error(`[collect] Wikidata enrichment failed: ${err.message}`); }
 
   // --- Gemini AI Plans ---
   await generatePlans(geminiKey, eventData, PLANS_DIR);
