@@ -981,7 +981,7 @@ body {
     background:var(--bg); margin:4px 8px; border-radius:14px;
     padding:6px 10px; box-shadow:var(--shadow); max-height:30vh; overflow-y:auto;
   }
-  #filters-toggle { display:block!important; pointer-events:all; background:var(--bg); margin:4px 8px; border-radius:12px; padding:6px; font-size:12px; text-align:center; cursor:pointer; box-shadow:var(--shadow); }
+  #filters-toggle { display:block!important; pointer-events:all; background:var(--bg); margin:4px 8px; border-radius:12px; padding:8px 12px; font-size:12px; cursor:pointer; box-shadow:var(--shadow); }
   .chip { padding:4px 8px; font-size:10px; }
   .filter-group { margin-bottom:6px; }
   .filter-group label { font-size:10px; }
@@ -997,6 +997,7 @@ body {
     transition: height 0.3s ease;
     overflow: hidden;
     display: flex; flex-direction: column;
+    pointer-events: all;
   }
   #results-drawer.expanded { height: 70vh; }
   #results-drawer.full { height: 88vh; }
