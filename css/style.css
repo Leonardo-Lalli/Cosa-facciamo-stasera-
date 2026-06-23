@@ -1002,16 +1002,19 @@ body {
   #results-drawer.full { height: 88vh; }
 
   .drawer-handle {
-    display: flex; justify-content:center; align-items:center;
+    display: flex; justify-content:center; align-items:center; gap:6px;
     min-height: 44px; flex-shrink:0; cursor:pointer;
   }
+  .drawer-handle::before {
+    content: '▴';
+    font-size: 12px; color: var(--text-muted);
+  }
   .drawer-handle::after {
-    content: ''; width: 40px; height: 5px;
-    background: var(--border); border-radius: 3px;
+    content: 'Trascina per i risultati';
+    font-size: 10px; color: var(--text-muted);
   }
-  .drawer-handle-label {
-    font-size: 10px; color: var(--text-muted); margin-top: -2px;
-  }
+  #results-drawer.expanded .drawer-handle::before { content: '▾'; }
+  #results-drawer.expanded .drawer-handle::after { content: 'Trascina per chiudere'; }
 
   #results-header {
     padding:4px 12px; flex-shrink:0;

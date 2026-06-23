@@ -316,23 +316,30 @@ window.addEventListener('DOMContentLoaded', () => {
   const drawer = S('results-drawer');
   if (drawer && window.innerWidth <= 768) {
     const handle = drawer.querySelector('.drawer-handle');
-    let startY = 0;
-    let expanded = false;
+    let startY = 0, dragging = false;
 
-    function expand() { expanded = true; drawer.classList.add('expanded'); }
-    function collapse() { expanded = false; drawer.classList.remove('expanded'); }
-    function toggle() { expanded ? collapse() : expand(); }
+    function expand() { drawer.classList.add('expanded'); }
+    function collapse() { drawer.classList.remove('expanded'); }
 
+    // Click on handle or collapsed drawer = expand
     if (handle) {
-      handle.addEventListener('click', toggle);
-      handle.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, { passive: true });
-      handle.addEventListener('touchmove', e => {
-        const diff = startY - e.touches[0].clientY;
-        if (diff > 20) expand();
-        else if (diff < -20) collapse();
-      }, { passive: true });
+      handle.addEventListener('click', () => {
+        drawer.classList.contains('expanded') ? collapse() : expand();
+      });
     }
+    // Touch on entire drawer for swipe
+    drawer.addEventListener('touchstart', e => {
+      startY = e.touches[0].clientY;
+      dragging = true;
+    }, { passive: true });
+    drawer.addEventListener('touchmove', e => {
+      if (!dragging) return;
+      const diff = startY - e.touches[0].clientY;
+      if (diff > 30) expand();
+      else if (diff < -30) collapse();
+    }, { passive: true });
+    drawer.addEventListener('touchend', () => { dragging = false; });
 
-    window._onResultsReady = () => { setTimeout(expand, 200); };
+    window._onResultsReady = () => { setTimeout(expand, 300); };
   }
 });
