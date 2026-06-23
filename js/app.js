@@ -315,22 +315,26 @@ window.addEventListener('DOMContentLoaded', () => {
   // Mobile drawer
   const drawer = S('results-drawer');
   if (drawer && window.innerWidth <= 768) {
+    // Move filters into drawer on mobile
+    const filters = S('filters-wrap');
+    if (filters && !drawer.contains(filters)) {
+      drawer.insertBefore(filters, drawer.querySelector('.drawer-handle').nextSibling);
+      filters.classList.add('in-drawer');
+    }
+
     const handle = drawer.querySelector('.drawer-handle');
     let startY = 0, dragging = false;
 
     function expand() { drawer.classList.add('expanded'); }
     function collapse() { drawer.classList.remove('expanded'); }
 
-    // Click on handle or collapsed drawer = expand
     if (handle) {
       handle.addEventListener('click', () => {
         drawer.classList.contains('expanded') ? collapse() : expand();
       });
     }
-    // Touch on entire drawer for swipe
     drawer.addEventListener('touchstart', e => {
-      startY = e.touches[0].clientY;
-      dragging = true;
+      startY = e.touches[0].clientY; dragging = true;
     }, { passive: true });
     drawer.addEventListener('touchmove', e => {
       if (!dragging) return;
