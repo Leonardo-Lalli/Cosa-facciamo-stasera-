@@ -1,43 +1,6 @@
-// ===== OSRM + Transit Routing =====
+// ===== OSRM Routing =====
 const OSRM_URL = 'https://router.project-osrm.org';
-var ORS_KEY = 'ORS_KEY_PLACEHOLDER'; // Replaced by GitHub Actions deploy
-const ORS_URL = 'https://api.openrouteservice.org/v2/directions';
-
 const MODE_PROFILE = { walking: 'foot', cycling: 'bike', driving: 'driving' };
-
-async function getTransitRoutes(origin, destinations) {
-  if (destinations.length === 0 || ORS_KEY === 'ORS_KEY_PLACEHOLDER') return null;
-  try {
-    const results = [];
-    for (const dest of destinations) {
-      const body = { coordinates: [[origin.lng, origin.lat], [dest.lng, dest.lat]], language: 'it' };
-      const resp = await fetch(`${ORS_URL}/public-transport/geojson`, {
-        method: 'POST',
-        headers: { 'Authorization': ORS_KEY, 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      if (!resp.ok) { results.push(null); continue; }
-      const data = await resp.json();
-      const features = data.features || [];
-      if (!features.length) { results.push(null); continue; }
-      const summary = features[0].properties?.summary || {};
-      results.push({
-        duration: Math.round((summary.duration || 0) / 60),
-        distance: ((summary.distance || 0) / 1000).toFixed(1),
-        routes: features.slice(0, 2).map(f => ({
-          duration: Math.round((f.properties?.summary?.duration || 0) / 60),
-          segments: (f.properties?.segments || []).map(s => ({
-            type: s.type, line: s.line || s.name || '',
-            from: s.from?.name || '', to: s.to?.name || '',
-            stops: s.stops || 0, duration: Math.round((s.duration || 0) / 60),
-          })),
-        })),
-      });
-      await new Promise(r => setTimeout(r, 200));
-    }
-    return results;
-  } catch { return null; }
-}
 
 async function getRoutesBatch(origin, destinations, mode) {
   const profile = MODE_PROFILE[mode] || 'foot';
@@ -76,12 +39,9 @@ function haversineKm(a, b) {
 async function getRoutesForModes(origin, destinations) {
   const modes = ['walking', 'cycling', 'transit', 'driving'];
   const routes = {};
-  const batches = modes.map(mode => {
-    if (mode === 'transit' && ORS_KEY !== 'ORS_KEY_PLACEHOLDER') {
-      return getTransitRoutes(origin, destinations).then(r => { if (r) routes[mode] = r; });
-    }
-    return getRoutesBatch(origin, destinations, mode).then(r => { routes[mode] = r; });
-  });
+  const batches = modes.map(mode =>
+    getRoutesBatch(origin, destinations, mode).then(r => { routes[mode] = r; })
+  );
   await Promise.allSettled(batches);
   modes.forEach(mode => { if (!routes[mode]) routes[mode] = destinations.map(d => estimate(origin, d, mode)); });
   const mapped = {};
