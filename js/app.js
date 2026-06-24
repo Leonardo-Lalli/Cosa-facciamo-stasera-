@@ -131,9 +131,11 @@ async function performSearch() {
 
     // Render
     addClass('sidebar', 'results-mode');
-    showEl('filters-toggle');
-    setText('filters-toggle', '⚙️ Filtri ▸');
-    addClass('filters-wrap', 'collapsed');
+    if (window.innerWidth > 768) {
+      showEl('filters-toggle');
+      setText('filters-toggle', '⚙️ Filtri ▸');
+      addClass('filters-wrap', 'collapsed');
+    }
 
     saveScrollPosition();
     sortAndRender(venues, estRoutes);
@@ -315,11 +317,12 @@ window.addEventListener('DOMContentLoaded', () => {
   // Mobile drawer
   const drawer = S('results-drawer');
   if (drawer && window.innerWidth <= 768) {
-    // Move filters into drawer on mobile
+    // Move filters into drawer
     const filters = S('filters-wrap');
-    if (filters && !drawer.contains(filters)) {
+    if (filters) {
       drawer.insertBefore(filters, drawer.querySelector('.drawer-handle').nextSibling);
       filters.classList.add('in-drawer');
+      filters.classList.remove('collapsed');
     }
 
     const handle = drawer.querySelector('.drawer-handle');
@@ -344,6 +347,9 @@ window.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
     drawer.addEventListener('touchend', () => { dragging = false; });
 
-    window._onResultsReady = () => { setTimeout(expand, 300); };
+    window._onResultsReady = () => {
+      filters.classList.add('collapsed');
+      setTimeout(expand, 300);
+    };
   }
 });
