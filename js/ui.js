@@ -319,9 +319,17 @@ function showLoading() {
   window._loadingTimeout = setTimeout(() => { hideLoading(); }, 20000);
 }
 function hideLoading() {
-  clearTimeout(window._loadingTimeout);
-  S('loading')?.classList.add('hidden');
+clearTimeout(window._loadingTimeout);
+  window._loadingTimeout = setTimeout(() => { hideLoading(); }, 20000);
 }
+
+// Advanced filter toggle (mobile)
+S('advanced-toggle')?.addEventListener('click', function() {
+  const adv = S('filter-advanced');
+  if (!adv) return;
+  adv.classList.toggle('collapsed');
+  this.textContent = adv.classList.contains('collapsed') ? '⚙️ Distanza e mezzi ▸' : '⚙️ Distanza e mezzi ▾';
+});
 
 function renderVenueList(venues, routes, onClick, events) {
   const list = S('venue-list');

@@ -43,27 +43,26 @@
         <button id="filters-toggle" class="filters-toggle hidden">⚙️ Filtri ▾</button>
         <div class="filters-inner">
         <div class="filter-group">
-          <label>Raggio (km)</label>
-          <div class="range-wrap">
-            <input type="range" id="radius-slider" min="1" max="50" value="10">
-            <span id="radius-value">10 km</span>
-          </div>
-        </div>
-        <div class="filter-group">
-          <label>Mezzo di trasporto</label>
-          <div class="transport-options">
-            <button class="transport-btn active" data-mode="walking">🚶</button>
-            <button class="transport-btn" data-mode="cycling">🚲</button>
-            <button class="transport-btn" data-mode="transit">🚌</button>
-            <button class="transport-btn" data-mode="driving">🚗</button>
-          </div>
-        </div>
-        <div class="filter-group">
-          <label>Tempo massimo (minuti)</label>
-          <div class="range-wrap">
-            <input type="range" id="time-slider" min="5" max="120" value="60">
-            <span id="time-value">60 min</span>
-          </div>
+          <label class="filter-advanced-toggle" id="advanced-toggle">⚙️ Distanza e mezzi ▸</label>
+          <div class="filter-advanced" id="filter-advanced">
+            <div class="range-wrap" style="margin-bottom:8px">
+              <label style="font-size:11px;display:block;margin-bottom:2px">Raggio (km)</label>
+              <input type="range" id="radius-slider" min="1" max="50" value="10">
+              <span id="radius-value">10 km</span>
+            </div>
+            <label style="font-size:11px;display:block;margin-bottom:4px">Mezzo di trasporto</label>
+            <div class="transport-options" style="margin-bottom:8px">
+              <button class="transport-btn active" data-mode="walking">🚶</button>
+              <button class="transport-btn" data-mode="cycling">🚲</button>
+              <button class="transport-btn" data-mode="transit">🚌</button>
+              <button class="transport-btn" data-mode="driving">🚗</button>
+            </div>
+            <div class="range-wrap">
+              <label style="font-size:11px;display:block;margin-bottom:2px">Tempo massimo (minuti)</label>
+              <input type="range" id="time-slider" min="5" max="120" value="60">
+              <span id="time-value">60 min</span>
+            </div>
+          </div><!-- filter-advanced -->
         </div>
         <div class="filter-group">
           <label>Tipo locale</label>

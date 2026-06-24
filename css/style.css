@@ -258,6 +258,11 @@ body {
   letter-spacing: 0.5px;
   margin-bottom: 6px;
 }
+.filter-advanced-toggle {
+  cursor: pointer; user-select: none;
+}
+.filter-advanced-toggle:hover { color: var(--primary); }
+.filter-advanced.collapsed { display: none; }
 
 .range-wrap {
   display: flex;
@@ -998,7 +1003,7 @@ body {
   #filters-wrap.in-drawer {
     display:block!important;
     flex-shrink:0;
-    max-height:40vh; overflow-y:auto;
+    max-height:60vh; overflow-y:auto;
     padding:4px 12px; margin:0;
     background:var(--bg);
     border-bottom:1px solid var(--border);
@@ -1006,9 +1011,10 @@ body {
   #filters-wrap.in-drawer.collapsed { display:none!important; }
   #filters-wrap.in-drawer .filter-group { margin-bottom:6px; }
   #filters-wrap.in-drawer .filter-group label { font-size:10px; }
+  #filter-advanced.collapsed { display:none; }
 
-  #results-drawer.expanded { height: 70vh; }
-  #results-drawer.full { height: 88vh; }
+  #results-drawer.expanded { height: 78vh; }
+  #results-drawer.full { height: 90vh; }
 
   .drawer-handle {
     display: flex; justify-content:center; align-items:center; gap:6px;
@@ -1019,11 +1025,10 @@ body {
     font-size: 12px; color: var(--text-muted);
   }
   .drawer-handle::after {
-    content: 'Trascina per i risultati';
-    font-size: 10px; color: var(--text-muted);
+    content: 'Filtri e risultati ▴';
+    font-size: 11px; color: var(--text-muted);
   }
-  #results-drawer.expanded .drawer-handle::before { content: '▾'; }
-  #results-drawer.expanded .drawer-handle::after { content: 'Trascina per chiudere'; }
+  #results-drawer.expanded .drawer-handle::after { content: 'Trascina per chiudere ▾'; }
 
   #results-header {
     padding:4px 12px; flex-shrink:0;
