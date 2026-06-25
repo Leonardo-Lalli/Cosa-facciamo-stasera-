@@ -16,22 +16,6 @@
     "source": "ticketmaster"
   },
   {
-    "id": "Zf98xZKrZek6v1Zup5QQKr",
-    "name": "GroundUp Experience '26",
-    "type": "live_music",
-    "date": "2026-06-26",
-    "time": "10:30:00",
-    "venue": "Ristorante Il Poeta Contadino",
-    "city": "Alberobello",
-    "lat": 40.782151,
-    "lng": 17.238979,
-    "url": "https://shop.ticketmaster.it/biglietti/groundup-experience-26-26-giugno-2026-ristorante-il-poeta-contadino-alberobello-15609.html",
-    "image": "https://s1.ticketm.net/dam/c/ab4/6367448e-7474-4650-bd2d-02a8f7166ab4_106161_CUSTOM.jpg",
-    "priceMin": null,
-    "priceMax": null,
-    "source": "ticketmaster"
-  },
-  {
     "id": "Z59rmIYnyZFe7",
     "name": "Visita Collezione Arte Ambientale e Giardini Storici",
     "type": "events_venue",
@@ -218,7 +202,7 @@
     "lat": 43.719462,
     "lng": 10.400091,
     "url": "https://www.ticketmaster.it/biglietti/fulminacci-pisa-26-06-2026/event/tu7hzonmra37",
-    "image": "https://s1.ticketm.net/dam/a/b60/3512f5b3-99c0-46a1-8ca3-fe6ba52d7b60_TABLET_LANDSCAPE_LARGE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/b60/3512f5b3-99c0-46a1-8ca3-fe6ba52d7b60_SOURCE",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -5121,7 +5105,7 @@
   },
   {
     "id": "ZG9rmIYnyZeF6d",
-    "name": "THE RUMJACKS",
+    "name": "The Rumjacks + MaveriX",
     "type": "live_music",
     "date": "2026-07-24",
     "time": "20:30:00",
@@ -5130,7 +5114,7 @@
     "lat": 44.121964,
     "lng": 12.495436,
     "url": "https://www.ticketmaster.it/biglietti/the-rumjacks-bellaria-igea-marina-rimini-24-07-2026/event/mwj1wzyt5olm",
-    "image": "https://s1.ticketm.net/dam/a/03a/47e5ee2c-d4fc-401a-992c-2a62ea7c403a_TABLET_LANDSCAPE_3_2.jpg",
+    "image": "https://s1.ticketm.net/dam/a/03a/47e5ee2c-d4fc-401a-992c-2a62ea7c403a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
