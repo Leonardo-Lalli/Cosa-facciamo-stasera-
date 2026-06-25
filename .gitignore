@@ -431,4 +431,5 @@ FodyWeavers.xsd
 # Node
 node_modules/
 DEEPSEEK_PROMPT.md
+doc/
 
