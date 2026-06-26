@@ -88,7 +88,7 @@ body.landing-active #sidebar { display: none; }
   align-items: center;
   gap: 6px;
   padding: 6px 10px;
-  background: rgba(255,255,255,0.82);
+  background: rgba(255,255,255,0.55);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(0,0,0,0.08);
@@ -97,7 +97,7 @@ body.landing-active #sidebar { display: none; }
   z-index: 10001;
 }
 [data-theme="dark"] .landing-nav {
-  background: rgba(26,26,46,0.82);
+  background: rgba(26,26,46,0.55);
   border-color: rgba(255,255,255,0.08);
 }
 .landing-hamburger {
@@ -161,12 +161,12 @@ body.landing-active #sidebar { display: none; }
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: calc(100% - 24px);
-  max-width: 460px;
+  width: calc(100% - 48px);
+  max-width: 420px;
   max-height: calc(100vh - 110px);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  background: rgba(255,255,255,0.88);
+  background: rgba(255,255,255,0.55);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(0,0,0,0.08);
@@ -176,7 +176,7 @@ body.landing-active #sidebar { display: none; }
   z-index: 10001;
 }
 [data-theme="dark"] .landing-card {
-  background: rgba(26,26,46,0.88);
+  background: rgba(26,26,46,0.55);
   border-color: rgba(255,255,255,0.08);
 }
 

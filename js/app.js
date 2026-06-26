@@ -297,6 +297,10 @@ window.addEventListener('DOMContentLoaded', () => {
   initTheme();
   // Pick random city for initial map center
   window._initialCenter = RANDOM_CITIES[Math.floor(Math.random() * RANDOM_CITIES.length)];
+  // Activate landing fullscreen FIRST so map container has correct size
+  document.body.classList.add('landing-active');
+  // Force layout reflow
+  void document.body.offsetHeight;
   initMap();
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
   initLanding();
@@ -395,8 +399,6 @@ function initLanding() {
   const landing = S('landing');
   const cta = S('landing-cta');
   if (!landing || !cta) return;
-
-  document.body.classList.add('landing-active');
 
   // Sync theme toggle text
   const updateLandingThemeBtn = () => {
