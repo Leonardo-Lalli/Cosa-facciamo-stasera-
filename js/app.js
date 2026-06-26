@@ -293,18 +293,61 @@ S('theme-toggle')?.addEventListener('click', () => {
 });
 
 // ===== Init =====
+let landingMap = null;
+
 window.addEventListener('DOMContentLoaded', () => {
   initTheme();
   // Pick random city for initial map center
-  window._initialCenter = RANDOM_CITIES[Math.floor(Math.random() * RANDOM_CITIES.length)];
-  // Activate landing fullscreen FIRST so map container has correct size
+  const randomCity = RANDOM_CITIES[Math.floor(Math.random() * RANDOM_CITIES.length)];
+  window._initialCenter = randomCity;
+  
+  // Activate landing fullscreen FIRST
   document.body.classList.add('landing-active');
-  // Force layout reflow
-  void document.body.offsetHeight;
-  initMap();
+  
+  // Initialize landing map after a frame to ensure container is visible
+  requestAnimationFrame(() => {
+    initLandingMap(randomCity);
+    initLanding();
+  });
+  
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
-  initLanding();
 });
+
+// ===== Landing Map (separate instance) =====
+function initLandingMap(center) {
+  const container = document.getElementById('landing-map');
+  if (!container) return;
+  
+  try {
+    landingMap = L.map('landing-map', {
+      zoomControl: false,
+      attributionControl: false,
+      dragging: false,
+      scrollWheelZoom: false,
+      doubleClickZoom: false,
+      touchZoom: false
+    }).setView([center.lat, center.lng], center.z);
+    
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    L.tileLayer(isDark ? TILE_URLS.dark : TILE_URLS.light, {
+      maxZoom: 19,
+    }).addTo(landingMap);
+    
+    // Force size calculation
+    setTimeout(() => {
+      if (landingMap) landingMap.invalidateSize();
+    }, 100);
+  } catch (e) {
+    console.error('Failed to init landing map:', e);
+  }
+}
+
+function destroyLandingMap() {
+  if (landingMap) {
+    landingMap.remove();
+    landingMap = null;
+  }
+}
 
 // ===== Landing Page =====
 const RANDOM_CITIES = [
@@ -418,7 +461,14 @@ function initLanding() {
       localStorage.setItem('theme', 'dark');
     }
     updateLandingThemeBtn();
-    if (typeof switchMapTiles === 'function') switchMapTiles();
+    // Switch landing map tiles
+    if (landingMap) {
+      landingMap.eachLayer(layer => {
+        if (layer instanceof L.TileLayer) {
+          layer.setUrl(document.documentElement.getAttribute('data-theme') === 'dark' ? TILE_URLS.dark : TILE_URLS.light);
+        }
+      });
+    }
     // Sync main theme toggle
     setText('theme-toggle', isDark ? '🌙' : '☀️');
   });
@@ -484,9 +534,11 @@ function initLanding() {
     setTimeout(() => {
       if (landing.parentNode) landing.style.display = 'none';
       document.body.classList.remove('landing-active');
-      if (typeof map !== 'undefined' && map) {
-        map.invalidateSize();
-      }
+      
+      // Destroy landing map and initialize main app map
+      destroyLandingMap();
+      initMap();
+      
       setupAppUI();
     }, 500);
   });

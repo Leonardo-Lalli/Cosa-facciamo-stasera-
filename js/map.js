@@ -9,7 +9,7 @@ let userLocation = null;
 const DEFAULT_CENTER = [41.9028, 12.4964];
 const DEFAULT_ZOOM = 13;
 
-const TILE_URLS = {
+let TILE_URLS = {
   light: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
   dark: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
 };
