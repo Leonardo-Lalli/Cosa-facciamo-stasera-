@@ -124,9 +124,16 @@ async function performSearch() {
       return;
     }
 
-    // Estimate routes
+    // Estimate routes for all 4 modes
     const estRoutes = {};
-    venues.forEach(v => { estRoutes[v.id] = { walking: { duration: Math.round(haversineKm(userLocation, v) / 5 * 60), distance: haversineKm(userLocation, v).toFixed(1) } }; });
+    const speeds = { walking: 5, cycling: 15, transit: 25, driving: 40 };
+    venues.forEach(v => {
+      const dist = haversineKm(userLocation, v);
+      estRoutes[v.id] = {};
+      Object.entries(speeds).forEach(([mode, speed]) => {
+        estRoutes[v.id][mode] = { duration: Math.round(dist / speed * 60), distance: dist.toFixed(1) };
+      });
+    });
     window._venueRoutes = estRoutes;
 
     // Render
@@ -288,11 +295,129 @@ S('theme-toggle')?.addEventListener('click', () => {
 // ===== Init =====
 window.addEventListener('DOMContentLoaded', () => {
   initTheme();
-  if (typeof initMap === 'function') initMap();
-  // Explore mode DISABLED - causes infinite search loops
-  // if (typeof enableExploreMode === 'function') enableExploreMode();
+  initLanding();
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+});
 
+// ===== Landing Page =====
+const LANDING_VERBS = [
+  'facciamo', 'guardiamo', 'mangiamo', 'balliamo', 'beviamo',
+  'ascoltiamo', 'giochiamo', 'cantiamo', 'vediamo', 'festeggiamo'
+];
+
+let _landingVerbIdx = 0;
+let _landingTimer, _landingAbort;
+
+function typewriteLanding(el, newWord, done) {
+  if (_landingAbort) { _landingAbort(); _landingAbort = null; }
+  if (_landingTimer) { clearTimeout(_landingTimer); _landingTimer = null; }
+  const cur = el.textContent;
+  if (cur === newWord) { if (done) done(); return; }
+  let i = cur.length, cancelled = false;
+  _landingAbort = () => { cancelled = true; };
+  function erase() {
+    if (cancelled) return;
+    if (i <= 0) {
+      el.textContent = ''; let j = 0;
+      function write() {
+        if (cancelled) return;
+        if (j <= newWord.length) { el.textContent = newWord.slice(0, j); j++; _landingTimer = setTimeout(write, 55); }
+        else { _landingTimer = null; _landingAbort = null; if (done) done(); }
+      }
+      write();
+      return;
+    }
+    el.textContent = cur.slice(0, i - 1); i--;
+    _landingTimer = setTimeout(erase, 30);
+  }
+  erase();
+}
+
+function cycleLandingVerb() {
+  const el = S('landing-verb');
+  if (!el) return;
+  _landingVerbIdx = (_landingVerbIdx + 1) % LANDING_VERBS.length;
+  typewriteLanding(el, LANDING_VERBS[_landingVerbIdx], () => {
+    _landingTimer = setTimeout(cycleLandingVerb, 1800);
+  });
+}
+
+// Load events for landing page
+async function loadLandingEvents() {
+  try {
+    const r = await fetch('data/events.json');
+    if (!r.ok) return;
+    const events = await r.json();
+    if (!events.length) return;
+    
+    // Group by city, take top 6 cities, 1 event each
+    const byCity = {};
+    events.forEach(ev => {
+      const c = ev.city || 'Italia';
+      if (!byCity[c]) byCity[c] = [];
+      if (byCity[c].length < 2) byCity[c].push(ev);
+    });
+    const cities = Object.keys(byCity).slice(0, 6);
+    const shown = cities.map(c => byCity[c][0]).filter(Boolean);
+    
+    if (!shown.length) return;
+    
+    const wrap = S('landing-events');
+    const list = S('landing-events-list');
+    if (!wrap || !list) return;
+    wrap.classList.remove('hidden');
+    
+    shown.forEach(ev => {
+      const dateStr = ev.date ? new Date(ev.date).toLocaleDateString('it-IT', { day:'numeric', month:'short' }) : 'TBA';
+      const card = document.createElement('div');
+      card.className = 'landing-event-card';
+      card.innerHTML = `
+        <div class="landing-event-date">${dateStr}</div>
+        <div class="landing-event-info">
+          <div class="landing-event-name">${ev.name}</div>
+          <div class="landing-event-venue">📍 ${ev.venue || ''}</div>
+        </div>
+        <div class="landing-event-city">${ev.city || ''}</div>
+      `;
+      card.addEventListener('click', () => {
+        if (ev.url) window.open(ev.url, '_blank');
+      });
+      list.appendChild(card);
+    });
+  } catch {}
+}
+
+function initLanding() {
+  const landing = S('landing');
+  const cta = S('landing-cta');
+  if (!landing || !cta) return;
+
+  // Start verb cycling
+  _landingTimer = setTimeout(cycleLandingVerb, 1200);
+
+  // Load events
+  loadLandingEvents();
+
+  cta.addEventListener('click', () => {
+    // Clean up landing timers
+    if (_landingTimer) clearTimeout(_landingTimer);
+    if (_landingAbort) _landingAbort();
+
+    // Fade out landing
+    landing.classList.add('fade-out');
+
+    // Init app after transition
+    setTimeout(() => {
+      if (landing.parentNode) landing.style.display = 'none';
+      document.getElementById('app').classList.remove('app-hidden');
+      document.getElementById('app').classList.add('app-visible');
+      initMap();
+      setupAppUI();
+    }, 400);
+  });
+}
+
+function setupAppUI() {
   // Filters toggle
   const ft = S('filters-toggle');
   const fw = S('filters-wrap');
@@ -317,7 +442,6 @@ window.addEventListener('DOMContentLoaded', () => {
   // Mobile drawer
   const drawer = S('results-drawer');
   if (drawer && window.innerWidth <= 768) {
-    // Move filters into drawer
     const filters = S('filters-wrap');
     if (filters) {
       drawer.insertBefore(filters, drawer.querySelector('.drawer-handle').nextSibling);
@@ -337,13 +461,20 @@ window.addEventListener('DOMContentLoaded', () => {
       });
     }
     drawer.addEventListener('touchstart', e => {
+      const el = e.target.closest('.drawer-handle');
+      if (!el) {
+        const vl = S('venue-list');
+        if (vl && (vl === e.target || vl.contains(e.target))) { dragging = false; return; }
+        const fw2 = drawer.querySelector('.filters');
+        if (fw2 && (fw2 === e.target || fw2.contains(e.target))) { dragging = false; return; }
+      }
       startY = e.touches[0].clientY; dragging = true;
     }, { passive: true });
     drawer.addEventListener('touchmove', e => {
       if (!dragging) return;
       const diff = startY - e.touches[0].clientY;
-      if (diff > 30) expand();
-      else if (diff < -30) collapse();
+      if (diff > 50) expand();
+      else if (diff < -50) collapse();
     }, { passive: true });
     drawer.addEventListener('touchend', () => { dragging = false; });
 
@@ -352,4 +483,4 @@ window.addEventListener('DOMContentLoaded', () => {
       setTimeout(expand, 300);
     };
   }
-});
+}

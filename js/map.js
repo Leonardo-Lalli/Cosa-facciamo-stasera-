@@ -51,6 +51,12 @@ function switchMapTiles() {
   tileLayer.setUrl(isDark ? TILE_URLS.dark : TILE_URLS.light);
 }
 
+let _resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(_resizeTimer);
+  _resizeTimer = setTimeout(() => { if (map) map.invalidateSize(); }, 200);
+});
+
 function setUserLocation(lat, lng) {
   userLocation = { lat, lng };
   exploreBlockedUntil = Date.now() + 3000;

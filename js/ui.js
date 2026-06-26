@@ -319,8 +319,8 @@ function showLoading() {
   window._loadingTimeout = setTimeout(() => { hideLoading(); }, 20000);
 }
 function hideLoading() {
-clearTimeout(window._loadingTimeout);
-  window._loadingTimeout = setTimeout(() => { hideLoading(); }, 20000);
+  clearTimeout(window._loadingTimeout);
+  hideEl('loading');
 }
 
 // Advanced filter toggle (mobile)
@@ -392,8 +392,7 @@ function renderVenueList(venues, routes, onClick, events) {
         <div class="venue-name">${venue.name}</div>
         <div class="venue-meta">
           <span>${venue.label}</span>
-          ${r ? `<span>🚶 ${r.walking?.duration || '—'}min</span>` : ''}
-          ${r ? `<span>🚗 ${r.driving?.duration || '—'}min</span>` : ''}
+          ${r ? Object.entries({walking:'🚶',cycling:'🚲',transit:'🚌',driving:'🚗'}).filter(([m]) => r[m]?.duration).map(([m,e]) => `<span>${e} ${r[m].duration}min</span>`).join('') : ''}
         </div>
         <div class="venue-tags">
           ${bestTime ? `<span class="venue-tag">⏱ ${bestTime} min</span>` : ''}

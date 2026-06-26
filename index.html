@@ -22,7 +22,23 @@
   </script>
 </head>
 <body>
-  <div id="app">
+  <div id="landing">
+    <div class="landing-bg"></div>
+    <div class="landing-content">
+      <div class="landing-logo-wrap">
+        <h1 class="landing-logo">Cosa <span id="landing-verb">facciamo</span><br><span class="landing-highlight">stasera?</span></h1>
+        <div class="landing-cursor"></div>
+      </div>
+      <p class="landing-sub">Scopri locali, eventi e serate vicino a te</p>
+      <button id="landing-cta" class="landing-cta">🎯 Cosa fare stasera?</button>
+      <div id="landing-events" class="landing-events-wrap hidden">
+        <h2>🎟️ Concerti in Italia</h2>
+        <div id="landing-events-list" class="landing-events-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="app" class="app-hidden">
     <aside id="sidebar">
       <div class="sidebar-header">
         <h1 class="logo">Cosa <span id="verb">facciamo</span><br><span class="logo-highlight">stasera?</span></h1>
