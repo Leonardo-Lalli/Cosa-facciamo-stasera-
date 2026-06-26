@@ -295,11 +295,30 @@ S('theme-toggle')?.addEventListener('click', () => {
 // ===== Init =====
 window.addEventListener('DOMContentLoaded', () => {
   initTheme();
-  initLanding();
+  initMap();
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+  initLanding();
 });
 
 // ===== Landing Page =====
+const RANDOM_CITIES = [
+  { lat: 41.9028, lng: 12.4964, z: 13 },
+  { lat: 45.4642, lng: 9.1900, z: 13 },
+  { lat: 35.6762, lng: 139.6503, z: 12 },
+  { lat: 40.7128, lng: -74.0060, z: 12 },
+  { lat: 48.8566, lng: 2.3522, z: 13 },
+  { lat: 51.5074, lng: -0.1278, z: 13 },
+  { lat: 41.3874, lng: 2.1686, z: 13 },
+  { lat: 52.5200, lng: 13.4050, z: 13 },
+  { lat: -33.8688, lng: 151.2093, z: 12 },
+  { lat: -22.9068, lng: -43.1729, z: 12 },
+  { lat: 52.3676, lng: 4.9041, z: 13 },
+  { lat: 25.2048, lng: 55.2708, z: 12 },
+  { lat: 55.7558, lng: 37.6173, z: 12 },
+  { lat: 39.9042, lng: 116.4074, z: 12 },
+  { lat: 37.7749, lng: -122.4194, z: 12 },
+];
+
 const LANDING_VERBS = [
   'facciamo', 'guardiamo', 'mangiamo', 'balliamo', 'beviamo',
   'ascoltiamo', 'giochiamo', 'cantiamo', 'vediamo', 'festeggiamo'
@@ -342,46 +361,29 @@ function cycleLandingVerb() {
   });
 }
 
-// Load events for landing page
 async function loadLandingEvents() {
   try {
     const r = await fetch('data/events.json');
     if (!r.ok) return;
     const events = await r.json();
     if (!events.length) return;
-    
-    // Group by city, take top 6 cities, 1 event each
     const byCity = {};
     events.forEach(ev => {
       const c = ev.city || 'Italia';
       if (!byCity[c]) byCity[c] = [];
       if (byCity[c].length < 2) byCity[c].push(ev);
     });
-    const cities = Object.keys(byCity).slice(0, 6);
+    const cities = Object.keys(byCity).slice(0, 8);
     const shown = cities.map(c => byCity[c][0]).filter(Boolean);
-    
     if (!shown.length) return;
-    
-    const wrap = S('landing-events');
     const list = S('landing-events-list');
-    if (!wrap || !list) return;
-    wrap.classList.remove('hidden');
-    
+    if (!list) return;
     shown.forEach(ev => {
       const dateStr = ev.date ? new Date(ev.date).toLocaleDateString('it-IT', { day:'numeric', month:'short' }) : 'TBA';
       const card = document.createElement('div');
       card.className = 'landing-event-card';
-      card.innerHTML = `
-        <div class="landing-event-date">${dateStr}</div>
-        <div class="landing-event-info">
-          <div class="landing-event-name">${ev.name}</div>
-          <div class="landing-event-venue">📍 ${ev.venue || ''}</div>
-        </div>
-        <div class="landing-event-city">${ev.city || ''}</div>
-      `;
-      card.addEventListener('click', () => {
-        if (ev.url) window.open(ev.url, '_blank');
-      });
+      card.innerHTML = `<div class="landing-event-date">${dateStr}</div><div class="landing-event-info"><div class="landing-event-name">${ev.name}</div><div class="landing-event-venue">📍 ${ev.venue || ''}</div></div><div class="landing-event-city">${ev.city || ''}</div>`;
+      card.addEventListener('click', () => { if (ev.url) window.open(ev.url, '_blank'); });
       list.appendChild(card);
     });
   } catch {}
@@ -392,28 +394,61 @@ function initLanding() {
   const cta = S('landing-cta');
   if (!landing || !cta) return;
 
+  // Center map on random city
+  const city = RANDOM_CITIES[Math.floor(Math.random() * RANDOM_CITIES.length)];
+  if (typeof map !== 'undefined' && map) {
+    map.setView([city.lat, city.lng], city.z, { animate: false });
+  }
+
   // Start verb cycling
   _landingTimer = setTimeout(cycleLandingVerb, 1200);
 
   // Load events
   loadLandingEvents();
 
+  // Tab switching
+  const tabs = document.querySelectorAll('#landing-tabs .landing-tab');
+  const panels = document.querySelectorAll('.landing-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      panels.forEach(p => p.classList.remove('active'));
+      const panel = document.getElementById('panel-' + target);
+      if (panel) panel.classList.add('active');
+      // Close mobile menu after selection
+      const navTabs = S('landing-tabs');
+      if (navTabs) navTabs.classList.remove('open');
+    });
+  });
+
+  // Hamburger toggle
+  const hamburger = S('landing-hamburger');
+  if (hamburger) {
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const navTabs = S('landing-tabs');
+      if (navTabs) navTabs.classList.toggle('open');
+    });
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      const navTabs = S('landing-tabs');
+      if (navTabs && navTabs.classList.contains('open')) {
+        if (!e.target.closest('.landing-nav')) navTabs.classList.remove('open');
+      }
+    });
+  }
+
+  // CTA: enter app
   cta.addEventListener('click', () => {
-    // Clean up landing timers
     if (_landingTimer) clearTimeout(_landingTimer);
     if (_landingAbort) _landingAbort();
-
-    // Fade out landing
     landing.classList.add('fade-out');
-
-    // Init app after transition
     setTimeout(() => {
       if (landing.parentNode) landing.style.display = 'none';
-      document.getElementById('app').classList.remove('app-hidden');
-      document.getElementById('app').classList.add('app-visible');
-      initMap();
       setupAppUI();
-    }, 400);
+    }, 500);
   });
 }
 
