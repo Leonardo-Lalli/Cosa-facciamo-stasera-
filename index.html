@@ -151,9 +151,12 @@
         <button class="landing-tab" data-tab="info">ℹ️ Come funziona</button>
         <button class="landing-tab" data-tab="docs">📄 Documentazione</button>
       </div>
-      <a href="https://github.com/Leonardo-Lalli/Cosa-facciamo-stasera-" target="_blank" class="landing-github" title="GitHub">
-        <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-      </a>
+      <div class="landing-nav-actions">
+        <button class="landing-share-btn" id="landing-share-btn" title="Condividi">📤</button>
+        <a href="https://github.com/Leonardo-Lalli/Cosa-facciamo-stasera-" target="_blank" class="landing-github" title="GitHub">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.73.083-.73 1.205.085 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.604-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+      </div>
     </nav>
     <div class="landing-body">
       <div class="landing-hero">
@@ -170,22 +173,26 @@
           <div id="landing-events-list" class="landing-events-list"></div>
         </div>
         <div class="landing-panel" id="panel-info">
-          <h2>ℹ️ Come funziona</h2>
+          <h2>🤷 Quante volte...</h2>
+          <div class="landing-story">
+            <p>Quante volte ti sei chiesto <em>"che facciamo stasera?"</em> con gli amici, senza trovare una risposta?</p>
+            <p>Gruppi WhatsApp pieni di <strong>"boh"</strong>, ricerche su Google che durano un'ora, e alla fine si finisce sempre nello stesso posto.</p>
+            <p><strong>Cosa facciamo stasera?</strong> risolve questo problema.</p>
+          </div>
           <div class="landing-info-grid">
-            <div class="landing-info-card"><span class="landing-info-icon">🔍</span><strong>Cerca</strong><p>Inserisci una città o usa la tua posizione</p></div>
-            <div class="landing-info-card"><span class="landing-info-icon">🎯</span><strong>Scegli</strong><p>Filtra per tipo di locale, distanza e mezzi</p></div>
-            <div class="landing-info-card"><span class="landing-info-icon">🗺️</span><strong>Esplora</strong><p>Guarda i locali sulla mappa e scopri i dettagli</p></div>
-            <div class="landing-info-card"><span class="landing-info-icon">🤖</span><strong>Pianifica</strong><p>L'AI ti crea un programma per la serata</p></div>
+            <div class="landing-info-card"><span class="landing-info-icon">📍</span><strong>Scegli la città</strong><p>Inserisci il nome o usa il GPS</p></div>
+            <div class="landing-info-card"><span class="landing-info-icon">🎯</span><strong>Filtra</strong><p>Tipo locale, distanza, mezzi, orari</p></div>
+            <div class="landing-info-card"><span class="landing-info-icon">🗺️</span><strong>Esplora la mappa</strong><p>Locali geolocalizzati con dettagli</p></div>
+            <div class="landing-info-card"><span class="landing-info-icon">🤖</span><strong>AI Planner</strong><p>Un programma per la tua serata</p></div>
           </div>
         </div>
         <div class="landing-panel" id="panel-docs">
           <h2>📄 Documentazione</h2>
           <div class="landing-docs-list">
-            <a href="https://github.com/Leonardo-Lalli/Cosa-facciamo-stasera-" target="_blank" class="landing-doc-link">📂 Codice sorgente su GitHub</a>
+            <a href="https://github.com/Leonardo-Lalli/Cosa-facciamo-stasera-" target="_blank" class="landing-doc-link">📂 Codice sorgente</a>
             <a href="https://github.com/Leonardo-Lalli/Cosa-facciamo-stasera-/blob/main/README.md" target="_blank" class="landing-doc-link">📖 README</a>
-            <a href="https://github.com/Leonardo-Lalli/Cosa-facciamo-stasera-/blob/main/doc/PROJECT_OVERVIEW.md" target="_blank" class="landing-doc-link">📋 Panoramica del progetto</a>
-            <a href="https://github.com/Leonardo-Lalli/Cosa-facciamo-stasera-/blob/main/MARKETING.md" target="_blank" class="landing-doc-link">📢 Guida marketing</a>
-            <a href="https://github.com/Leonardo-Lalli/Cosa-facciamo-stasera-/issues" target="_blank" class="landing-doc-link">🐛 Segnala un bug</a>
+            <a href="https://github.com/Leonardo-Lalli/Cosa-facciamo-stasera-/blob/main/doc/PROJECT_OVERVIEW.md" target="_blank" class="landing-doc-link">📋 Panoramica tecnica</a>
+            <a href="https://github.com/Leonardo-Lalli/Cosa-facciamo-stasera-/issues" target="_blank" class="landing-doc-link">🐛 Segnala un bug / Richiedi feature</a>
           </div>
         </div>
       </div>

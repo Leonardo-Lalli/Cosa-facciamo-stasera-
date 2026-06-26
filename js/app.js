@@ -394,6 +394,9 @@ function initLanding() {
   const cta = S('landing-cta');
   if (!landing || !cta) return;
 
+  // Hide sidebar while landing is visible
+  document.body.classList.add('landing-active');
+
   // Center map on random city
   const city = RANDOM_CITIES[Math.floor(Math.random() * RANDOM_CITIES.length)];
   if (typeof map !== 'undefined' && map) {
@@ -406,6 +409,22 @@ function initLanding() {
   // Load events
   loadLandingEvents();
 
+  // Share button
+  const shareBtn = S('landing-share-btn');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const text = 'Scopri cosa fare stasera! Locali, eventi, concerti vicino a te \u2014 tutto gratis \ud83c\udf06\u2728';
+      const url = window.location.href;
+      if (navigator.share) {
+        navigator.share({ title: 'Cosa facciamo stasera?', text, url }).catch(() => {});
+      } else {
+        const shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
+        window.open(shareUrl, '_blank');
+      }
+    });
+  }
+
   // Tab switching
   const tabs = document.querySelectorAll('#landing-tabs .landing-tab');
   const panels = document.querySelectorAll('.landing-panel');
@@ -417,7 +436,6 @@ function initLanding() {
       panels.forEach(p => p.classList.remove('active'));
       const panel = document.getElementById('panel-' + target);
       if (panel) panel.classList.add('active');
-      // Close mobile menu after selection
       const navTabs = S('landing-tabs');
       if (navTabs) navTabs.classList.remove('open');
     });
@@ -431,7 +449,6 @@ function initLanding() {
       const navTabs = S('landing-tabs');
       if (navTabs) navTabs.classList.toggle('open');
     });
-    // Close on outside click
     document.addEventListener('click', (e) => {
       const navTabs = S('landing-tabs');
       if (navTabs && navTabs.classList.contains('open')) {
@@ -447,6 +464,7 @@ function initLanding() {
     landing.classList.add('fade-out');
     setTimeout(() => {
       if (landing.parentNode) landing.style.display = 'none';
+      document.body.classList.remove('landing-active');
       setupAppUI();
     }, 500);
   });
