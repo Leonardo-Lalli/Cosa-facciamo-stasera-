@@ -70,14 +70,12 @@ body {
 body.landing-active #sidebar { display: none; }
 
 #landing {
-  position: fixed; top:0; left:0; right:0; bottom:0;
-  z-index: 10000;
-  pointer-events: none;
+  display: contents;
 }
-#landing > * { pointer-events: all; }
-#landing.fade-out {
+#landing.fade-out > * {
   opacity: 0;
   pointer-events: none;
+  transition: opacity 0.5s;
 }
 
 /* Nav bar - floating top */
