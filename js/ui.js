@@ -444,6 +444,14 @@ function showVenueDetail(venue, routes) {
   if (!detail || !content) return;
   detail.classList.remove('hidden');
 
+  // On mobile, close the drawer when opening venue detail
+  if (window.innerWidth <= 768) {
+    const drawer = S('results-drawer');
+    if (drawer) {
+      drawer.classList.remove('expanded');
+    }
+  }
+
   const r = routes[venue.id] || {};
   const routeLabels = { walking: '🚶 A piedi', cycling: '🚲 In bici', transit: '🚌 Mezzi', driving: '🚗 In auto' };
   const routesHtml = Object.entries(r).filter(([,v]) => v).map(([mode,v]) => `<div class="detail-route">${routeLabels[mode]||mode}<br><span class="time">${v.duration} min</span> · ${v.distance} km</div>`).join('') || '<div style="font-size:13px;color:var(--text-secondary)">Calcolo percorso...</div>';

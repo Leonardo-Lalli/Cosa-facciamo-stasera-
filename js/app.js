@@ -218,7 +218,10 @@ function highlightVenueCard(venue) {
   document.querySelectorAll('.venue-card').forEach(card => {
     if (card.querySelector('.venue-name')?.textContent === venue.name) {
       card.classList.add('active');
-      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      // Scroll card into view with center alignment
+      setTimeout(() => {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+      }, 100);
     }
   });
 }
