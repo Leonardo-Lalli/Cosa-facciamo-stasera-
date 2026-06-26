@@ -27,7 +27,13 @@ const MARKER_HTML = (icon, active) => `<div style="
 ">${icon}</div>`;
 
 function initMap() {
-  map = L.map('map').setView(DEFAULT_CENTER, DEFAULT_ZOOM);
+  let center = DEFAULT_CENTER;
+  let zoom = DEFAULT_ZOOM;
+  if (window._initialCenter) {
+    center = [window._initialCenter.lat, window._initialCenter.lng];
+    zoom = window._initialCenter.z;
+  }
+  map = L.map('map').setView(center, zoom);
 
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   tileLayer = L.tileLayer(isDark ? TILE_URLS.dark : TILE_URLS.light, {

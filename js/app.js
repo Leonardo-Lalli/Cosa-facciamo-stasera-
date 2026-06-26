@@ -295,6 +295,8 @@ S('theme-toggle')?.addEventListener('click', () => {
 // ===== Init =====
 window.addEventListener('DOMContentLoaded', () => {
   initTheme();
+  // Pick random city for initial map center
+  window._initialCenter = RANDOM_CITIES[Math.floor(Math.random() * RANDOM_CITIES.length)];
   initMap();
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
   initLanding();
@@ -418,12 +420,6 @@ function initLanding() {
     // Sync main theme toggle
     setText('theme-toggle', isDark ? '🌙' : '☀️');
   });
-
-  // Center map on random city
-  const city = RANDOM_CITIES[Math.floor(Math.random() * RANDOM_CITIES.length)];
-  if (typeof map !== 'undefined' && map) {
-    map.setView([city.lat, city.lng], city.z, { animate: false });
-  }
 
   // Start verb cycling
   _landingTimer = setTimeout(cycleLandingVerb, 1200);
