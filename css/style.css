@@ -341,15 +341,17 @@ body.landing-active #sidebar { display: none; }
   display: flex;
   height: 100vh;
   width: 100vw;
-  position: relative;
-  z-index: 1;
-}
-body.landing-active #app {
-  z-index: 0;
 }
 body.landing-active #map-container {
-  width: 100vw;
-  flex: none;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 0 !important;
+  flex: none !important;
 }
 
 /* ===== Sidebar ===== */
