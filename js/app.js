@@ -394,8 +394,30 @@ function initLanding() {
   const cta = S('landing-cta');
   if (!landing || !cta) return;
 
-  // Hide sidebar while landing is visible
   document.body.classList.add('landing-active');
+
+  // Sync theme toggle text
+  const updateLandingThemeBtn = () => {
+    const btn = S('landing-theme-toggle');
+    if (btn) btn.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
+  };
+  updateLandingThemeBtn();
+
+  // Landing theme toggle
+  S('landing-theme-toggle')?.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+    }
+    updateLandingThemeBtn();
+    if (typeof switchMapTiles === 'function') switchMapTiles();
+    // Sync main theme toggle
+    setText('theme-toggle', isDark ? '🌙' : '☀️');
+  });
 
   // Center map on random city
   const city = RANDOM_CITIES[Math.floor(Math.random() * RANDOM_CITIES.length)];
@@ -419,8 +441,7 @@ function initLanding() {
       if (navigator.share) {
         navigator.share({ title: 'Cosa facciamo stasera?', text, url }).catch(() => {});
       } else {
-        const shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
-        window.open(shareUrl, '_blank');
+        window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
       }
     });
   }
@@ -465,6 +486,9 @@ function initLanding() {
     setTimeout(() => {
       if (landing.parentNode) landing.style.display = 'none';
       document.body.classList.remove('landing-active');
+      if (typeof map !== 'undefined' && map) {
+        map.invalidateSize();
+      }
       setupAppUI();
     }, 500);
   });
