@@ -66,43 +66,39 @@ body {
   transition: background 0.3s, color 0.3s;
 }
 
-/* ===== Landing Page (overlay on map) ===== */
+/* ===== Landing Page (floating elements over map) ===== */
 body.landing-active #sidebar { display: none; }
 
 #landing {
   position: fixed; top:0; left:0; right:0; bottom:0;
   z-index: 10000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: transparent;
-  transition: opacity 0.5s, transform 0.5s;
   pointer-events: none;
 }
 #landing > * { pointer-events: all; }
 #landing.fade-out {
   opacity: 0;
-  transform: scale(1.03);
   pointer-events: none;
 }
 
-/* Nav bar - floating glass */
+/* Nav bar - floating top */
 .landing-nav {
-  position: relative;
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   width: calc(100% - 24px);
   max-width: 680px;
-  margin-top: 12px;
   padding: 8px 16px;
-  background: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.8);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(0,0,0,0.08);
   border-radius: 16px;
   box-shadow: 0 2px 16px rgba(0,0,0,0.06);
   gap: 8px;
-  z-index: 2;
+  z-index: 10001;
 }
 [data-theme="dark"] .landing-nav {
   background: rgba(26,26,46,0.75);
@@ -184,34 +180,39 @@ body.landing-active #sidebar { display: none; }
 }
 .landing-github:hover { opacity: 1; color: var(--text); }
 
-/* Body - scrollable */
+/* Body - centered scrollable block */
 .landing-body {
-  flex: 1;
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 100%;
+  max-width: 560px;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  padding: 16px 24px 32px;
+  padding: 0 12px 32px;
+  z-index: 10001;
 }
 
 /* Hero card - centered glass */
 .landing-hero {
   text-align: center;
   padding: 32px 32px 24px;
-  flex-shrink: 0;
   width: 100%;
-  max-width: 520px;
-  background: rgba(255,255,255,0.78);
+  background: rgba(255,255,255,0.82);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(0,0,0,0.08);
   border-radius: 20px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  flex-shrink: 0;
 }
 [data-theme="dark"] .landing-hero {
-  background: rgba(26,26,46,0.78);
+  background: rgba(26,26,46,0.82);
   border-color: rgba(255,255,255,0.08);
 }
 .landing-logo-wrap {
@@ -264,17 +265,15 @@ body.landing-active #sidebar { display: none; }
 /* Panels card */
 .landing-panels {
   width: 100%;
-  max-width: 520px;
   margin-top: 12px;
-  flex-shrink: 0;
-  background: rgba(255,255,255,0.78);
+  background: rgba(255,255,255,0.82);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(0,0,0,0.08);
   border-radius: 20px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
   padding: 20px 24px 24px;
-  margin-bottom: 24px;
+  flex-shrink: 0;
 }
 [data-theme="dark"] .landing-panels {
   background: rgba(26,26,46,0.78);
@@ -1270,12 +1269,17 @@ body.landing-active #sidebar { display: none; }
 
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
-  /* Landing mobile */
+  /* Landing mobile - floating elements */
   .landing-nav {
+    top: 8px;
     width: calc(100% - 16px);
-    margin-top: 8px;
     padding: 6px 12px;
     border-radius: 14px;
+  }
+  .landing-body {
+    top: 70px;
+    max-width: 100%;
+    padding: 0 8px 24px;
   }
   .landing-hamburger { display: block; }
   .landing-nav-tabs {
@@ -1307,7 +1311,6 @@ body.landing-active #sidebar { display: none; }
   .landing-hero { padding: 24px 20px 20px; border-radius: 18px; }
   .landing-panels { margin-top: 10px; padding: 16px 16px 20px; border-radius: 18px; }
   .landing-panel h2 { font-size: 14px; }
-  .landing-body { padding: 10px 12px 24px; }
   .landing-info-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
   .landing-info-card { padding: 10px; }
   .landing-info-icon { font-size: 22px; }
