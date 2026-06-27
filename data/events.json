@@ -1,21 +1,5 @@
 [
   {
-    "id": "Zf98xZKrZek6dAZup5QQKr",
-    "name": "GroundUp Experience '26",
-    "type": "live_music",
-    "date": "2026-06-28",
-    "time": "10:30:00",
-    "venue": "Ristorante Il Poeta Contadino",
-    "city": "Alberobello",
-    "lat": 40.782151,
-    "lng": 17.238979,
-    "url": "https://shop.ticketmaster.it/biglietti/groundup-experience-26-28-giugno-2026-ristorante-il-poeta-contadino-alberobello-15624.html",
-    "image": "https://s1.ticketm.net/dam/c/ab4/6367448e-7474-4650-bd2d-02a8f7166ab4_106161_CUSTOM.jpg",
-    "priceMin": null,
-    "priceMax": null,
-    "source": "ticketmaster"
-  },
-  {
     "id": "Zf98xZKrZek6veZup5QQKr",
     "name": "GroundUp Festival Alberobello 2026 - Trullo Sovrano - 3th day (second set) | SHAI MAESTRO",
     "type": "live_music",
