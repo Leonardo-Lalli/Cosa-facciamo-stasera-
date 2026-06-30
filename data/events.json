@@ -272,6 +272,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZdddk",
+    "name": "Lollipop + Zelletta | Pride Village 2026",
+    "type": "live_music",
+    "date": "2026-07-03",
+    "time": "19:30:00",
+    "venue": "Arena Spettacoli - Fiera di Padova",
+    "city": "Padova",
+    "lat": 45.411731,
+    "lng": 11.893828,
+    "url": "https://www.ticketmaster.it/biglietti/lollipop-zelletta-pride-village-2026-padova-03-07-2026/event/weh7tlf59m0v",
+    "image": "https://s1.ticketm.net/dam/a/d42/2d0dbfbf-d49b-46a9-93ed-dfcde4dfad42_ARTIST_PAGE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "Z59rmIYnyZaAe",
     "name": "Converge",
     "type": "live_music",
@@ -4901,7 +4917,7 @@
     "type": "live_music",
     "date": "2026-07-27",
     "time": "21:00:00",
-    "venue": "Castello Volante di Corigliano d'Otranto",
+    "venue": "CASTELLO DE' MONTI",
     "city": "Corigliano d'Otranto",
     "lat": 40.158758,
     "lng": 18.256397,
@@ -5873,7 +5889,7 @@
   },
   {
     "id": "ZG9rmIYnyZeFkF",
-    "name": "Frida Bollani Magoni | Pietrasanta in Concerto OFF",
+    "name": "Frida Bollani Magoni - Special Guest: Mauro Di Maggio | Pietrasanta in Concerto OFF",
     "type": "live_music",
     "date": "2026-08-05",
     "time": "21:30:00",
