@@ -378,7 +378,7 @@
     "lat": 43.073013,
     "lng": 12.6156,
     "url": "https://www.ticketmaster.it/biglietti/sayf-assisi-summer-festival-assisi-16-07-2026/event/4r4lj2dkuwbg",
-    "image": "https://s1.ticketm.net/dam/a/964/63843570-46a5-4031-957a-6cfa5a8c5964_TABLET_LANDSCAPE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/964/63843570-46a5-4031-957a-6cfa5a8c5964_TABLET_LANDSCAPE_LARGE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -465,7 +465,7 @@
   },
   {
     "id": "ZG9rmIYnyZdda1",
-    "name": "Populous | Pride Village 2026",
+    "name": "Populous DJ SET | Pride Village 2026",
     "type": "live_music",
     "date": "2026-07-17",
     "time": "19:30:00",
@@ -491,22 +491,6 @@
     "lng": 9.113489,
     "url": "https://shop.ticketmaster.it/partner/biglietti/bad-bunny-debi-tirar-mas-fotos-world-tour-17-luglio-2026-ippodromo-snai-la-maura-milano-15666.html?queueittoken=e_bb20260717secres~ts_1783341776~ce_true~rt_safetynet~h_b1b30f59ecdc8cad89ca38dd2be80f8c6ebf956968a970031cb05da1b03bda36",
     "image": "https://s1.ticketm.net/dam/a/598/144e8308-c5a1-4f38-b913-e38d9d02f598_RETINA_PORTRAIT_3_2.jpg",
-    "priceMin": null,
-    "priceMax": null,
-    "source": "ticketmaster"
-  },
-  {
-    "id": "ZG9rmIYnyZe6ad",
-    "name": "CASINO ROYALE",
-    "type": "live_music",
-    "date": "2026-07-17",
-    "time": "20:30:00",
-    "venue": "Beky Bay",
-    "city": "Bellaria – Igea Marina (Rimini)",
-    "lat": 44.121964,
-    "lng": 12.495436,
-    "url": "https://www.ticketmaster.it/biglietti/casino-royale-bellaria-igea-marina-17-07-2026/event/fsrbrcdkn9od",
-    "image": "https://s1.ticketm.net/dam/a/6c0/11d0fad8-f185-4e72-b953-638db8e2c6c0_TABLET_LANDSCAPE_LARGE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -640,6 +624,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZe6ad",
+    "name": "CASINO ROYALE",
+    "type": "live_music",
+    "date": "2026-07-17",
+    "time": "21:30:00",
+    "venue": "Beky Bay",
+    "city": "Bellaria – Igea Marina (Rimini)",
+    "lat": 44.121964,
+    "lng": 12.495436,
+    "url": "https://www.ticketmaster.it/biglietti/casino-royale-bellaria-igea-marina-17-07-2026/event/fsrbrcdkn9od",
+    "image": "https://s1.ticketm.net/dam/a/6c0/11d0fad8-f185-4e72-b953-638db8e2c6c0_CUSTOM.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZevva",
     "name": "Subsonica - Terre Rare 96 - 26 | 35° PORDENONE BLUES & C. FESTIVAL 2026",
     "type": "live_music",
@@ -747,6 +747,22 @@
     "lng": 10.653644,
     "url": "https://www.ticketmaster.it/biglietti/ye-kanye-west-ye-live-concert-reggio-emilia-18-07-2026/event/s87q6cb513zm/ticketmaster",
     "image": "https://s1.ticketm.net/dam/a/f39/44dd1b4f-cae3-4b67-982a-d6572691af39_TABLET_LANDSCAPE_LARGE_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZdd1e",
+    "name": "Juventus Women Vs Servette",
+    "type": "events_venue",
+    "date": "2026-07-18",
+    "time": "17:30:00",
+    "venue": "Stadio Comunale “E. Brunod”",
+    "city": "Châtillon",
+    "lat": 45.746896,
+    "lng": 7.602631,
+    "url": "https://www.ticketmaster.it/biglietti/juventus-women-vs-servette-chtillon-18-07-2026/event/cefjnz9wf5m6",
+    "image": "https://s1.ticketm.net/dam/a/977/8ea37107-97cf-4cb1-a757-3b5ac9e2a977_ARTIST_PAGE_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
