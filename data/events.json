@@ -74,7 +74,7 @@
     "lat": 43.779175,
     "lng": 11.249456,
     "url": "https://www.ticketmaster.it/biglietti/resonance-presents-fantasm-winson-firenze-18-07-2026/event/hsuraqsm6nj1",
-    "image": "https://s1.ticketm.net/dam/a/ce5/a9875f66-d1aa-483f-839a-35e2c247ece5_TABLET_LANDSCAPE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/ce5/a9875f66-d1aa-483f-839a-35e2c247ece5_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -1322,7 +1322,7 @@
     "lat": 45.838054,
     "lng": 9.077177,
     "url": "https://www.ticketmaster.it/biglietti/alessandro-mannarino-cernobbio-como-24-07-2026/event/cp6jzzxlzt0i",
-    "image": "https://s1.ticketm.net/dam/a/315/4559491e-414d-4aef-b7b8-4853ce9b5315_TABLET_LANDSCAPE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/315/4559491e-414d-4aef-b7b8-4853ce9b5315_TABLET_LANDSCAPE_LARGE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -1876,7 +1876,7 @@
     "name": "Emanuela Serra · I'm not a hero",
     "type": "events_venue",
     "date": "2026-07-26",
-    "time": "20:30:00",
+    "time": "20:00:00",
     "venue": "Fortezza Firmafede",
     "city": "Sarzana",
     "lat": 44.112003,
@@ -1968,6 +1968,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZddde",
+    "name": "Compagnie Ma' · Hold Fast",
+    "type": "events_venue",
+    "date": "2026-07-26",
+    "time": "21:15:00",
+    "venue": "Fortezza Firmafede",
+    "city": "Sarzana",
+    "lat": 44.112003,
+    "lng": 9.963589,
+    "url": "https://www.ticketmaster.it/biglietti/hold-fast-sarzana-26-07-2026/event/ffpuhz62xfo3",
+    "image": "https://s1.ticketm.net/dam/a/055/c3cbb528-86c5-4724-b27c-f1c8a6487055_ARTIST_PAGE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZevk1",
     "name": "Joan Thiele | 79 Estate Fiesolana",
     "type": "live_music",
@@ -2027,22 +2043,6 @@
     "lng": 10.400091,
     "url": "https://www.ticketmaster.it/biglietti/skunk-anansie-pisa-26-07-2026/event/hzfd9vrr3oyh",
     "image": "https://s1.ticketm.net/dam/a/d2d/41ff61c3-4ff5-4442-8095-721b690dad2d_SOURCE",
-    "priceMin": null,
-    "priceMax": null,
-    "source": "ticketmaster"
-  },
-  {
-    "id": "ZG9rmIYnyZddde",
-    "name": "Compagnie Ma' · Hold Fast",
-    "type": "events_venue",
-    "date": "2026-07-26",
-    "time": "22:00:00",
-    "venue": "Fortezza Firmafede",
-    "city": "Sarzana",
-    "lat": 44.112003,
-    "lng": 9.963589,
-    "url": "https://www.ticketmaster.it/biglietti/hold-fast-sarzana-26-07-2026/event/ffpuhz62xfo3",
-    "image": "https://s1.ticketm.net/dam/a/055/c3cbb528-86c5-4724-b27c-f1c8a6487055_ARTIST_PAGE_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -2266,7 +2266,7 @@
     "lat": 45.469494,
     "lng": 9.177566,
     "url": "https://www.ticketmaster.it/biglietti/chi-ha-ucciso-il-pianeta-milano-28-07-2026/event/3qzzps4c4nw9",
-    "image": "https://s1.ticketm.net/dam/a/80f/c790733e-94a2-4a69-aca2-2ab001fbf80f_RETINA_LANDSCAPE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/80f/c790733e-94a2-4a69-aca2-2ab001fbf80f_RETINA_PORTRAIT_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -6945,7 +6945,7 @@
   },
   {
     "id": "ZG9rmIYnyZd7ve",
-    "name": "32 Vasco Brondi, Federico Dragogna-Una cosa spirituale. Musiche e letture tra terreno e ultraterreno",
+    "name": "32 - Vasco Brondi, Federico Dragogna-Una cosa spirituale. Musiche e letture tra terreno e ultraterreno",
     "type": "events_venue",
     "date": "2026-09-06",
     "time": "21:15:00",
