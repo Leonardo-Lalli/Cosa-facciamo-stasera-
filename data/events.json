@@ -42,7 +42,7 @@
     "lat": 40.824487,
     "lng": 14.191572,
     "url": "https://www.ticketmaster.it/biglietti/noisy-naples-2026-2-days-pass/event/hwyao2oupgbp",
-    "image": "https://s1.ticketm.net/dam/a/bd4/6b98d279-f624-437d-9ddd-8437d2d4ebd4_ARTIST_PAGE_3_2.jpg",
+    "image": "https://s1.ticketm.net/dam/a/bd4/6b98d279-f624-437d-9ddd-8437d2d4ebd4_TABLET_LANDSCAPE_LARGE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -817,7 +817,7 @@
   },
   {
     "id": "Z59rmIYnyZaAA",
-    "name": "Frah Quintale - Summer Tour '26 | Locus Festival 2026",
+    "name": "Frah Quintale - Summer Tour '26 + TUTTI FENOMENI | Locus Festival 2026",
     "type": "live_music",
     "date": "2026-07-25",
     "time": "21:00:00",
@@ -1547,6 +1547,22 @@
     "lng": 11.035695,
     "url": "https://www.ticketmaster.it/biglietti/visita-collezione-arte-ambientale-e-giardini-storici-santomato-pistoia-29-07-2026/event/gicuxzeutar0",
     "image": "https://s1.ticketm.net/dam/a/bbd/fe677e1a-cf26-480d-839d-9fdcba57fbbd_RETINA_PORTRAIT_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZd7a6",
+    "name": "PRO Vercelli vs Rappresentativa locale",
+    "type": "events_venue",
+    "date": "2026-07-29",
+    "time": "18:30:00",
+    "venue": "Stadio Comunale “E. Brunod”",
+    "city": "Châtillon",
+    "lat": 45.746896,
+    "lng": 7.602631,
+    "url": "https://www.ticketmaster.it/biglietti/pro-vercelli-vs-rappresentativa-locale-chtillon-29-07-2026/event/vapaazoi6zzw",
+    "image": "https://s1.ticketm.net/dam/a/ad0/4f9f605b-d722-4714-bc99-1e2483f73ad0_1813081_ARTIST_PAGE_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
