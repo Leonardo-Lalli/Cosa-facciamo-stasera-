@@ -128,6 +128,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZdAvF",
+    "name": "Territorio Match Music - Laura Marcellini DJ | Pride Village 2026",
+    "type": "live_music",
+    "date": "2026-07-30",
+    "time": "19:30:00",
+    "venue": "Arena Spettacoli - Fiera di Padova",
+    "city": "Padova",
+    "lat": 45.411731,
+    "lng": 11.893828,
+    "url": "https://www.ticketmaster.it/biglietti/territorio-match-music-laura-marcellini-dj-pride-village-2026-padova-30-07-2026/event/1qm3wjsirpuf",
+    "image": "https://s1.ticketm.net/dam/a/d42/2d0dbfbf-d49b-46a9-93ed-dfcde4dfad42_ARTIST_PAGE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZekda",
     "name": "Agnostic Front",
     "type": "live_music",
@@ -1120,8 +1136,24 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZdAva",
+    "name": "CLUB MILANO SSD - CASTELLANZESE",
+    "type": "events_venue",
+    "date": "2026-08-08",
+    "time": "10:30:00",
+    "venue": "Pero Sporting Club",
+    "city": "Pero (Milano)",
+    "lat": 45.512313,
+    "lng": 9.077099,
+    "url": "https://www.ticketmaster.it/biglietti/club-milano-ssd-castellanzese-pero-milano-08-08-2026/event/ja2agypq7s8u",
+    "image": "https://s1.ticketm.net/dam/a/4a5/5941b14b-80f6-471d-a172-1fa733bc24a5_RETINA_LANDSCAPE_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZdAvk",
-    "name": "KARMA B + GREGOR SALTO | Pride Village 2026",
+    "name": "GREGOR SALTO | Pride Village 2026",
     "type": "live_music",
     "date": "2026-08-08",
     "time": "19:30:00",
@@ -1129,7 +1161,7 @@
     "city": "Padova",
     "lat": 45.411731,
     "lng": 11.893828,
-    "url": "https://www.ticketmaster.it/biglietti/karma-b-gregor-salto-pride-village-2026-padova-08-08-2026/event/bthjf7257fsg",
+    "url": "https://www.ticketmaster.it/biglietti/gregor-salto-pride-village-2026-padova-08-08-2026/event/bthjf7257fsg",
     "image": "https://s1.ticketm.net/dam/a/d42/2d0dbfbf-d49b-46a9-93ed-dfcde4dfad42_ARTIST_PAGE_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
