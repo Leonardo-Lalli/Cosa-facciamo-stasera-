@@ -5664,6 +5664,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZdA71",
+    "name": "Holi Splash Run ECO Tour 2026 - Prenotazione",
+    "type": "events_venue",
+    "date": "2026-09-13",
+    "time": "15:30:00",
+    "venue": "Parco Ferrari",
+    "city": "Maranello",
+    "lat": 44.52335,
+    "lng": 10.86596,
+    "url": "https://www.ticketmaster.it/biglietti/holi-splash-run-eco-tour-2026-prenotazione-maranello-13-09-2026/event/9ts23etoy2k4",
+    "image": "https://s1.ticketm.net/dam/a/c0d/6783e55e-fb64-43a3-9bd0-3f555f1b6c0d_ARTIST_PAGE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "Zf98xZKrZekkeAZup5QQKr",
     "name": "JOVA SUMMER PARTY 2026 - L’ARCA DI LORÈ",
     "type": "live_music",
