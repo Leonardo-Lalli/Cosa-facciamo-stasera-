@@ -145,7 +145,7 @@
   },
   {
     "id": "ZG9rmIYnyZed1a",
-    "name": "Francesca Michielin - Estate 2026",
+    "name": "Francesca Michielin - Strega Comanda – Summer Tour 2026",
     "type": "live_music",
     "date": "2026-08-08",
     "time": "21:30:00",
@@ -833,7 +833,7 @@
   },
   {
     "id": "ZG9rmIYnyZeAdA",
-    "name": "Nek",
+    "name": "NEK - Hits Live",
     "type": "live_music",
     "date": "2026-08-13",
     "time": "21:30:00",
@@ -938,7 +938,7 @@
     "lat": 40.754839,
     "lng": 17.339705,
     "url": "https://shop.ticketmaster.it/biglietti/locus-2026-14-agosto-subsonica-the-orb-tara-14-agosto-2026-masseria-ferragnano-locorotondo-15357.html",
-    "image": "https://s1.ticketm.net/dam/c/48b/2352e3b5-8496-496b-97a3-e605177e848b_105851_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/c/48b/2352e3b5-8496-496b-97a3-e605177e848b_105851_RETINA_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -954,7 +954,7 @@
     "lat": 40.05163,
     "lng": 17.996378,
     "url": "https://www.ticketmaster.it/biglietti/sfera-ebbasta-oversound-music-festival-gallipoli-lecce-14-08-2026/event/kawgxrtl2k3q",
-    "image": "https://s1.ticketm.net/dam/a/fc0/d581387e-56eb-4293-86d7-ab5ad6747fc0_TABLET_LANDSCAPE_3_2.jpg",
+    "image": "https://s1.ticketm.net/dam/a/fc0/d581387e-56eb-4293-86d7-ab5ad6747fc0_TABLET_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -1953,7 +1953,7 @@
   },
   {
     "id": "ZG9rmIYnyZevkv",
-    "name": "WOLFMOTHER + Folkstone | Beat Festival",
+    "name": "Folkstone | Beat Festival",
     "type": "live_music",
     "date": "2026-08-27",
     "time": "21:00:00",
@@ -4907,6 +4907,22 @@
     "lng": 9.182377,
     "url": "https://www.ticketmaster.it/biglietti/the-black-keys-peaches-n-kream-milano-11-09-2026/event/w0h68mlm7ele",
     "image": "https://s1.ticketm.net/dam/a/df4/1bfe1370-1394-4588-8207-71723a5a4df4_SOURCE",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZdkke",
+    "name": "GOB",
+    "type": "live_music",
+    "date": "2026-09-11",
+    "time": "20:30:00",
+    "venue": "La Cripta Club",
+    "city": "Cusano Milanino (Milano)",
+    "lat": 0,
+    "lng": 0,
+    "url": "https://www.ticketmaster.it/biglietti/gob-cusano-milanino-milano-11-09-2026/event/5x6l3cwmbxhj",
+    "image": "https://s1.ticketm.net/dam/a/c85/4c0589ff-7e79-458a-9e61-02adb3d30c85_TABLET_LANDSCAPE_LARGE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
