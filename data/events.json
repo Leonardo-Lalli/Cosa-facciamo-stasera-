@@ -170,7 +170,7 @@
     "lat": 43.405285,
     "lng": 10.410191,
     "url": "https://www.ticketmaster.it/biglietti/federico-buffa-number-23-vita-e-splendori-di-michael-jordan-castiglioncello-20-08-2026/event/q84jd0lhrw4x",
-    "image": "https://s1.ticketm.net/dam/a/81a/d1a41bf9-500b-4d33-aea5-e204b1d8f81a_RETINA_LANDSCAPE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/81a/d1a41bf9-500b-4d33-aea5-e204b1d8f81a_ARTIST_PAGE_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -186,7 +186,7 @@
     "lat": 43.96864,
     "lng": 10.157998,
     "url": "https://www.ticketmaster.it/biglietti/sal-da-vinci-estate-2026-forte-dei-marmi-20-08-2026/event/juox3m98u6lb",
-    "image": "https://s1.ticketm.net/dam/a/b8a/1bb568e1-9235-452f-895c-95dde56a7b8a_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/b8a/1bb568e1-9235-452f-895c-95dde56a7b8a_SOURCE",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -3136,6 +3136,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZd6e1",
+    "name": "Gianni Morandi",
+    "type": "live_music",
+    "date": "2026-09-06",
+    "time": "21:00:00",
+    "venue": "PORTO TURISTICO",
+    "city": "Pescara",
+    "lat": 0,
+    "lng": 0,
+    "url": "https://www.ticketmaster.it/biglietti/gianni-morandi-pescara-06-09-2026/event/voi8tskipa4q",
+    "image": "https://s1.ticketm.net/dam/a/9b9/673f994d-28b3-40df-be09-75f3bba5d9b9_RETINA_PORTRAIT_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZdd7v",
     "name": "Lisa Agnelli Pop Rock Concert",
     "type": "live_music",
@@ -3658,7 +3674,7 @@
     "lat": 40.835478,
     "lng": 14.162362,
     "url": "https://shop.ticketmaster.it/biglietti/luche-tour-palasport-2025-26-10-settembre-2026-ippodromo-di-agnano-napoli-15553.html",
-    "image": "https://s1.ticketm.net/dam/c/80b/f3cd8d24-c3ae-4fa0-b4bc-1ba99f9b380b_106091_RETINA_PORTRAIT_3_2.jpg",
+    "image": "https://s1.ticketm.net/dam/c/80b/f3cd8d24-c3ae-4fa0-b4bc-1ba99f9b380b_106091_RETINA_PORTRAIT_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -5419,6 +5435,22 @@
     "lng": 10.21351,
     "url": "https://shop.ticketmaster.it/biglietti/brunori-sas-tuttobrunori-canzoni-e-monologhi-04-ottobre-2026-teatro-clerici-brescia-15337.html",
     "image": "https://s1.ticketm.net/dam/c/797/5e693c26-2881-4776-8f0c-3aa94bfa3797_106511_RETINA_LANDSCAPE_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZdk1d",
+    "name": "FUTURA GIOVANI BUSTO ARSIZIO | NON SOLO UNA PARTITA - Abbonamento Stagione 2026-2027",
+    "type": "events_venue",
+    "date": "2026-10-05",
+    "time": "17:00:00",
+    "venue": "Soevis Arena",
+    "city": "Castellanza (Varese)",
+    "lat": 45.647098,
+    "lng": 8.808889,
+    "url": "https://www.ticketmaster.it/biglietti/futura-giovani-busto-arsizio-non-solo-una-partita-abbonamento-stagione-2026-2027/event/jh9e389hbh8t",
+    "image": "https://s1.ticketm.net/dam/a/2d5/1486fb7e-ea3e-48df-a809-ef7d342cc2d5_1537791_CUSTOM.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
