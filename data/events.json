@@ -496,22 +496,6 @@
     "source": "ticketmaster"
   },
   {
-    "id": "ZG9rmIYnyZe6ea",
-    "name": "ROSARIO MIRAGGIO- Live Tour 2026",
-    "type": "live_music",
-    "date": "2026-08-25",
-    "time": "21:00:00",
-    "venue": "Levante Arena",
-    "city": "Giovinazzo (Bari)",
-    "lat": 41.191132,
-    "lng": 16.65983,
-    "url": "https://www.ticketmaster.it/biglietti/rosario-miraggio-live-tour-2026-giovinazzo-25-08-2026/event/5ltp9m4ju1u3",
-    "image": "https://s1.ticketm.net/dam/a/646/1c051bb5-cbe7-4edb-bc90-f87efa70a646_CUSTOM.jpg",
-    "priceMin": null,
-    "priceMax": null,
-    "source": "ticketmaster"
-  },
-  {
     "id": "Zf98xZKrZekdvaZup5QQKr",
     "name": "Tyler, The Creator",
     "type": "live_music",
@@ -3627,22 +3611,6 @@
     "lng": 12.661728,
     "url": "https://www.ticketmaster.it/biglietti/gianni-morandi-riccione-10-09-2026/event/fmbzd5y06uoo",
     "image": "https://s1.ticketm.net/dam/a/9b9/673f994d-28b3-40df-be09-75f3bba5d9b9_TABLET_LANDSCAPE_LARGE_16_9.jpg",
-    "priceMin": null,
-    "priceMax": null,
-    "source": "ticketmaster"
-  },
-  {
-    "id": "Zf98xZKrZekkk7Zup5QQKr",
-    "name": "LUCHÈ - Tour Palasport 2025/26",
-    "type": "live_music",
-    "date": "2026-09-10",
-    "time": "21:00:00",
-    "venue": "Ippodromo di Agnano",
-    "city": "Napoli",
-    "lat": 40.835478,
-    "lng": 14.162362,
-    "url": "https://shop.ticketmaster.it/biglietti/luche-tour-palasport-2025-26-10-settembre-2026-ippodromo-di-agnano-napoli-15553.html",
-    "image": "https://s1.ticketm.net/dam/c/80b/f3cd8d24-c3ae-4fa0-b4bc-1ba99f9b380b_106091_RETINA_PORTRAIT_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
