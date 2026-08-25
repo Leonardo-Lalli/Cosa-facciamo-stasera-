@@ -1456,6 +1456,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZd6Av",
+    "name": "Reboot | Pride Village 2026",
+    "type": "live_music",
+    "date": "2026-09-04",
+    "time": "19:30:00",
+    "venue": "Arena Spettacoli - Fiera di Padova",
+    "city": "Padova",
+    "lat": 45.411731,
+    "lng": 11.893828,
+    "url": "https://www.ticketmaster.it/biglietti/reboot-pride-village-2026-padova-04-09-2026/event/avvi89po2ta6",
+    "image": "https://s1.ticketm.net/dam/a/d42/2d0dbfbf-d49b-46a9-93ed-dfcde4dfad42_ARTIST_PAGE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZekdv",
     "name": "Madame + Ditonellapiaga | Trento Live Fest 2026",
     "type": "live_music",
@@ -4475,6 +4491,22 @@
     "lng": 12.29388,
     "url": "https://www.ticketmaster.it/biglietti/barutz-in-casa-di-riposo-show-conegliano-26-09-2026/event/3yk1rvo3pbor",
     "image": "https://s1.ticketm.net/dam/a/efc/ce1d5dc0-07f5-4327-827a-f815f07c5efc_CUSTOM.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZd67A",
+    "name": "Giancane + guest",
+    "type": "live_music",
+    "date": "2026-09-26",
+    "time": "21:30:00",
+    "venue": "Vidia Club",
+    "city": "Cesena",
+    "lat": 44.109532,
+    "lng": 12.200673,
+    "url": "https://www.ticketmaster.it/biglietti/giancane-cesena-26-09-2026/event/c1zn3f8a2f61",
+    "image": "https://s1.ticketm.net/dam/a/913/0b9c0380-9efa-44fb-a3f7-191d1e612913_RETINA_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
