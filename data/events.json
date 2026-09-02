@@ -186,7 +186,7 @@
     "lat": 44.701596,
     "lng": 10.661042,
     "url": "https://www.ticketmaster.it/biglietti/cristiano-de-andr-de-andr-canta-de-andr-festa-de-lunit-di-reggio-emilia-reggio-emilia-03-09-2026/event/uesv64p7tbpx",
-    "image": "https://s1.ticketm.net/dam/a/c0b/25e29cab-5ce5-4251-afd9-70790e06ec0b_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/c0b/25e29cab-5ce5-4251-afd9-70790e06ec0b_RETINA_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -2561,7 +2561,7 @@
   },
   {
     "id": "ZG9rmIYnyZd677",
-    "name": "Big Closing Party | Pride Village 2026 -  Special guest Donatella Rettore",
+    "name": "Big Closing Party | Pride Village 2026 -  Special guest: Donatella Rettore",
     "type": "live_music",
     "date": "2026-09-12",
     "time": "19:31:00",
