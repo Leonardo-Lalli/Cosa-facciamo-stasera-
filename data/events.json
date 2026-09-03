@@ -4160,6 +4160,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZdk1A",
+    "name": "Milano Hockey Club - Abbonamento 2026/2027",
+    "type": "events_venue",
+    "date": "2026-10-09",
+    "time": "19:45:00",
+    "venue": "Fiera Ice Arena",
+    "city": "Rho",
+    "lat": 45.517636,
+    "lng": 9.077188,
+    "url": "https://www.ticketmaster.it/biglietti/milano-hockey-club-abbonamento-20262027/event/p606i8qg8tzo",
+    "image": "https://s1.ticketm.net/dam/a/f2e/3e245a0d-c264-40c2-9df7-57b047843f2e_RETINA_LANDSCAPE_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZekev",
     "name": "Christian Gate$",
     "type": "live_music",
