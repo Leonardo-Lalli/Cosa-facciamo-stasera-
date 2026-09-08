@@ -512,6 +512,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZd1d1",
+    "name": "MILANO CUP",
+    "type": "events_venue",
+    "date": "2026-09-12",
+    "time": "13:20:00",
+    "venue": "Centro Sportivo Accademia I.C.",
+    "city": "Milano",
+    "lat": 45.502927,
+    "lng": 9.094347,
+    "url": "https://www.ticketmaster.it/biglietti/milano-cup-milano-12-09-2026/event/6mcbd8hryyy6",
+    "image": "https://s1.ticketm.net/dam/a/a90/8d918d8e-f1f3-4a6f-aee0-cc57dd1fba90_1518601_RETINA_LANDSCAPE_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "Z59rmIYnyZFAa",
     "name": "Visita Collezione Arte Ambientale e Giardini Storici",
     "type": "events_venue",
@@ -672,6 +688,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZd17e",
+    "name": "Accademia I.C. - Sedriano, Cat. U14",
+    "type": "events_venue",
+    "date": "2026-09-13",
+    "time": "10:30:00",
+    "venue": "Centro Sportivo Accademia I.C.",
+    "city": "Milano",
+    "lat": 45.502927,
+    "lng": 9.094347,
+    "url": "https://www.ticketmaster.it/biglietti/accademia-ic-sedriano-cat-u14-milano-13-09-2026/event/31v3zhr4afrq",
+    "image": "https://s1.ticketm.net/dam/a/a90/8d918d8e-f1f3-4a6f-aee0-cc57dd1fba90_1518601_RETINA_LANDSCAPE_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZe61A",
     "name": "REVOLUNION MOTOR FESTIVAL",
     "type": "live_music",
@@ -683,6 +715,22 @@
     "lng": 0,
     "url": "https://www.ticketmaster.it/biglietti/revolunion-motor-festival-casella-genova-12-07-2026/event/bafwhn72r6jv",
     "image": "https://s1.ticketm.net/dam/a/306/4eb61ade-891c-4481-8fcd-0d2a2fda3306_CUSTOM.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZd17v",
+    "name": "MILANO CUP",
+    "type": "events_venue",
+    "date": "2026-09-13",
+    "time": "13:20:00",
+    "venue": "Centro Sportivo Accademia I.C.",
+    "city": "Milano",
+    "lat": 45.502927,
+    "lng": 9.094347,
+    "url": "https://www.ticketmaster.it/biglietti/milano-cup-milano-13-09-2026/event/ukdduezrusbc",
+    "image": "https://s1.ticketm.net/dam/a/a90/8d918d8e-f1f3-4a6f-aee0-cc57dd1fba90_1518601_RETINA_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
