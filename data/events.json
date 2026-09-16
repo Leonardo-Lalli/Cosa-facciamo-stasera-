@@ -672,6 +672,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZ7vdF",
+    "name": "PRO SESTO vs REAL MEDA | COPPA ITALIA FEM",
+    "type": "events_venue",
+    "date": "2026-09-20",
+    "time": "15:30:00",
+    "venue": "Stadio Ernesto Breda",
+    "city": "Sesto San Giovanni",
+    "lat": 45.532712,
+    "lng": 9.223256,
+    "url": "https://www.ticketmaster.it/biglietti/pro-sesto-vs-real-meda-coppa-italia-fem-sesto-san-giovanni-20-09-2026/event/hbqxm5lety1u",
+    "image": "https://s1.ticketm.net/dam/a/06a/debba2e9-7078-4973-9ed0-50005447a06a_1736611_RETINA_PORTRAIT_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZd111",
     "name": "U.S. Folgore Caratese - Giana Erminio",
     "type": "events_venue",
@@ -1402,7 +1418,7 @@
     "lat": 45.494744,
     "lng": 9.182377,
     "url": "https://www.ticketmaster.it/biglietti/dargen-damico-milano-01-10-2026/event/adeewn8xuvtb",
-    "image": "https://s1.ticketm.net/dam/a/8d4/cb5a327a-3fe3-4327-a292-f19d735048d4_RETINA_LANDSCAPE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/8d4/cb5a327a-3fe3-4327-a292-f19d735048d4_ARTIST_PAGE_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
