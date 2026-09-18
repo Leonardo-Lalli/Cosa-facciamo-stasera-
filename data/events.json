@@ -176,6 +176,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZ7dAv",
+    "name": "FOLGORE ACADEMY - CASATI ARCORE (U14 ACADEMY)",
+    "type": "events_venue",
+    "date": "2026-09-19",
+    "time": "16:00:00",
+    "venue": "Sportitalia Village",
+    "city": "Verano Brianza (Monza-Brianza)",
+    "lat": 45.678626,
+    "lng": 9.219351,
+    "url": "https://www.ticketmaster.it/biglietti/folgore-academy-casati-arcore-u14-academy-verano-brianza-monza-brianza-19-09-2026/event/41adwsxfferl",
+    "image": "https://s1.ticketm.net/dam/a/0b5/c48e8e12-ac19-415f-b21c-30cc19c350b5_ARTIST_PAGE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZdk7F",
     "name": "Holi Splash Run ECO Tour 2026 - Prenotazione",
     "type": "events_venue",
@@ -352,6 +368,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZ7d6k",
+    "name": "FOLGORE ACADEMY - LEO TEAM (U16 ACADEMY)",
+    "type": "events_venue",
+    "date": "2026-09-20",
+    "time": "10:30:00",
+    "venue": "Sportitalia Village",
+    "city": "Verano Brianza (Monza-Brianza)",
+    "lat": 45.678626,
+    "lng": 9.219351,
+    "url": "https://www.ticketmaster.it/biglietti/folgore-academy-leo-team-u16-academy-verano-brianza-monza-brianza-20-09-2026/event/yqsw2mt7tvjw",
+    "image": "https://s1.ticketm.net/dam/a/0b5/c48e8e12-ac19-415f-b21c-30cc19c350b5_ARTIST_PAGE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZ7vek",
     "name": "Accademia I.C. - AC Leon, Cat. U17",
     "type": "events_venue",
@@ -443,6 +475,22 @@
     "lng": 9.223256,
     "url": "https://www.ticketmaster.it/biglietti/pro-sesto-vs-real-meda-coppa-italia-fem-sesto-san-giovanni-20-09-2026/event/hbqxm5lety1u",
     "image": "https://s1.ticketm.net/dam/a/06a/debba2e9-7078-4973-9ed0-50005447a06a_1736611_RETINA_PORTRAIT_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZ7d1e",
+    "name": "U.S. FOLGORE CARATESE - U.C. ALBINOLEFFE | U16 Nazionali - Amichevole",
+    "type": "events_venue",
+    "date": "2026-09-20",
+    "time": "16:30:00",
+    "venue": "Sportitalia Village",
+    "city": "Verano Brianza (Monza-Brianza)",
+    "lat": 45.678626,
+    "lng": 9.219351,
+    "url": "https://www.ticketmaster.it/biglietti/us-folgore-caratese-uc-albinoleffe-u16-verano-brianza-monza-brianza-20-09-2026/event/eki4ee7nqd8k",
+    "image": "https://s1.ticketm.net/dam/a/0b5/c48e8e12-ac19-415f-b21c-30cc19c350b5_ARTIST_PAGE_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -2874,7 +2922,7 @@
     "lat": 45.466895,
     "lng": 9.153773,
     "url": "https://www.ticketmaster.it/biglietti/erykah-badu-imeho-an-intimate-experience-with-erykah-badu-milano-19-10-2026/event/7nboy9lu4i77",
-    "image": "https://s1.ticketm.net/dam/a/ba7/1a685203-064e-4896-835f-976ad24e1ba7_SOURCE",
+    "image": "https://s1.ticketm.net/dam/a/843/f4ed3885-576a-432a-b1f7-9ed860a10843_TABLET_LANDSCAPE_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -2954,7 +3002,7 @@
     "lat": 45.466895,
     "lng": 9.153773,
     "url": "https://www.ticketmaster.it/biglietti/erykah-badu-imeho-an-intimate-experience-with-erykah-badu-milano-20-10-2026/event/opp8tn8otxok",
-    "image": "https://s1.ticketm.net/dam/a/ba7/1a685203-064e-4896-835f-976ad24e1ba7_SOURCE",
+    "image": "https://s1.ticketm.net/dam/a/843/f4ed3885-576a-432a-b1f7-9ed860a10843_TABLET_LANDSCAPE_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -3194,7 +3242,7 @@
     "lat": 45.445641,
     "lng": 9.18835,
     "url": "https://www.ticketmaster.it/biglietti/lantidote-jazzmi-2026-milano-22-10-2026/event/635n7g1qdbsr",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -3386,7 +3434,7 @@
     "lat": 45.442881,
     "lng": 9.157459,
     "url": "https://www.ticketmaster.it/biglietti/songhoy-blues-milano-23-10-2026/event/dllk3x36rxiq",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -3562,7 +3610,7 @@
     "lat": 45.445641,
     "lng": 9.18835,
     "url": "https://www.ticketmaster.it/biglietti/corto-alto-milano-24-10-2026/event/buxybc5hgz4r",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -3706,7 +3754,7 @@
     "lat": 45.494744,
     "lng": 9.182377,
     "url": "https://www.ticketmaster.it/biglietti/rokia-traore-milano-27-10-2026/event/cslhv3zcj4wp",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -3898,7 +3946,7 @@
     "lat": 45.466448,
     "lng": 9.192408,
     "url": "https://www.ticketmaster.it/biglietti/kjartan-sveinsson-gyda-valtsdttir-bert-cools-and-indr-jurgeleviit-jazzmi-2026-milano-28-10-2026/event/rewuxahmfdvm",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -4026,7 +4074,7 @@
     "lat": 45.461335,
     "lng": 9.191807,
     "url": "https://www.ticketmaster.it/biglietti/paolo-fresu-quintet-ascensore-per-il-patibolo-milano-29-10-2026/event/2ofhixil342w",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -4202,7 +4250,7 @@
     "lat": 45.466389,
     "lng": 9.181004,
     "url": "https://www.ticketmaster.it/biglietti/tommy-emmanuel-milano-30-10-2026/event/60q5rr243dpg",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -4218,7 +4266,7 @@
     "lat": 45.442881,
     "lng": 9.157459,
     "url": "https://www.ticketmaster.it/biglietti/louis-matute-large-ensemble-jazzmi-2026-milano-30-10-2026/event/i8al81rrclr2",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -4266,7 +4314,7 @@
     "lat": 45.470283,
     "lng": 9.174798,
     "url": "https://www.ticketmaster.it/biglietti/gaetano-liguori-idea-trio-underground-jazzmi-2026-milano-31-10-2026/event/uadyji7hf4tc",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -4314,7 +4362,7 @@
     "lat": 45.470283,
     "lng": 9.174798,
     "url": "https://www.ticketmaster.it/biglietti/enrico-intra-milano-31-10-2026/event/95v0v4q2l07c",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -4330,7 +4378,7 @@
     "lat": 45.470283,
     "lng": 9.174798,
     "url": "https://www.ticketmaster.it/biglietti/the-songs-of-joni-mitchell-milano-31-10-2026/event/elav7zbxih6o",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -4442,7 +4490,7 @@
     "lat": 0,
     "lng": 0,
     "url": "https://www.ticketmaster.it/biglietti/dimitri-grechi-espinoza-aziz-senol-filiz-e-guido-zorn-meditation-on-a-love-supreme-jazzmi-2026-milano-01-11-2026/event/gevbmvgtyfcd",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -4474,7 +4522,7 @@
     "lat": 45.470283,
     "lng": 9.174798,
     "url": "https://www.ticketmaster.it/biglietti/nate-smith-milano-01-11-2026/event/nau82bpktnhz",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -4506,7 +4554,7 @@
     "lat": 45.470283,
     "lng": 9.174798,
     "url": "https://www.ticketmaster.it/biglietti/nate-smith-milano-01-11-2026/event/yt3vccabbvfa",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -4554,7 +4602,7 @@
     "lat": 45.470283,
     "lng": 9.174798,
     "url": "https://www.ticketmaster.it/biglietti/david-binney-action-trio-ft-louis-cole-and-pera-krstrasic-jazzmi-2026-milano-03-11-2026/event/dbwhhzabwtc1",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -4698,7 +4746,7 @@
     "lat": 45.470283,
     "lng": 9.174798,
     "url": "https://www.ticketmaster.it/biglietti/china-moses-milano-04-11-2026/event/fhlk6u4ydk7c",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -4730,7 +4778,7 @@
     "lat": 45.470283,
     "lng": 9.174798,
     "url": "https://www.ticketmaster.it/biglietti/a-new-sketches-of-spain-jazzmi-2026-milano-05-11-2026/event/3nh75kgje87l",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -4922,7 +4970,7 @@
     "lat": 45.470283,
     "lng": 9.174798,
     "url": "https://www.ticketmaster.it/biglietti/svaneborg-kardyb-milano-06-11-2026/event/133qrwadspqa",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -4970,7 +5018,7 @@
     "lat": 45.445641,
     "lng": 9.18835,
     "url": "https://www.ticketmaster.it/biglietti/mt-jones-jazzmi-2026-milano-06-11-2026/event/h8izq30gog31",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -4992,6 +5040,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZ7daF",
+    "name": "BukRomance",
+    "type": "events_venue",
+    "date": "2026-11-07",
+    "time": "10:30:00",
+    "venue": "Salone delle Fontane",
+    "city": "Roma",
+    "lat": 41.83757,
+    "lng": 12.469004,
+    "url": "https://www.ticketmaster.it/biglietti/bukromance-roma-07-11-2026/event/mqej38cz0tc5",
+    "image": "https://s1.ticketm.net/dam/a/2fe/2c1aef1e-1b5f-40c0-965c-16f60efab2fe_ARTIST_PAGE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZeaAk",
     "name": "Enzo Favata “Atlantico\" | JAZZMI 2026",
     "type": "live_music",
@@ -5002,7 +5066,7 @@
     "lat": 45.470283,
     "lng": 9.174798,
     "url": "https://www.ticketmaster.it/biglietti/enzo-favata-atlantico-jazzmi-2026-milano-07-11-2026/event/xh6nj5djbk6m",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -5018,7 +5082,7 @@
     "lat": 45.470283,
     "lng": 9.174798,
     "url": "https://www.ticketmaster.it/biglietti/bill-frisell-with-luke-bergman-and-tim-angulo-milano-07-11-2026/event/n1n72x6qq006",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -5114,7 +5178,7 @@
     "lat": 45.445641,
     "lng": 9.18835,
     "url": "https://www.ticketmaster.it/biglietti/the-messthetics-and-james-brandon-lewis-milano-07-11-2026/event/h190ouw6l1n2",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -5130,7 +5194,7 @@
     "lat": 45.470283,
     "lng": 9.174798,
     "url": "https://www.ticketmaster.it/biglietti/bill-frisell-with-luke-bergman-and-tim-angulo-milano-07-11-2026/event/9o2en666vm3x",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -5178,7 +5242,7 @@
     "lat": 45.470283,
     "lng": 9.174798,
     "url": "https://www.ticketmaster.it/biglietti/isaiah-collier-milano-08-11-2026/event/m1ad85rlkjq4",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -5210,7 +5274,7 @@
     "lat": 45.463962,
     "lng": 9.203268,
     "url": "https://www.ticketmaster.it/biglietti/sergio-cammariere-milano-08-11-2026/event/v471kcstoywt",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -5242,7 +5306,7 @@
     "lat": 45.470283,
     "lng": 9.174798,
     "url": "https://www.ticketmaster.it/biglietti/calibro-35-vs-la-jazzmi-2026-milano-08-11-2026/event/68cgvasvwcpx",
-    "image": "https://s1.ticketm.net/dam/a/395/60c908f1-60a8-4aa1-b185-c73eee11b395_CUSTOM.jpg",
+    "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -5770,7 +5834,7 @@
     "lat": 41.047933,
     "lng": 16.82501,
     "url": "https://www.ticketmaster.it/biglietti/malika-ayane-bitritto-16-11-2026/event/ckeup79zal9f",
-    "image": "https://s1.ticketm.net/dam/a/4bb/ea8f8427-7726-45d5-83b4-ca295c6264bb_1718481_RETINA_PORTRAIT_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/435/e5be1f84-6c33-4be0-abc1-3f64f1d12435_TABLET_LANDSCAPE_LARGE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
