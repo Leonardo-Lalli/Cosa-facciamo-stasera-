@@ -144,22 +144,6 @@
     "source": "ticketmaster"
   },
   {
-    "id": "ZG9rmIYnyZ7vdA",
-    "name": "TORNEO GOL ARENA CUP | ESO 2014 + Piccoli Amici 2018",
-    "type": "events_venue",
-    "date": "2026-09-20",
-    "time": "14:00:00",
-    "venue": "Centro Sportivo M. Casadei",
-    "city": "Milano",
-    "lat": 45.500658,
-    "lng": 9.2434,
-    "url": "https://www.ticketmaster.it/biglietti/torneo-gol-arena-cup-eso-2014-piccoli-amici-2018-milano-20-09-2026/event/kbsk48873yj7",
-    "image": "https://s1.ticketm.net/dam/a/d5d/1af17704-baba-4ecb-b087-de64c584ad5d_TABLET_LANDSCAPE_3_2.jpg",
-    "priceMin": null,
-    "priceMax": null,
-    "source": "ticketmaster"
-  },
-  {
     "id": "ZG9rmIYnyZdkee",
     "name": "Club Milano SSD - Virtus Verona",
     "type": "events_venue",
@@ -705,7 +689,7 @@
   },
   {
     "id": "ZG9rmIYnyZdkFa",
-    "name": "Antonella Montrasio e Marlise Goidanich  - “Joni al last”",
+    "name": "Antonella Montrasio e Marlise Goidanich  - “Joni at last”",
     "type": "live_music",
     "date": "2026-09-26",
     "time": "21:30:00",
