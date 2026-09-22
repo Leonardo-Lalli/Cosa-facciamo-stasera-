@@ -432,6 +432,38 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZF9rmIYnyZk77",
+    "name": "Robur Saronno - Nerviano",
+    "type": "events_venue",
+    "date": "2026-09-26",
+    "time": "21:00:00",
+    "venue": "PalaRonchi",
+    "city": "Saronno",
+    "lat": 45.631639,
+    "lng": 9.039778,
+    "url": "https://www.ticketmaster.it/biglietti/robur-saronno-nerviano-saronno-26-09-2026/event/q60qhr0i9ted",
+    "image": "https://s1.ticketm.net/dam/a/2b9/180e73d3-c765-4ec4-b9c0-11ba6d8302b9_TABLET_LANDSCAPE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZ77Aa",
+    "name": "Abbonamento Stagione 2026/27 - Robur Basket Saronno (14 partite)",
+    "type": "events_venue",
+    "date": "2026-09-26",
+    "time": "21:00:00",
+    "venue": "PalaRonchi",
+    "city": "Saronno",
+    "lat": 45.631639,
+    "lng": 9.039778,
+    "url": "https://www.ticketmaster.it/biglietti/abbonamento-stagione-202627-robur-basket-saronno-14-partite-saronno-26-09-2026/event/5ix63gv0mkqp",
+    "image": "https://s1.ticketm.net/dam/a/2b9/180e73d3-c765-4ec4-b9c0-11ba6d8302b9_TABLET_LANDSCAPE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZd7k1",
     "name": "BARUTZ  “in casa di riposo Show\"",
     "type": "events_venue",
@@ -571,6 +603,22 @@
     "lng": 9.516882,
     "url": "https://shop.ticketmaster.it/biglietti/metalitaliacom-festival-2026-day-2-27-settembre-2026-live-club-trezzo-sull-adda-15420.html",
     "image": "https://s1.ticketm.net/dam/c/ab4/6367448e-7474-4650-bd2d-02a8f7166ab4_106161_TABLET_LANDSCAPE_LARGE_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZ776A",
+    "name": "Abbonamento S.S.D. Pro Sesto 1913 2026/27",
+    "type": "events_venue",
+    "date": "2026-09-27",
+    "time": "15:00:00",
+    "venue": "Stadio Ernesto Breda",
+    "city": "Sesto San Giovanni",
+    "lat": 45.532712,
+    "lng": 9.223256,
+    "url": "https://www.ticketmaster.it/biglietti/abbonamento-ssd-pro-sesto-1913-202627-sesto-san-giovanni-06-09-2026/event/avzt9ham27qp",
+    "image": "https://s1.ticketm.net/dam/a/06a/debba2e9-7078-4973-9ed0-50005447a06a_1736611_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -1226,7 +1274,7 @@
     "lat": 45.401644,
     "lng": 9.142051,
     "url": "https://shop.ticketmaster.it/biglietti/laura-pausini-io-canto-world-tour-06-ottobre-2026-unipol-forum-assago-14690.html",
-    "image": "https://s1.ticketm.net/dam/a/cfc/61fcb7f2-fcac-4bab-b204-5f796c908cfc_RETINA_PORTRAIT_3_2.jpg",
+    "image": "https://s1.ticketm.net/dam/a/cfc/61fcb7f2-fcac-4bab-b204-5f796c908cfc_RETINA_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -1290,7 +1338,7 @@
     "lat": 45.401644,
     "lng": 9.142051,
     "url": "https://shop.ticketmaster.it/biglietti/laura-pausini-io-canto-world-tour-07-ottobre-2026-unipol-forum-assago-14692.html",
-    "image": "https://s1.ticketm.net/dam/a/cfc/61fcb7f2-fcac-4bab-b204-5f796c908cfc_RETINA_PORTRAIT_3_2.jpg",
+    "image": "https://s1.ticketm.net/dam/a/cfc/61fcb7f2-fcac-4bab-b204-5f796c908cfc_RETINA_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -2458,7 +2506,7 @@
     "lat": 45.042077,
     "lng": 7.652552,
     "url": "https://shop.ticketmaster.it/biglietti/laura-pausini-io-canto-world-tour-17-ottobre-2026-inalpi-arena-torino-14689.html",
-    "image": "https://s1.ticketm.net/dam/a/cfc/61fcb7f2-fcac-4bab-b204-5f796c908cfc_RETINA_PORTRAIT_3_2.jpg",
+    "image": "https://s1.ticketm.net/dam/a/cfc/61fcb7f2-fcac-4bab-b204-5f796c908cfc_RETINA_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -2570,7 +2618,7 @@
     "lat": 45.042077,
     "lng": 7.652552,
     "url": "https://shop.ticketmaster.it/biglietti/laura-pausini-io-canto-world-tour-18-ottobre-2026-inalpi-arena-torino-15453.html",
-    "image": "https://s1.ticketm.net/dam/a/cfc/61fcb7f2-fcac-4bab-b204-5f796c908cfc_RETINA_PORTRAIT_3_2.jpg",
+    "image": "https://s1.ticketm.net/dam/a/cfc/61fcb7f2-fcac-4bab-b204-5f796c908cfc_RETINA_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -3760,22 +3808,6 @@
     "source": "ticketmaster"
   },
   {
-    "id": "ZG9rmIYnyZdFv6",
-    "name": "BRANDEE YOUNGER TRIO | Padova Jazz Festival 2026",
-    "type": "live_music",
-    "date": "2026-10-29",
-    "time": "21:00:00",
-    "venue": "Auditorium San Gaetano",
-    "city": "Padova",
-    "lat": 45.407831,
-    "lng": 11.882868,
-    "url": "https://www.ticketmaster.it/biglietti/brandee-younger-trio-padova-29-10-2026/event/qsarmtt80f2v",
-    "image": "https://s1.ticketm.net/dam/a/dda/1d1d09d9-68a5-4898-8ced-b0c7c8c64dda_1161581_CUSTOM.jpg",
-    "priceMin": null,
-    "priceMax": null,
-    "source": "ticketmaster"
-  },
-  {
     "id": "ZG9rmIYnyZddav",
     "name": "Paolo Fresu Quintet \"Ascensore per il Patibolo” | JAZZMI 26",
     "type": "live_music",
@@ -4730,7 +4762,7 @@
     "lat": 43.776871,
     "lng": 11.282995,
     "url": "https://shop.ticketmaster.it/biglietti/laura-pausini-io-canto-world-tour-06-novembre-2026-mandela-forum-firenze-14704.html",
-    "image": "https://s1.ticketm.net/dam/a/cfc/61fcb7f2-fcac-4bab-b204-5f796c908cfc_RETINA_PORTRAIT_3_2.jpg",
+    "image": "https://s1.ticketm.net/dam/a/cfc/61fcb7f2-fcac-4bab-b204-5f796c908cfc_RETINA_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
