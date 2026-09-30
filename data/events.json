@@ -1040,6 +1040,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZ7ka1",
+    "name": " LIVE LOUNGE | Emozioni Senza Tempo",
+    "type": "live_music",
+    "date": "2026-10-10",
+    "time": "19:00:00",
+    "venue": "Inalpi Arena",
+    "city": "Torino",
+    "lat": 45.042484,
+    "lng": 7.651973,
+    "url": "https://www.ticketmaster.it/biglietti/live-lounge-emozioni-senza-tempo-torino-10-10-2026/event/1sxzflme67hw",
+    "image": "https://s1.ticketm.net/dam/a/fbe/fefdd5b9-f14a-4b30-9bcb-8bb010ae6fbe_TABLET_LANDSCAPE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "Z59rmIYnyZ1kd",
     "name": "KID YUGI - Anche gli Eroi Muoiono Tour - Palasport 2026",
     "type": "live_music",
@@ -1259,6 +1275,22 @@
     "lng": 8.808889,
     "url": "https://www.ticketmaster.it/biglietti/sae-scientifica-soevis-legnano-abbonamento-2026-2027/event/n4wofo73j5ro",
     "image": "https://s1.ticketm.net/dam/a/7b8/89610c34-f795-44fd-8329-6208c264f7b8_1502121_RETINA_PORTRAIT_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZ7k1v",
+    "name": " LIVE LOUNGE | Emozioni Senza Tempo",
+    "type": "live_music",
+    "date": "2026-10-11",
+    "time": "19:00:00",
+    "venue": "Inalpi Arena",
+    "city": "Torino",
+    "lat": 45.042484,
+    "lng": 7.651973,
+    "url": "https://www.ticketmaster.it/biglietti/live-lounge-inalpi-arena-torino-11-10-2026/event/lx0voq44htis",
+    "image": "https://s1.ticketm.net/dam/a/fbe/fefdd5b9-f14a-4b30-9bcb-8bb010ae6fbe_TABLET_LANDSCAPE_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
