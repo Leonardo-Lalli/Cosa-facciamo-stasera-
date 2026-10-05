@@ -368,6 +368,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZ6Fd6",
+    "name": "Pro Sesto Giovanili - 10/10/2026",
+    "type": "events_venue",
+    "date": "2026-10-10",
+    "time": "08:30:00",
+    "venue": "Stadio Ernesto Breda",
+    "city": "Sesto San Giovanni",
+    "lat": 45.532712,
+    "lng": 9.223256,
+    "url": "https://www.ticketmaster.it/biglietti/pro-sesto-giovanili-10102026-sesto-san-giovanni-10-10-2026/event/apsmbq8ccywe",
+    "image": "https://s1.ticketm.net/dam/a/06a/debba2e9-7078-4973-9ed0-50005447a06a_1736611_RETINA_PORTRAIT_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "Z59rmIYnyZked",
     "name": "Visita della Poesia",
     "type": "events_venue",
@@ -442,7 +458,7 @@
     "lat": 45.402496,
     "lng": 9.139273,
     "url": "https://www.ticketmaster.it/biglietti/kid-yugi-anche-gli-eroi-muoiono-tour-palasport-2026-assago-10-10-2026/event/0e07titv7vob",
-    "image": "https://s1.ticketm.net/dam/a/de0/72f7996f-5a42-4508-b5ef-b1e391e8dde0_TABLET_LANDSCAPE_LARGE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/de0/72f7996f-5a42-4508-b5ef-b1e391e8dde0_TABLET_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -576,6 +592,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZ6FdF",
+    "name": "Pro Sesto Giovanili - 11/10/2026",
+    "type": "events_venue",
+    "date": "2026-10-11",
+    "time": "08:30:00",
+    "venue": "Stadio Ernesto Breda",
+    "city": "Sesto San Giovanni",
+    "lat": 45.532712,
+    "lng": 9.223256,
+    "url": "https://www.ticketmaster.it/biglietti/pro-sesto-giovanili-11102026-sesto-san-giovanni-11-10-2026/event/3tlu1vnc9529",
+    "image": "https://s1.ticketm.net/dam/a/06a/debba2e9-7078-4973-9ed0-50005447a06a_1736611_RETINA_PORTRAIT_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZdFA1",
     "name": "ATP 125 Olbia Challenger | Abbonamento All Days",
     "type": "events_venue",
@@ -640,6 +672,38 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZdAa1",
+    "name": "S.S.D. Pro Sesto 1913 - Solbiatese Calcio 1911",
+    "type": "events_venue",
+    "date": "2026-10-11",
+    "time": "15:00:00",
+    "venue": "Stadio Ernesto Breda",
+    "city": "Sesto San Giovanni",
+    "lat": 45.532712,
+    "lng": 9.223256,
+    "url": "https://www.ticketmaster.it/biglietti/ssd-pro-sesto-1913-solbiatese-calcio-1911-sesto-san-giovanni-11-10-2026/event/8m7senrxe8ui",
+    "image": "https://s1.ticketm.net/dam/a/06a/debba2e9-7078-4973-9ed0-50005447a06a_1736611_RETINA_PORTRAIT_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZ6FdA",
+    "name": "PRO SESTO vs TORINO | SERIE C FEM",
+    "type": "events_venue",
+    "date": "2026-10-11",
+    "time": "15:30:00",
+    "venue": "Stadio Ernesto Breda",
+    "city": "Sesto San Giovanni",
+    "lat": 45.532712,
+    "lng": 9.223256,
+    "url": "https://www.ticketmaster.it/biglietti/pro-sesto-vs-torino-serie-c-fem-sesto-san-giovanni-11-10-2026/event/jlxt9087twrm",
+    "image": "https://s1.ticketm.net/dam/a/06a/debba2e9-7078-4973-9ed0-50005447a06a_1736611_RETINA_PORTRAIT_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZdFkF",
     "name": "Milano HC vs HCB Südtirol Alperia",
     "type": "events_venue",
@@ -667,6 +731,22 @@
     "lng": 8.808889,
     "url": "https://www.ticketmaster.it/biglietti/sae-scientifica-soevis-legnano-abbonamento-2026-2027/event/n4wofo73j5ro",
     "image": "https://s1.ticketm.net/dam/a/7b8/89610c34-f795-44fd-8329-6208c264f7b8_1502121_RETINA_PORTRAIT_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZd66d",
+    "name": "Novipiù Monferrato Basket - Campus Varese",
+    "type": "events_venue",
+    "date": "2026-10-11",
+    "time": "18:00:00",
+    "venue": "PalaEnergica Paolo Ferraris",
+    "city": "Casale Monferrato",
+    "lat": 0,
+    "lng": 0,
+    "url": "https://www.ticketmaster.it/biglietti/novipi-monferrato-basket-campus-varese-casale-monferrato-11-10-2026/event/8wqu06ef3x9m",
+    "image": "https://s1.ticketm.net/dam/a/646/c9c83528-6413-4e92-917d-b68a5bd13646_1752771_RETINA_PORTRAIT_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
