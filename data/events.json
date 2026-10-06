@@ -3504,6 +3504,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZFAAk",
+    "name": "La Tempesta",
+    "type": "events_venue",
+    "date": "2026-10-30",
+    "time": "20:30:00",
+    "venue": "Auditorium Dialma Ruggiero",
+    "city": "La Spezia",
+    "lat": 44.115008,
+    "lng": 9.809262,
+    "url": "https://www.ticketmaster.it/biglietti/la-tempesta-la-spezia-30-10-2027/event/x7eulbg8bhsa",
+    "image": "https://s1.ticketm.net/dam/a/40b/44ad3633-c957-47ed-aa43-ba34ea4f640b_CUSTOM.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZe76a",
     "name": "Ryan Adams",
     "type": "live_music",
@@ -3760,6 +3776,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZFAA6",
+    "name": "La Tempesta",
+    "type": "events_venue",
+    "date": "2026-10-31",
+    "time": "20:30:00",
+    "venue": "Auditorium Dialma Ruggiero",
+    "city": "La Spezia",
+    "lat": 44.115008,
+    "lng": 9.809262,
+    "url": "https://www.ticketmaster.it/biglietti/la-tempesta-la-spezia-31-10-2026/event/7szop35n6gpu",
+    "image": "https://s1.ticketm.net/dam/a/40b/44ad3633-c957-47ed-aa43-ba34ea4f640b_CUSTOM.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZdFvk",
     "name": "DELFEAYO MARSALIS QUINTET feat. ERIC ALEXANDER | Padova Jazz Festival 2026",
     "type": "live_music",
@@ -3850,7 +3882,7 @@
     "lat": 44.109532,
     "lng": 12.200673,
     "url": "https://www.ticketmaster.it/biglietti/punkreas-cesena-31-10-2026/event/tn40ggly0j6i",
-    "image": "https://s1.ticketm.net/dam/a/25b/07f51231-d20d-4369-a166-9807096da25b_1663091_TABLET_LANDSCAPE_LARGE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/913/0b9c0380-9efa-44fb-a3f7-191d1e612913_RETINA_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -6592,6 +6624,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZFA7d",
+    "name": "Haunt Me",
+    "type": "live_music",
+    "date": "2026-11-21",
+    "time": "19:00:00",
+    "venue": "El Barrio",
+    "city": "Torino",
+    "lat": 45.123477,
+    "lng": 7.703204,
+    "url": "https://www.ticketmaster.it/biglietti/haunt-me-torino-21-11-2026/event/p4u3gpw9tlgd",
+    "image": "https://s1.ticketm.net/dam/a/eb6/cd982c0e-97b0-42e4-a2a7-085eaab67eb6_RETINA_PORTRAIT_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZeFe6",
     "name": "Kingfishr",
     "type": "live_music",
@@ -8512,6 +8560,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZ7kaF",
+    "name": "Lisa Agnelli Pop Rock Concert",
+    "type": "live_music",
+    "date": "2026-12-04",
+    "time": "21:00:00",
+    "venue": "Cinema Teatro Lux",
+    "city": "Quistello",
+    "lat": 45.007853,
+    "lng": 10.98093,
+    "url": "https://www.ticketmaster.it/biglietti/lisa-agnelli-pop-rock-concert-quistello-04-12-2026/event/in77v3e5zn70",
+    "image": "https://s1.ticketm.net/dam/a/e02/96c60182-87de-4fb5-ac87-90293bab6e02_RETINA_PORTRAIT_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZd1A7",
     "name": "Cesare Cremonini - AMATOUR",
     "type": "live_music",
@@ -8667,6 +8731,22 @@
     "lng": 10.097287,
     "url": "https://www.ticketmaster.it/biglietti/la-tigre-carrara-05-12-2026/event/c2b72q5ump1n",
     "image": "https://s1.ticketm.net/dam/a/049/0d5122ea-83f7-4c38-abbf-b29ab0849049_ARTIST_PAGE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZ7kak",
+    "name": "Lisa Agnelli Pop Rock Concert",
+    "type": "live_music",
+    "date": "2026-12-05",
+    "time": "21:00:00",
+    "venue": "Teatro Cristallo",
+    "city": "Bolzano",
+    "lat": 46.491861,
+    "lng": 11.333872,
+    "url": "https://www.ticketmaster.it/biglietti/lisa-agnelli-pop-rock-concert-bolzano-05-12-2026/event/e8n0tzditfjw",
+    "image": "https://s1.ticketm.net/dam/a/e02/96c60182-87de-4fb5-ac87-90293bab6e02_RETINA_PORTRAIT_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
