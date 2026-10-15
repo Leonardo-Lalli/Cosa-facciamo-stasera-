@@ -561,7 +561,7 @@
   },
   {
     "id": "ZG9rmIYnyZd1F6",
-    "name": "TEENAGE DREAM",
+    "name": "TEENAGE DREAM - The Show Must Glow on",
     "type": "live_music",
     "date": "2026-10-17",
     "time": "21:30:00",
@@ -1963,6 +1963,22 @@
     "lng": 11.879655,
     "url": "https://www.ticketmaster.it/biglietti/silvania-dos-santos-giancarlo-bianchetti-padova-25-10-2026/event/g6z7sazr0sds",
     "image": "https://s1.ticketm.net/dam/a/dda/1d1d09d9-68a5-4898-8ced-b0c7c8c64dda_1161581_CUSTOM.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZF61F",
+    "name": "PRO SESTO vs ANGELO BAIARDO | SERIE C FEM",
+    "type": "events_venue",
+    "date": "2026-10-25",
+    "time": "14:30:00",
+    "venue": "Stadio Ernesto Breda",
+    "city": "Sesto San Giovanni",
+    "lat": 45.532712,
+    "lng": 9.223256,
+    "url": "https://www.ticketmaster.it/biglietti/pro-sesto-vs-angelo-baiardo-serie-c-fem-sesto-san-giovanni-25-10-2026/event/7rb0bim2gyc0",
+    "image": "https://s1.ticketm.net/dam/a/06a/debba2e9-7078-4973-9ed0-50005447a06a_1736611_RETINA_PORTRAIT_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -5088,22 +5104,6 @@
     "source": "ticketmaster"
   },
   {
-    "id": "ZG9rmIYnyZF61k",
-    "name": "PICTURES OF YOU | Open Ticket",
-    "type": "events_venue",
-    "date": "2026-11-13",
-    "time": "18:30:00",
-    "venue": "Ex MAM",
-    "city": "Cosenza",
-    "lat": 39.287361,
-    "lng": 16.242838,
-    "url": "https://www.ticketmaster.it/biglietti/pictures-of-you-open-ticket/event/y5pmngs1ausl",
-    "image": "https://s1.ticketm.net/dam/c/f51/ee785ed6-f806-4195-98f4-69f67e09df51_106201_TABLET_LANDSCAPE_16_9.jpg",
-    "priceMin": null,
-    "priceMax": null,
-    "source": "ticketmaster"
-  },
-  {
     "id": "ZG9rmIYnyZ7kFd",
     "name": "LIVE GULINO (MARTA SUI TUBI)",
     "type": "live_music",
@@ -5552,6 +5552,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZFk6e",
+    "name": "Special Stage - Finale 2026",
+    "type": "live_music",
+    "date": "2026-11-15",
+    "time": "21:00:00",
+    "venue": "Santeria Toscana 31",
+    "city": "Milano",
+    "lat": 45.445641,
+    "lng": 9.18835,
+    "url": "https://www.ticketmaster.it/biglietti/special-stage-finale-2026-milano-15-11-2026/event/hvz2sd9g2wtq",
+    "image": "https://s1.ticketm.net/dam/a/52c/08ea0b10-fd04-44de-a48e-acbaa4c6852c_TABLET_LANDSCAPE_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZe6kv",
     "name": "22Simba | Miria - Live Tour",
     "type": "live_music",
@@ -5562,7 +5578,7 @@
     "lat": 45.452124,
     "lng": 9.252277,
     "url": "https://www.ticketmaster.it/biglietti/22simba-miria-live-tour-milano-15-11-2026/event/ir5g2luy26oq",
-    "image": "https://s1.ticketm.net/dam/a/cb3/1e2a8227-f98b-4e5e-a856-2b978f785cb3_SOURCE",
+    "image": "https://s1.ticketm.net/dam/a/cb3/1e2a8227-f98b-4e5e-a856-2b978f785cb3_RETINA_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -5610,7 +5626,7 @@
     "lat": 45.452124,
     "lng": 9.252277,
     "url": "https://www.ticketmaster.it/biglietti/22simba-miria-live-tour-milano-16-11-2026/event/q0v5q45eqaeo",
-    "image": "https://s1.ticketm.net/dam/a/cb3/1e2a8227-f98b-4e5e-a856-2b978f785cb3_SOURCE",
+    "image": "https://s1.ticketm.net/dam/a/cb3/1e2a8227-f98b-4e5e-a856-2b978f785cb3_RETINA_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -6026,7 +6042,7 @@
     "lat": 45.452124,
     "lng": 9.252277,
     "url": "https://www.ticketmaster.it/biglietti/aiello-milano-19-11-2026/event/chefdd4jsd2d",
-    "image": "https://s1.ticketm.net/dam/a/667/46cfb355-d45d-4178-a4af-761bca58f667_TABLET_LANDSCAPE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/667/46cfb355-d45d-4178-a4af-761bca58f667_RETINA_PORTRAIT_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -8352,22 +8368,6 @@
     "source": "ticketmaster"
   },
   {
-    "id": "ZG9rmIYnyZdd77",
-    "name": "Dinosaur Pile-Up",
-    "type": "live_music",
-    "date": "2026-12-04",
-    "time": "20:00:00",
-    "venue": "SPAZIO COMBO - SUONERIA",
-    "city": "Settimo Torinese",
-    "lat": 45.143918,
-    "lng": 7.773697,
-    "url": "https://www.ticketmaster.it/biglietti/dinosaur-pile-up-settimo-torinese-04-12-2026/event/d0fmx8ewgnao",
-    "image": "https://s1.ticketm.net/dam/a/32d/996610e2-214c-4582-864f-de1c540ae32d_TABLET_LANDSCAPE_LARGE_16_9.jpg",
-    "priceMin": null,
-    "priceMax": null,
-    "source": "ticketmaster"
-  },
-  {
     "id": "ZG9rmIYnyZ7kdk",
     "name": "Marco Mengoni - Residency Allo Sbagliato",
     "type": "live_music",
@@ -8715,22 +8715,6 @@
     "lng": 10.21349,
     "url": "https://www.ticketmaster.it/biglietti/alessandro-cattelan-benvenuto-nellai-brescia-05-12-2026/event/586krfbkpchc",
     "image": "https://s1.ticketm.net/dam/a/03c/7f136425-1826-4b3a-a771-a16f7998d03c_TABLET_LANDSCAPE_3_2.jpg",
-    "priceMin": null,
-    "priceMax": null,
-    "source": "ticketmaster"
-  },
-  {
-    "id": "ZG9rmIYnyZddAe",
-    "name": "Dinosaur Pile-Up",
-    "type": "live_music",
-    "date": "2026-12-05",
-    "time": "22:00:00",
-    "venue": "Arci Tom",
-    "city": "Mantova",
-    "lat": 0,
-    "lng": 0,
-    "url": "https://www.ticketmaster.it/biglietti/dinosaur-pile-up-mantova-05-12-2026/event/dajozfrumu6z",
-    "image": "https://s1.ticketm.net/dam/a/32d/996610e2-214c-4582-864f-de1c540ae32d_TABLET_LANDSCAPE_LARGE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -9306,7 +9290,7 @@
     "lat": 45.452124,
     "lng": 9.252277,
     "url": "https://www.ticketmaster.it/biglietti/giuse-the-lizia-milano-10-12-2026/event/efgkm60ka4po",
-    "image": "https://s1.ticketm.net/dam/a/0e3/8bd316a8-64d5-4a43-8d39-53c1694be0e3_TABLET_LANDSCAPE_LARGE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/0e3/8bd316a8-64d5-4a43-8d39-53c1694be0e3_TABLET_LANDSCAPE_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
