@@ -1,36 +1,24 @@
-const CACHE = 'stasera-v3';
-const ASSETS = [
-  '/Cosa-facciamo-stasera-/',
-  '/Cosa-facciamo-stasera-/index.html',
-  '/Cosa-facciamo-stasera-/css/style.css',
-  '/Cosa-facciamo-stasera-/js/api.js',
-  '/Cosa-facciamo-stasera-/js/routing.js',
-  '/Cosa-facciamo-stasera-/js/describer.js',
-  '/Cosa-facciamo-stasera-/js/planner.js',
-  '/Cosa-facciamo-stasera-/js/map.js',
-  '/Cosa-facciamo-stasera-/js/ui.js',
-  '/Cosa-facciamo-stasera-/js/app.js',
-  '/Cosa-facciamo-stasera-/manifest.json',
-];
-
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE).then(cache => cache.addAll(ASSETS))
-  );
-  // Force new SW to activate immediately
-  self.skipWaiting();
+const CACHE = 'stasera-v5-stitch';
+const ASSETS = ['./', 'index.html', 'css/style.css', 'js/safe.js', 'js/api.js',
+  'js/routing.js', 'js/model.js', 'js/map.js', 'js/ui.js', 'js/app.js',
+  'vendor/leaflet/leaflet.js', 'vendor/leaflet/leaflet.css', 'manifest.json', 'icon.svg'];
+const ASSET_URLS = new Set(ASSETS.map(asset => new URL(asset, self.registration.scope).href));
+self.addEventListener('install', event => {
+  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)));
 });
-
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys().then(keys => Promise.all(
-      keys.filter(k => k !== CACHE).map(k => caches.delete(k))
-    ))
-  );
+self.addEventListener('activate', event => {
+  event.waitUntil(caches.keys().then(keys => Promise.all(
+    keys.filter(key => key.startsWith('stasera-') && key !== CACHE).map(key => caches.delete(key))
+  )).then(() => self.clients.claim()));
 });
-
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request))
-  );
+self.addEventListener('fetch', event => {
+  if(event.request.method !== 'GET' || !ASSET_URLS.has(event.request.url)) return;
+  // Versioned app shell: an active worker always serves one complete UI version.
+  // A newly downloaded worker takes over after all old windows close.
+  event.respondWith((async () => {
+    const cache = await caches.open(CACHE);
+    const cached = await cache.match(event.request);
+    if(cached) return cached;
+    return fetch(event.request);
+  })());
 });

@@ -1,616 +1,153 @@
-// ===== Main App Controller (stable) =====
-let sortListenerAttached = false;
-let searchInProgress = false;
-
-// ===== Geocode =====
-async function geocode(query) {
-  const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`, { headers: { 'Accept-Language': 'it' } });
-  const data = await resp.json();
-  if (!data.length) throw new Error('Luogo non trovato');
-  const a = data[0];
-  return { lat: parseFloat(a.lat), lng: parseFloat(a.lon), city: a.address?.city || a.address?.town || a.address?.village || query, display: a.display_name };
+// App controller: explicit home entry, URL navigation, cancellable searches and local fallback.
+const state={view:'home',origin:null,venues:[],events:[],visible:[],selected:null,busy:false,hasSearched:false,
+  filters:{types:[...DEFAULT_TYPES],radius:5,transport:'walking',maxTime:0,onlyOpen:false,sort:'distance'},draft:{types:[...DEFAULT_TYPES]}};
+let searchController=null,searchRevision=0,categoryTimer,installPrompt;
+const sessionCache=new Map();
+function setTheme(theme) { document.documentElement.dataset.theme=theme;S('theme-toggle').textContent=theme==='dark'?'☀':'☾';S('theme-toggle').setAttribute('aria-label',theme==='dark'?'Attiva tema chiaro':'Attiva tema scuro');document.querySelector('meta[name=theme-color]').content=theme==='dark'?'#0d1322':'#f8fafc'; }
+function setLayout(layout) {
+  S('explore-workspace').dataset.layout=layout;
+  document.querySelectorAll('[data-layout]').forEach(button=>{if(button.tagName==='BUTTON')button.setAttribute('aria-pressed',String(button.dataset.layout===layout));});
+  if(layout!=='list')initMap();
 }
-
-// ===== Weather =====
-async function fetchWeather(lat, lng) {
-  try {
-    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,weather_code&timezone=auto`);
-    const d = await r.json();
-    const code = d.current?.weather_code;
-    const icons = {0:'☀️ Sereno',1:'🌤️ Sereno',2:'⛅ Nuvoloso',3:'☁️ Nuvoloso',45:'🌫️ Nebbia',51:'🌧️ Pioggia',61:'🌧️ Pioggia',71:'❄️ Neve',80:'🌦️ Rovesci',95:'⛈️ Temporale'};
-    return { temp: Math.round(d.current?.temperature_2m), desc: icons[code] || '⛅', wind: d.current?.wind_speed_10m };
-  } catch { return null; }
-}
-
-function showWeather(w, city) {
-  const el = S('weather-widget');
-  if (!el) return;
-  if (!w) { el.classList.add('hidden'); return; }
-  el.innerHTML = `${w.desc} · ${w.temp}°C · 💨 ${w.wind} km/h <span style="opacity:0.6">a ${city||''}</span>`;
-  el.classList.remove('hidden');
-}
-
-// ===== Enrich data =====
-async function loadEnrichedVenues(city) {
-  if (!city) return [];
-  try {
-    const r = await fetch(`data/cities/${city.toLowerCase().replace(/[^a-z0-9]/g,'-')}.json`);
-    if (!r.ok) return [];
-    return (await r.json()).venues || [];
-  } catch { return []; }
-}
-
-async function loadEvents(city) {
-  try {
-    const r = await fetch('data/events.json');
-    if (!r.ok) return [];
-    const events = await r.json();
-    const cn = (city||'').toLowerCase();
-    return events.filter(e => (e.city||'').toLowerCase().includes(cn) || cn.includes((e.city||'').toLowerCase()));
-  } catch { return []; }
-}
-
-function mergeVenues(osm, extra) {
-  const seen = new Set();
-  osm.forEach(v => seen.add(`${v.name}|${v.lat?.toFixed(4)}|${v.lng?.toFixed(4)}`));
-  const added = extra.filter(v => {
-    const k = `${v.name}|${v.lat?.toFixed(4)}|${v.lng?.toFixed(4)}`;
-    if (seen.has(k)) return false;
-    seen.add(k);
-    return true;
-  }).map(v => ({
-    id:v.id, lat:v.lat, lng:v.lng, name:v.name, address:v.address||'', type:v.type,
-    icon:({nightclub:'🪩',bar:'🍺',pub:'🍻',cinema:'🎬',theatre:'🎭',restaurant:'🍽️',live_music:'🎵',bowling:'🎳',events_venue:'🎪',dance_hall:'💃',casino:'🎰',arcade:'🕹️',karaoke:'🎤'})[v.type]||'📍',
-    label:v.label||v.type, website:v.website||null, rating:v.rating||null, source:'google'
-  }));
-  return [...osm, ...added];
-}
-
-// ===== GPS =====
-function getCurrentPosition() {
-  return new Promise((resolve, reject) => {
-    if (!navigator.geolocation) return reject(new Error('Geolocalizzazione non supportata'));
-    navigator.geolocation.getCurrentPosition(
-      p => resolve({ lat: p.coords.latitude, lng: p.coords.longitude }),
-      () => reject(new Error('Posizione non disponibile'))
-    );
-  });
-}
-
-// ===== Main Search =====
-async function performSearch() {
-  if (searchInProgress) return;
-  searchInProgress = true;
-
-  const types = Array.from(document.querySelectorAll('#type-filters .chip.active')).map(c => c.dataset.type);
-  if (!types.length) { alert('Seleziona almeno un tipo di locale'); searchInProgress = false; return; }
-
-  const input = (S('location-input')?.value || '').trim();
-  if (!input && !userLocation) { alert('Inserisci una città o clicca 📍'); searchInProgress = false; return; }
-
-  showEl('loading');
-  clearVenueMarkers();
-  if (typeof hideVenueDetail === 'function') hideVenueDetail();
-
-  try {
-    if (input && (!userLocation || userLocation.display !== input)) {
-      userLocation = await geocode(input);
-      setUserLocation(userLocation.lat, userLocation.lng);
-      drawRadiusCircle(userLocation, parseInt(S('radius-slider')?.value || 10));
-      const w = await fetchWeather(userLocation.lat, userLocation.lng);
-      showWeather(w, userLocation.city);
-    } else if (userLocation) {
-      drawRadiusCircle(userLocation, parseInt(S('radius-slider')?.value || 10));
-    }
-
-    const radius = parseInt(S('radius-slider')?.value || 10);
-    const osmVenues = await fetchVenues(userLocation, radius, types);
-
-    const [enriched, events] = await Promise.all([
-      loadEnrichedVenues(userLocation.city).catch(() => []),
-      loadEvents(userLocation.city).catch(() => []),
-    ]);
-
-    const venues = mergeVenues(osmVenues, enriched);
-    window._allVenues = venues;
-    window._events = events;
-    if (typeof trackCity === 'function') trackCity(userLocation.city);
-
-    if (!venues.length) {
-      hideEl('loading');
-      renderVenueList([], {}, () => {}, []);
-      clearVenueMarkers();
-      searchInProgress = false;
-      return;
-    }
-
-    // Estimate routes for all 4 modes
-    const estRoutes = {};
-    const speeds = { walking: 5, cycling: 15, transit: 25, driving: 40 };
-    venues.forEach(v => {
-      const dist = haversineKm(userLocation, v);
-      estRoutes[v.id] = {};
-      Object.entries(speeds).forEach(([mode, speed]) => {
-        estRoutes[v.id][mode] = { duration: Math.round(dist / speed * 60), distance: dist.toFixed(1) };
-      });
-    });
-    window._venueRoutes = estRoutes;
-
-    // Render
-    addClass('sidebar', 'results-mode');
-    if (window.innerWidth > 768) {
-      showEl('filters-toggle');
-      setText('filters-toggle', '⚙️ Filtri ▸');
-      addClass('filters-wrap', 'collapsed');
-    }
-
-    saveScrollPosition();
-    sortAndRender(venues, estRoutes);
-    restoreScrollPosition();
-
-    addVenueMarkers(venues, venue => {
-      showVenueDetail(venue, window._venueRoutes);
-      highlightVenueCard(venue);
-      highlightMarker(venue.id);
-    });
-    fitBounds(venues);
-
-    // Background: real routes
-    updateRoutesInBackground(venues);
-    searchInProgress = false;
-
-  } catch (err) {
-    searchInProgress = false;
-    hideEl('loading');
-    console.error(err);
-    alert('Errore: ' + (err.message || 'Riprova'));
-  }
-}
-
-async function updateRoutesInBackground(venues) {
-  try {
-    const dests = venues.map(v => ({ lat: v.lat, lng: v.lng }));
-    const batch = await getRoutesForModes(userLocation, dests);
-    const real = {};
-    venues.forEach((v, i) => { real[v.id] = batch[i] || {}; });
-    window._venueRoutes = real;
-  } catch {}
-}
-
-// ===== Sort & Render =====
-function saveScrollPosition() {
-  const el = S('venue-list');
-  if (el) el.dataset.scrollTop = el.scrollTop;
-}
-function restoreScrollPosition() {
-  const el = S('venue-list');
-  if (el?.dataset.scrollTop) requestAnimationFrame(() => { el.scrollTop = parseInt(el.dataset.scrollTop); });
-}
-
-function sortAndRender(venues, routes) {
-  const sortBy = S('sort-select')?.value || 'distance';
-  const sorted = [...venues];
-  if (sortBy === 'name') sorted.sort((a, b) => a.name.localeCompare(b.name, 'it'));
-  else if (sortBy === 'time') sorted.sort((a, b) => (routes[a.id]?.walking?.duration || 999) - (routes[b.id]?.walking?.duration || 999));
-  else sorted.sort((a, b) => parseFloat(routes[a.id]?.walking?.distance || 999) - parseFloat(routes[b.id]?.walking?.distance || 999));
-  window._lastVenues = sorted;
-
-  renderVenueList(sorted, routes, venue => {
-    showVenueDetail(venue, routes);
-    highlightVenueCard(venue);
-    highlightMarker(venue.id);
-  }, window._events || []);
-
-  if (window._onResultsReady) window._onResultsReady();
-
-  if (!sortListenerAttached) {
-    sortListenerAttached = true;
-    S('sort-select')?.addEventListener('change', () => {
-      saveScrollPosition();
-      sortAndRender(window._lastVenues || sorted, window._venueRoutes || routes);
-      restoreScrollPosition();
-    });
-  }
-}
-
-function highlightVenueCard(venue) {
-  document.querySelectorAll('.venue-card.active').forEach(c => c.classList.remove('active'));
-  document.querySelectorAll('.venue-card').forEach(card => {
-    if (card.querySelector('.venue-name')?.textContent === venue.name) {
-      card.classList.add('active');
-      // Scroll card into view with center alignment
-      setTimeout(() => {
-        card.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
-      }, 100);
-    }
-  });
-}
-
-// ===== Random picker =====
-function pickRandom() {
-  const venues = window._allVenues;
-  if (!venues?.length) { alert('Prima cerca dei locali!'); return; }
-  const pick = venues[Math.floor(Math.random() * venues.length)];
-  showVenueDetail(pick, window._venueRoutes || {});
-  highlightVenueCard(pick);
-  highlightMarker(pick.id);
-}
-
-// ===== Event listeners =====
-S('search-btn')?.addEventListener('click', performSearch);
-S('random-btn')?.addEventListener('click', pickRandom);
-
-S('locate-btn')?.addEventListener('click', async () => {
-  try {
-    const pos = await getCurrentPosition();
-    userLocation = pos;
-    setUserLocation(pos.lat, pos.lng);
-    const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.lat}&lon=${pos.lng}`, { headers: { 'Accept-Language': 'it' } });
-    const d = await r.json();
-    const city = d.address?.city || d.address?.town || '';
-    if (city) setText('location-input', city);
-    const w = await fetchWeather(pos.lat, pos.lng);
-    showWeather(w, city);
-    performSearch();
-  } catch (e) { alert(e.message); }
-});
-
-S('location-input')?.addEventListener('keydown', e => { if (e.key === 'Enter') performSearch(); });
-S('close-detail')?.addEventListener('click', () => { if (typeof hideVenueDetail === 'function') hideVenueDetail(); });
-
-// Back button
-S('back-btn')?.addEventListener('click', () => {
-  removeClass('sidebar', 'results-mode');
-  removeClass('filters-wrap', 'collapsed');
-  hideEl('filters-toggle');
-  hideEl('planner-section');
-  hideEl('weather-widget');
-  hideEl('results-header');
-  if (S('venue-list')) S('venue-list').innerHTML = '';
-  clearVenueMarkers();
-  if (typeof hideVenueDetail === 'function') hideVenueDetail();
-});
-
-// ===== Dark mode =====
-function initTheme() {
-  const saved = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  if (saved === 'dark' || (!saved && prefersDark)) {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    setText('theme-toggle', '☀️');
-  }
-}
-
-S('theme-toggle')?.addEventListener('click', () => {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  if (isDark) {
-    document.documentElement.removeAttribute('data-theme');
-    setText('theme-toggle', '🌙');
-    localStorage.setItem('theme', 'light');
+function showView() {
+  const route=location.hash.slice(1);
+  const view=route==='favorites'?'favorites':['explore','map','list'].includes(route)?'explore':'home';
+  const old=state.view;state.view=view;
+  document.body.dataset.view=view;S('home-view').hidden=view!=='home';S('explore-view').hidden=view==='home';
+  document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===view)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+  if(view!=='home') {
+    setLayout(view==='favorites' || route==='list'?'list':route==='map'?'map':'split');
+    renderResults();
+    if(view==='favorites')S('search-status').textContent='Preferiti salvati su questo dispositivo. Cerca una città per tornare a esplorare.';
+    else if(old==='favorites')S('search-status').textContent=state.hasSearched?'Risultati dell’ultima ricerca.':'Scegli una città per iniziare.';
   } else {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    setText('theme-toggle', '☀️');
-    localStorage.setItem('theme', 'dark');
+    searchController?.abort();++searchRevision;setBusy(false);
+    if(route==='how')requestAnimationFrame(()=>S('how').scrollIntoView());
+    else if(old!=='home')window.scrollTo({top:0,behavior:'instant'});
   }
-  if (typeof switchMapTiles === 'function') switchMapTiles();
-});
-
-// ===== Init =====
-let landingMap = null;
-
-window.addEventListener('DOMContentLoaded', () => {
-  initTheme();
-  // Pick random city for initial map center
-  const randomCity = RANDOM_CITIES[Math.floor(Math.random() * RANDOM_CITIES.length)];
-  window._initialCenter = randomCity;
-  
-  // Activate landing fullscreen FIRST
-  document.body.classList.add('landing-active');
-  
-  // Initialize landing map after a frame to ensure container is visible
-  requestAnimationFrame(() => {
-    initLandingMap(randomCity);
-    initLanding();
-  });
-  
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
-});
-
-// ===== Landing Map (separate instance) =====
-function initLandingMap(center) {
-  const container = document.getElementById('landing-map');
-  if (!container) return;
-  
+  document.title=view==='home'?'Cosa facciamo stasera? · Serata':view==='favorites'?'I tuoi preferiti · Serata':'Esplora la serata · Serata';
+}
+function updateRadius(radius) {
+  state.filters.radius=Number(radius);S('home-radius').value=radius;S('home-radius-label').textContent=`${radius} km`;
+  S('radius-summary').textContent=`Nel raggio di ${radius} km`;
+  document.querySelectorAll('[data-radius]').forEach(button=>button.classList.toggle('active',Number(button.dataset.radius)===Number(radius)));
+}
+async function geocode(query,signal) {
+  const url=`https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&accept-language=it&q=${encodeURIComponent(query)}`;
+  const response=await fetch(url,{signal});if(!response.ok)throw new Error('Ricerca città non disponibile. Riprova tra poco.');
+  const places=await response.json();if(!places.length)throw new Error('Città non trovata. Prova con comune e provincia.');
+  const place=places[0];return {lat:Number(place.lat),lng:Number(place.lon),city:place.address?.city||place.address?.town||place.address?.village||query,display:query};
+}
+async function fetchCityData(city,signal) {
+  if(!city)return [];
+  const slug=city.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'-');
+  try{const response=await fetch(`data/cities/${slug}.json`,{signal});return response.ok?(await response.json()).venues||[]:[];}catch{return [];}
+}
+async function loadUpcomingEvents(origin,radius,signal) {
   try {
-    landingMap = L.map('landing-map', {
-      zoomControl: false,
-      attributionControl: false,
-      dragging: false,
-      scrollWheelZoom: false,
-      doubleClickZoom: false,
-      touchZoom: false
-    }).setView([center.lat, center.lng], center.z);
-    
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    L.tileLayer(isDark ? TILE_URLS.dark : TILE_URLS.light, {
-      maxZoom: 19,
-    }).addTo(landingMap);
-    
-    // Force size calculation
-    setTimeout(() => {
-      if (landingMap) landingMap.invalidateSize();
-    }, 100);
-  } catch (e) {
-    console.error('Failed to init landing map:', e);
-  }
+    const response=await fetch('data/events.json',{signal});if(!response.ok)return [];
+    const events=await response.json();if(!Array.isArray(events))return [];
+    const today=new Date();today.setHours(0,0,0,0);const limit=new Date(today);limit.setDate(limit.getDate()+60);
+    return events.filter(event=>{
+      const date=new Date(event.date);if(!event.date || !Number.isFinite(date.getTime()) || date<today || date>limit)return false;
+      const hasCoords=event.lat!=null && event.lng!=null && Number.isFinite(Number(event.lat)) && Number.isFinite(Number(event.lng));
+      return hasCoords ? haversineKm(origin,{lat:Number(event.lat),lng:Number(event.lng)})<=radius :
+        !!origin.city && String(event.city||'').toLocaleLowerCase('it')===origin.city.toLocaleLowerCase('it');
+    }).sort((a,b)=>new Date(a.date)-new Date(b.date));
+  } catch {return [];}
 }
-
-function destroyLandingMap() {
-  if (landingMap) {
-    landingMap.remove();
-    landingMap = null;
-  }
-}
-
-// ===== Landing Page =====
-const RANDOM_CITIES = [
-  { lat: 41.9028, lng: 12.4964, z: 13 },
-  { lat: 45.4642, lng: 9.1900, z: 13 },
-  { lat: 35.6762, lng: 139.6503, z: 12 },
-  { lat: 40.7128, lng: -74.0060, z: 12 },
-  { lat: 48.8566, lng: 2.3522, z: 13 },
-  { lat: 51.5074, lng: -0.1278, z: 13 },
-  { lat: 41.3874, lng: 2.1686, z: 13 },
-  { lat: 52.5200, lng: 13.4050, z: 13 },
-  { lat: -33.8688, lng: 151.2093, z: 12 },
-  { lat: -22.9068, lng: -43.1729, z: 12 },
-  { lat: 52.3676, lng: 4.9041, z: 13 },
-  { lat: 25.2048, lng: 55.2708, z: 12 },
-  { lat: 55.7558, lng: 37.6173, z: 12 },
-  { lat: 39.9042, lng: 116.4074, z: 12 },
-  { lat: 37.7749, lng: -122.4194, z: 12 },
-];
-
-const LANDING_VERBS = [
-  'facciamo', 'guardiamo', 'mangiamo', 'balliamo', 'beviamo',
-  'ascoltiamo', 'giochiamo', 'cantiamo', 'vediamo', 'festeggiamo'
-];
-
-let _landingVerbIdx = 0;
-let _landingTimer, _landingAbort;
-
-function typewriteLanding(el, newWord, done) {
-  if (_landingAbort) { _landingAbort(); _landingAbort = null; }
-  if (_landingTimer) { clearTimeout(_landingTimer); _landingTimer = null; }
-  const cur = el.textContent;
-  if (cur === newWord) { if (done) done(); return; }
-  let i = cur.length, cancelled = false;
-  _landingAbort = () => { cancelled = true; };
-  function erase() {
-    if (cancelled) return;
-    if (i <= 0) {
-      el.textContent = ''; let j = 0;
-      function write() {
-        if (cancelled) return;
-        if (j <= newWord.length) { el.textContent = newWord.slice(0, j); j++; _landingTimer = setTimeout(write, 55); }
-        else { _landingTimer = null; _landingAbort = null; if (done) done(); }
-      }
-      write();
-      return;
-    }
-    el.textContent = cur.slice(0, i - 1); i--;
-    _landingTimer = setTimeout(erase, 30);
-  }
-  erase();
-}
-
-function cycleLandingVerb() {
-  const el = S('landing-verb');
-  if (!el) return;
-  _landingVerbIdx = (_landingVerbIdx + 1) % LANDING_VERBS.length;
-  typewriteLanding(el, LANDING_VERBS[_landingVerbIdx], () => {
-    _landingTimer = setTimeout(cycleLandingVerb, 1800);
-  });
-}
-
-async function loadLandingEvents() {
+function cacheKey(origin,filters) { return `${origin.lat.toFixed(4)}|${origin.lng.toFixed(4)}|${filters.radius}|${[...filters.types].sort().join(',')}`; }
+async function searchVenues(originOverride) {
+  const input=S('location-input').value.trim();
+  if(!state.filters.types.length){S('search-status').textContent='Scegli almeno una categoria prima di cercare.';return;}
+  if(!input && !state.origin && !originOverride){S('search-status').textContent='Inserisci una città oppure usa la posizione.';S('location-input').focus();return;}
+  if(state.view==='favorites'){location.hash='explore';state.view='explore';}
+  searchController?.abort();searchController=new AbortController();const controller=searchController;
+  const revision=++searchRevision,filters={...state.filters,types:[...state.filters.types]};
+  const timeout=setTimeout(()=>controller.abort(),45000);setBusy(true);S('search-status').textContent='Cerco i posti nella tua zona…';
   try {
-    const r = await fetch('data/events.json');
-    if (!r.ok) return;
-    const events = await r.json();
-    if (!events.length) return;
-    const byCity = {};
-    events.forEach(ev => {
-      const c = ev.city || 'Italia';
-      if (!byCity[c]) byCity[c] = [];
-      if (byCity[c].length < 2) byCity[c].push(ev);
-    });
-    const cities = Object.keys(byCity).slice(0, 8);
-    const shown = cities.map(c => byCity[c][0]).filter(Boolean);
-    if (!shown.length) return;
-    const list = S('landing-events-list');
-    if (!list) return;
-    shown.forEach(ev => {
-      const dateStr = ev.date ? new Date(ev.date).toLocaleDateString('it-IT', { day:'numeric', month:'short' }) : 'TBA';
-      const card = document.createElement('div');
-      card.className = 'landing-event-card';
-      card.innerHTML = `<div class="landing-event-date">${dateStr}</div><div class="landing-event-info"><div class="landing-event-name">${ev.name}</div><div class="landing-event-venue">📍 ${ev.venue || ''}</div></div><div class="landing-event-city">${ev.city || ''}</div>`;
-      card.addEventListener('click', () => { if (ev.url) window.open(ev.url, '_blank'); });
-      list.appendChild(card);
-    });
-  } catch {}
-}
-
-function initLanding() {
-  const landing = S('landing');
-  const cta = S('landing-cta');
-  if (!landing || !cta) return;
-
-  // Sync theme toggle text
-  const updateLandingThemeBtn = () => {
-    const btn = S('landing-theme-toggle');
-    if (btn) btn.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
-  };
-  updateLandingThemeBtn();
-
-  // Landing theme toggle
-  S('landing-theme-toggle')?.addEventListener('click', () => {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    if (isDark) {
-      document.documentElement.removeAttribute('data-theme');
-      localStorage.setItem('theme', 'light');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      localStorage.setItem('theme', 'dark');
-    }
-    updateLandingThemeBtn();
-    // Switch landing map tiles
-    if (landingMap) {
-      landingMap.eachLayer(layer => {
-        if (layer instanceof L.TileLayer) {
-          layer.setUrl(document.documentElement.getAttribute('data-theme') === 'dark' ? TILE_URLS.dark : TILE_URLS.light);
-        }
-      });
-    }
-    // Sync main theme toggle
-    setText('theme-toggle', isDark ? '🌙' : '☀️');
-  });
-
-  // Start verb cycling
-  _landingTimer = setTimeout(cycleLandingVerb, 1200);
-
-  // Load events
-  loadLandingEvents();
-
-  // Share button
-  const shareBtn = S('landing-share-btn');
-  if (shareBtn) {
-    shareBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const text = 'Scopri cosa fare stasera! Locali, eventi, concerti vicino a te \u2014 tutto gratis \ud83c\udf06\u2728';
-      const url = window.location.href;
-      if (navigator.share) {
-        navigator.share({ title: 'Cosa facciamo stasera?', text, url }).catch(() => {});
-      } else {
-        window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
+    let origin=originOverride || state.origin;
+    if(!originOverride && (!origin || (input && input!==origin.display)))origin=await geocode(input,controller.signal);
+    if(revision!==searchRevision)return;
+    state.origin=origin;S('location-input').value=origin.display;S('home-location').value=origin.display;
+    setSearchOrigin(origin,filters.radius);
+    const key=cacheKey(origin,filters);let cached=sessionCache.get(key);
+    let venues,partial=false,offline=false;
+    if(cached && Date.now()-cached.time<300000) {venues=cached.venues;partial=!!cached.partial;state.events=cached.events||[];}
+    else {
+      window._venueSearchPartial=false;
+      const [osm,extra,events]=await Promise.all([
+        fetchVenues(origin,filters.radius,filters.types,controller.signal).then(venues=>({venues})).catch(error=>({venues:[],error})),fetchCityData(origin.city,controller.signal),loadUpcomingEvents(origin,filters.radius,controller.signal)]);
+      if(controller.signal.aborted)throw new DOMException('Ricerca interrotta','AbortError');
+      state.events=events;
+      partial=!!osm.error || !!osm.venues.partial;
+      venues=mergeNearby(osm.venues,extra,origin,filters.radius,filters.types);
+      if(osm.error && !venues.length) {
+        const last=readStored('serata_last_search',null);
+        if(last?.key===key && Array.isArray(last.venues)){venues=last.venues.map(normalizeVenue).filter(Boolean);offline=true;partial=true;}
+        else throw new Error('Le fonti dei locali non rispondono. Riprova tra poco oppure consulta i preferiti.');
       }
-    });
-  }
-
-  // Tab switching
-  const tabs = document.querySelectorAll('#landing-tabs .landing-tab');
-  const panels = document.querySelectorAll('.landing-panel');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const target = tab.dataset.tab;
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      panels.forEach(p => p.classList.remove('active'));
-      const panel = document.getElementById('panel-' + target);
-      if (panel) panel.classList.add('active');
-      const navTabs = S('landing-tabs');
-      if (navTabs) navTabs.classList.remove('open');
-    });
-  });
-
-  // Hamburger toggle
-  const hamburger = S('landing-hamburger');
-  if (hamburger) {
-    hamburger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const navTabs = S('landing-tabs');
-      if (navTabs) navTabs.classList.toggle('open');
-    });
-    document.addEventListener('click', (e) => {
-      const navTabs = S('landing-tabs');
-      if (navTabs && navTabs.classList.contains('open')) {
-        if (!e.target.closest('.landing-nav')) navTabs.classList.remove('open');
-      }
-    });
-  }
-
-  // CTA: enter app
-  cta.addEventListener('click', () => {
-    if (_landingTimer) clearTimeout(_landingTimer);
-    if (_landingAbort) _landingAbort();
-    landing.classList.add('fade-out');
-    setTimeout(() => {
-      if (landing.parentNode) landing.style.display = 'none';
-      document.body.classList.remove('landing-active');
-      
-      // Destroy landing map and initialize main app map
-      destroyLandingMap();
-      initMap();
-      
-      setupAppUI();
-    }, 500);
-  });
-}
-
-function setupAppUI() {
-  // Filters toggle
-  const ft = S('filters-toggle');
-  const fw = S('filters-wrap');
-  if (ft && fw) {
-    ft.addEventListener('click', () => {
-      fw.classList.toggle('collapsed');
-      ft.textContent = fw.classList.contains('collapsed') ? '⚙️ Filtri ▸' : '⚙️ Filtri ▾';
-    });
-  }
-
-  // Planner toggle
-  const pb = S('planner-btn');
-  if (pb) {
-    pb.addEventListener('click', () => {
-      const po = S('planner-output');
-      if (!po) return;
-      po.style.display = po.style.display === 'none' ? '' : 'none';
-      pb.textContent = po.style.display === 'none' ? 'Mostra' : 'Nascondi';
-    });
-  }
-
-  // Mobile drawer
-  const drawer = S('results-drawer');
-  if (drawer && window.innerWidth <= 768) {
-    const filters = S('filters-wrap');
-    if (filters) {
-      drawer.insertBefore(filters, drawer.querySelector('.drawer-handle').nextSibling);
-      filters.classList.add('in-drawer');
-      filters.classList.remove('collapsed');
+      if(!offline){const record={key,venues,events:state.events,time:Date.now(),partial};sessionCache.set(key,record);if(sessionCache.size>8)sessionCache.delete(sessionCache.keys().next().value);writeStored('serata_last_search',record);}
     }
-
-    const handle = drawer.querySelector('.drawer-handle');
-    let startY = 0, dragging = false;
-
-    function expand() { drawer.classList.add('expanded'); }
-    function collapse() { drawer.classList.remove('expanded'); }
-
-    if (handle) {
-      handle.addEventListener('click', () => {
-        drawer.classList.contains('expanded') ? collapse() : expand();
-      });
-    }
-    drawer.addEventListener('touchstart', e => {
-      const el = e.target.closest('.drawer-handle');
-      if (!el) {
-        const vl = S('venue-list');
-        if (vl && (vl === e.target || vl.contains(e.target))) { dragging = false; return; }
-        const fw2 = drawer.querySelector('.filters');
-        if (fw2 && (fw2 === e.target || fw2.contains(e.target))) { dragging = false; return; }
-      }
-      startY = e.touches[0].clientY; dragging = true;
-    }, { passive: true });
-    drawer.addEventListener('touchmove', e => {
-      if (!dragging) return;
-      const diff = startY - e.touches[0].clientY;
-      if (diff > 50) expand();
-      else if (diff < -50) collapse();
-    }, { passive: true });
-    drawer.addEventListener('touchend', () => { dragging = false; });
-
-    window._onResultsReady = () => {
-      filters.classList.add('collapsed');
-      setTimeout(expand, 300);
-    };
-  }
+    if(revision!==searchRevision)return;
+    state.venues=venues;state.hasSearched=true;state.selected=null;
+    S('search-status').textContent=offline?'Sei offline o la fonte non risponde: mostro l’ultima ricerca salvata. Dati da verificare.':partial?'Risultati parziali: una fonte non risponde. Puoi riprovare la ricerca.':`${origin.city || 'Zona selezionata'} · ${filters.radius} km · Dati OpenStreetMap, copertura non garantita. Tempi indicativi.`;
+    renderResults();setSearchOrigin(origin,filters.radius);
+    if(window.innerWidth>768 && state.visible.length)fitVenueBounds(state.visible);
+  } catch(error) {
+    if(revision!==searchRevision)return;
+    const message=error.name==='AbortError'?'La ricerca impiega troppo tempo. Riprova con un raggio più piccolo.':error.message;
+    S('search-status').replaceChildren(document.createTextNode(`${message} `),action('Riprova',()=>searchVenues(),'button secondary retry-button'));
+  } finally {clearTimeout(timeout);if(revision===searchRevision)setBusy(false);}
 }
+async function useGPS(fromHome=false) {
+  const status=S(fromHome?'home-status':'search-status');
+  if(!navigator.geolocation){status.textContent='GPS non supportato. Inserisci una città.';return;}
+  status.textContent='Attendo la tua posizione…';
+  navigator.geolocation.getCurrentPosition(async position=>{
+    const origin={lat:position.coords.latitude,lng:position.coords.longitude,city:'',display:'Posizione attuale'};
+    S('home-location').value=origin.display;S('location-input').value=origin.display;state.origin=origin;
+    status.textContent='Posizione trovata.';
+    if(fromHome){location.hash='explore';showView();}
+    await searchVenues(origin);
+  },()=>{status.textContent='Posizione non disponibile o non consentita. Puoi inserire la città.';},{timeout:10000,maximumAge:60000});
+}
+function initApp() {
+  setTheme(readStored('serata_theme','dark'));updateFavoriteCount();renderCategories();showView();
+  window.addEventListener('hashchange',showView);
+  S('theme-toggle').addEventListener('click',()=>{const theme=document.documentElement.dataset.theme==='dark'?'light':'dark';setTheme(theme);writeStored('serata_theme',theme);});
+  S('home-radius').addEventListener('input',event=>updateRadius(event.target.value));
+  document.querySelectorAll('[data-radius]').forEach(button=>button.addEventListener('click',()=>updateRadius(button.dataset.radius)));
+  S('home-search').addEventListener('submit',event=>{
+    event.preventDefault();const input=S('home-location').value.trim();if(!input)return;
+    if(!state.filters.types.length){S('home-status').textContent='Scegli almeno un tipo di serata.';return;}
+    S('location-input').value=input;location.hash='explore';showView();searchVenues();
+  });
+  S('explore-search').addEventListener('submit',event=>{event.preventDefault();searchVenues();});
+  document.querySelector('.home-gps').addEventListener('click',()=>useGPS(true));S('locate-btn').addEventListener('click',()=>useGPS(false));
+  S('filters-toggle').addEventListener('click',openFilters);
+  S('radius-slider').addEventListener('input',event=>S('radius-value').textContent=`${event.target.value} km`);
+  S('filters-form').addEventListener('submit',event=>{
+    event.preventDefault();if(!state.draft.types.length){S('filter-status').textContent='Scegli almeno una categoria.';return;}
+    state.filters={...state.filters,types:[...state.draft.types],radius:Number(S('radius-slider').value),transport:S('transport').value,maxTime:Number(S('max-time').value),onlyOpen:S('only-open').checked};
+    updateRadius(state.filters.radius);renderCategories();S('filters-dialog').close();S('filter-count').textContent=state.filters.onlyOpen || state.filters.maxTime?'●':'';
+    if(state.origin && state.view!=='favorites')searchVenues();else renderResults();
+  });
+  S('reset-filters').addEventListener('click',()=>{
+    state.draft.types=[...DEFAULT_TYPES];S('radius-slider').value=5;S('radius-value').textContent='5 km';S('transport').value='walking';S('max-time').value=0;S('only-open').checked=false;renderCategories();
+  });
+  S('sort-select').addEventListener('change',event=>{state.filters.sort=event.target.value;renderResults();});
+  document.querySelectorAll('[data-layout]').forEach(button=>{if(button.tagName==='BUTTON')button.addEventListener('click',()=>setLayout(button.dataset.layout));});
+  document.querySelectorAll('[data-close]').forEach(button=>button.addEventListener('click',()=>S(button.dataset.close).close()));
+  document.querySelectorAll('[data-idea]').forEach(button=>button.addEventListener('click',()=>{state.filters.types=[button.dataset.idea];renderCategories();S('home-location').focus();S('home-search').scrollIntoView({block:'center'});}));
+  S('search-area').addEventListener('click',()=>{if(!map)return;const center=map.getCenter();searchVenues({lat:center.lat,lng:center.lng,city:'Zona della mappa',display:'Zona della mappa'});});
+  window.addEventListener('offline',()=>{if(state.view!=='home')S('search-status').textContent='Connessione assente. Puoi consultare i preferiti e i risultati già caricati.';});
+  window.addEventListener('online',()=>toast('Connessione ripristinata. Puoi ripetere la ricerca.'));
+  window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();installPrompt=event;S('install-btn').hidden=false;});
+  S('install-btn').addEventListener('click',async()=>{if(!installPrompt)return;await installPrompt.prompt();installPrompt=null;S('install-btn').hidden=true;});
+  if('serviceWorker' in navigator && !['localhost','127.0.0.1'].includes(location.hostname))navigator.serviceWorker.register('sw.js').then(reg=>{
+    if(reg.waiting)toast('Aggiornamento pronto. Chiudi tutte le finestre di Serata e riapri l’app.');
+    reg.addEventListener('updatefound',()=>{const worker=reg.installing;worker?.addEventListener('statechange',()=>{if(worker.state==='installed' && navigator.serviceWorker.controller)toast('Nuova versione pronta: chiudi e riapri Serata.');});});
+  }).catch(()=>{});
+}
+initApp();
