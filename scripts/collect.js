@@ -25,12 +25,15 @@ async function main() {
   // Ensure data dirs exist
   fs.mkdirSync(DATA_DIR, { recursive: true });
 
-  let venueData = {};
+  let venueData = loadExistingCities();
   let eventData = [];
 
   // --- Google Places ---
   try {
-    venueData = await fetchGooglePlaces(googleKey);
+    const freshCities = await fetchGooglePlaces(googleKey);
+    for (const [city, venues] of Object.entries(freshCities)) {
+      if (Array.isArray(venues) && venues.length) venueData[city] = venues;
+    }
   } catch (err) {
     if (err.message === 'QUOTA_EXCEEDED') {
       console.log('[collect] Google quota exceeded – using cached data');

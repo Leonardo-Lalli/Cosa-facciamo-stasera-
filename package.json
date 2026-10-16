@@ -1,0 +1,11 @@
+{
+  "name": "serata",
+  "private": true,
+  "version": "2.0.0",
+  "scripts": {
+    "start": "node scripts/serve.cjs",
+    "test": "node --test tests/*.cjs",
+    "check": "node scripts/check.cjs"
+  },
+  "engines": { "node": ">=22" }
+}

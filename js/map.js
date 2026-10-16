@@ -1,168 +1,67 @@
-// ===== Leaflet Map =====
-let map;
-let tileLayer;
-let userMarker;
-let venueMarkers = [];
-let venueMarkerMap = {};
-let userLocation = null;
-
-const DEFAULT_CENTER = [41.9028, 12.4964];
-const DEFAULT_ZOOM = 13;
-
-let TILE_URLS = {
-  light: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-  dark: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-};
-
-const MARKER_HTML = (icon, active) => `<div style="
-  width:${active ? '42' : '36'}px;height:${active ? '42' : '36'}px;
-  background:${active ? '#1a73e8' : 'white'};
-  border:${active ? '3px solid white' : '2px solid #1a73e8'};
-  border-radius:${active ? '12px' : '8px'};
-  display:flex;align-items:center;justify-content:center;
-  font-size:${active ? '22' : '18'}px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.2);
-  cursor:pointer;
-  transition:all 0.15s;
-">${icon}</div>`;
-
+// The map is created only after the user enters Explore. The home never loads tiles.
+let map, tileLayer, venueLayer, userMarker, venueCanvas;
+let venueMarkerMap = new Map();
+let selectedMarker = null;
+let mapMoveByUser = false;
+const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 function initMap() {
-  let center = DEFAULT_CENTER;
-  let zoom = DEFAULT_ZOOM;
-  if (window._initialCenter) {
-    center = [window._initialCenter.lat, window._initialCenter.lng];
-    zoom = window._initialCenter.z;
+  if (map) { requestAnimationFrame(()=>map.invalidateSize({pan:false})); return true; }
+  if (!window.L) {
+    S('map-status').textContent='La mappa non è disponibile. Usa la lista dei locali.';
+    S('map-status').hidden=false;
+    return false;
   }
-  map = L.map('map').setView(center, zoom);
-
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  tileLayer = L.tileLayer(isDark ? TILE_URLS.dark : TILE_URLS.light, {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
-    maxZoom: 19,
-  }).addTo(map);
-
-  userMarker = L.marker(DEFAULT_CENTER, {
-    icon: L.divIcon({
-      className: 'user-marker',
-      html: '<div style="width:20px;height:20px;background:#1a73e8;border:3px solid white;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.3);"></div>',
-      iconSize: [20, 20],
-      iconAnchor: [10, 10],
-    }),
-  }).addTo(map).bindPopup('La tua posizione');
+  map=L.map('map',{zoomControl:true,preferCanvas:true}).setView([41.9028,12.4964],12);
+  map.attributionControl.setPrefix(false);
+  venueCanvas=L.canvas({padding:.3});
+  let failures=0;
+  tileLayer=L.tileLayer(TILE_URL,{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'});
+  tileLayer.on('loading',()=>{failures=0;});
+  tileLayer.on('tileerror',()=>{if(++failures>=3){S('map-status').textContent='Cartografia non disponibile. Puoi continuare dalla lista.';S('map-status').hidden=false;}});
+  tileLayer.on('load',()=>{if(!failures)S('map-status').hidden=true;});
+  tileLayer.addTo(map);
+  venueLayer=L.layerGroup().addTo(map);
+  map.on('dragstart',()=>{mapMoveByUser=true;});
+  map.on('zoomstart',event=>{if(event.originalEvent)mapMoveByUser=true;});
+  map.on('moveend',()=>{if(mapMoveByUser){S('search-area').hidden=false;mapMoveByUser=false;}});
+  if(window.ResizeObserver)new ResizeObserver(()=>map.invalidateSize({pan:false})).observe(S('map-container'));
+  requestAnimationFrame(()=>map.invalidateSize());
+  return true;
 }
-
-function switchMapTiles() {
-  if (!tileLayer) return;
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  tileLayer.setUrl(isDark ? TILE_URLS.dark : TILE_URLS.light);
+function setSearchOrigin(origin,radius) {
+  if(!map)return;
+  const point=[origin.lat,origin.lng];
+  if(userMarker)map.removeLayer(userMarker);
+  userMarker=L.circleMarker(point,{radius:9,color:'#fff',weight:3,fillColor:'#ff5745',fillOpacity:1}).addTo(map);
+  const label=document.createElement('span');label.textContent='Il vostro ritrovo';userMarker.bindPopup(label);
+  map.setView(point, radius>15?11:13);
+  S('search-area').hidden=true;
 }
-
-let _resizeTimer;
-window.addEventListener('resize', () => {
-  clearTimeout(_resizeTimer);
-  _resizeTimer = setTimeout(() => { if (map) map.invalidateSize(); }, 200);
-});
-
-function setUserLocation(lat, lng) {
-  userLocation = { lat, lng };
-  exploreBlockedUntil = Date.now() + 3000;
-  userMarker.setLatLng([lat, lng]);
-  map.setView([lat, lng], 14);
-  lastExploreCenter = { lat, lng };
-}
-
-function drawRadiusCircle(center, radiusKm) {
-  map.eachLayer(layer => {
-    if (layer._radiusCircle) map.removeLayer(layer);
-  });
-  const circle = L.circle([center.lat, center.lng], {
-    radius: radiusKm * 1000,
-    color: '#1a73e8',
-    fillColor: '#1a73e8',
-    fillOpacity: 0.08,
-    weight: 2,
-    dashArray: '8 4',
-  }).addTo(map);
-  circle._radiusCircle = true;
-}
-
-function clearVenueMarkers() {
-  venueMarkers.forEach(m => map.removeLayer(m));
-  venueMarkers = [];
-  venueMarkerMap = {};
-}
-
-function addVenueMarkers(venues, onClick) {
-  clearVenueMarkers();
-
-  venues.forEach(venue => {
-    const marker = L.marker([venue.lat, venue.lng], { icon: L.divIcon({ className: 'venue-marker', html: MARKER_HTML(venue.icon, false), iconSize: [36, 36], iconAnchor: [18, 18] }) }).addTo(map);
-    marker.bindPopup(`<b>${sanitize(venue.name)}</b><br>${sanitize(venue.address)}`);
-    marker.on('click', () => onClick(venue));
-    marker._venueIcon = venue.icon;
-
-    venueMarkers.push(marker);
-    venueMarkerMap[venue.id] = marker;
+function addVenueMarkers(venues,onClick) {
+  if(!map)return;
+  venueLayer.clearLayers();venueMarkerMap.clear();selectedMarker=null;
+  const dense=venues.length>180;
+  venues.forEach(venue=>{
+    const marker=dense?L.circleMarker([venue.lat,venue.lng],{renderer:venueCanvas,radius:7,color:'#fff',weight:2,fillColor:'#a78bfa',fillOpacity:.95}):
+      L.marker([venue.lat,venue.lng],{title:venue.name,alt:venue.name,icon:L.divIcon({className:'venue-marker',html:`<span class="map-pin">${VENUE_TYPES[venue.type]?.icon||'•'}</span>`,iconSize:[34,34],iconAnchor:[17,17]})});
+    const popup=document.createElement('div');const title=document.createElement('strong');title.textContent=venue.name;
+    const address=document.createElement('p');address.textContent=venue.address;popup.append(title,address);
+    marker.bindPopup(popup).on('click',()=>onClick(venue));marker.addTo(venueLayer);venueMarkerMap.set(venue.id,marker);
   });
 }
-
-function highlightMarker(venueId) {
-  // Reset all markers to default
-  venueMarkers.forEach(m => {
-    const div = m.getElement();
-    if (div) {
-      const inner = div.querySelector('div');
-      if (inner) inner.outerHTML = MARKER_HTML(m._venueIcon || '📍', false);
-      div.style.zIndex = '';
-    }
-  });
-
-  // Highlight clicked marker
-  const marker = venueMarkerMap[venueId];
-  if (!marker) return;
-
-  const div = marker.getElement();
-  if (div) {
-    const inner = div.querySelector('div');
-    if (inner) inner.outerHTML = MARKER_HTML(marker._venueIcon || '📍', true);
-    div.style.zIndex = '1000';
-  }
-
+function highlightMarker(id) {
+  if(!map)return;
+  if(selectedMarker?.setStyle)selectedMarker.setStyle({fillColor:'#a78bfa',radius:7});
+  selectedMarker?.getElement()?.querySelector('.map-pin')?.classList.remove('active');
+  const marker=venueMarkerMap.get(id);if(!marker)return;
+  selectedMarker=marker;
+  if(marker.setStyle){marker.setStyle({fillColor:'#ff5745',radius:11});marker.bringToFront();}
+  marker.getElement()?.querySelector('.map-pin')?.classList.add('active');
   marker.openPopup();
-  map.panTo(marker.getLatLng(), { animate: true, duration: 0.3 });
 }
-
-function fitBounds(venues) {
-  if (venues.length === 0) return;
-  const bounds = L.latLngBounds(venues.map(v => [v.lat, v.lng]));
-  if (userLocation) bounds.extend([userLocation.lat, userLocation.lng]);
-  map.fitBounds(bounds, { padding: [40, 40], maxZoom: 16 });
-}
-
-// Explore zone: auto-search on map move
-let exploreTimeout;
-let lastExploreCenter = null;
-let exploreBlockedUntil = 0;
-
-function blockExplore(ms) { exploreBlockedUntil = Date.now() + (ms || 3000); }
-
-function enableExploreMode() {
-  map.on('moveend', () => {
-    if (Date.now() < exploreBlockedUntil) return;
-    clearTimeout(exploreTimeout);
-    exploreTimeout = setTimeout(() => {
-      if (Date.now() < exploreBlockedUntil || !userLocation) return;
-      const c = map.getCenter();
-      const dist = lastExploreCenter ? haversineKm(
-        { lat: lastExploreCenter.lat, lng: lastExploreCenter.lng },
-        { lat: c.lat, lng: c.lng }
-      ) : 999;
-      if (dist < 0.5) return;
-      lastExploreCenter = { lat: c.lat, lng: c.lng };
-      userLocation = { lat: c.lat, lng: c.lng, city: userLocation.city || '', display: userLocation.display || '' };
-      if (typeof searchInProgress !== 'undefined' && searchInProgress) return;
-      const locInput = S('location-input'); if (locInput) locInput.value = `${c.lat.toFixed(4)}, ${c.lng.toFixed(4)}`;
-      if (typeof performSearch === 'function') performSearch();
-    }, 800);
-  });
+function fitVenueBounds(venues) {
+  if(!map || !venues.length)return;
+  const bounds=L.latLngBounds(venues.map(v=>[v.lat,v.lng]));
+  if(userMarker)bounds.extend(userMarker.getLatLng());
+  map.fitBounds(bounds,{padding:[40,40],maxZoom:15,animate:false});
 }

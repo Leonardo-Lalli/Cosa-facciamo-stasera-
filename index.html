@@ -1,217 +1,59 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Cosa facciamo stasera?</title>
-  <meta name="description" content="Scopri locali, eventi e serate vicino a te">
-  <meta name="theme-color" content="#1a73e8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1322">
+  <meta name="description" content="Scegli la città, scopri locali e condividi la serata con gli amici.">
+  <title>Cosa facciamo stasera? · Serata</title>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon.svg">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX');
-  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
-  <!-- Mappa della landing (container separato) -->
-  <div id="landing-map-container">
-    <div id="landing-map"></div>
-  </div>
+<body data-view="home">
+  <a class="skip-link" href="#main-content">Vai al contenuto</a>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Serata — torna alla home"><span class="brand-icon" aria-hidden="true">✦</span><span>Serata<small>Cosa facciamo stasera?</small></span></a>
+    <nav aria-label="Navigazione principale"><a href="#explore" data-nav="explore">Esplora</a><a href="#favorites" data-nav="favorites">♡ Preferiti <span id="favorite-count" class="counter">0</span></a><a href="#how" class="how-link">Come funziona</a></nav>
+    <div class="header-actions"><button id="theme-toggle" class="icon-button" aria-label="Attiva tema chiaro">☀</button><button id="install-btn" class="button secondary" hidden>↓ Installa app</button></div>
+  </header>
 
-  <!-- App principale -->
-  <div id="app">
-    <aside id="sidebar">
-      <div class="sidebar-header">
-        <h1 class="logo">Cosa <span id="verb">facciamo</span><br><span class="logo-highlight">stasera?</span></h1>
-        <a href="https://github.com/Leonardo-Lalli/Cosa-facciamo-stasera-" target="_blank" class="github-link" title="GitHub">
-          <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-        </a>
-        <button id="theme-toggle" title="Dark mode">🌙</button>
+  <main id="main-content">
+    <section id="home-view" aria-labelledby="hero-title">
+      <div class="hero">
+        <div class="hero-copy"><span class="eyebrow">LE SERATE MIGLIORI INIZIANO QUI</span><h1 id="hero-title">Il gruppo c’è.<br><em>Manca solo il posto.</em></h1><p>Basta «boh» nella chat. Scegli la zona, trova l’ispirazione e condividi il prossimo posto con la compagnia.</p><div class="hero-steps"><span><b>01</b> Scegli la zona</span><span><b>02</b> Trova il posto</span><span><b>03</b> Invita gli amici</span></div><div class="hero-note"><span class="orbit" aria-hidden="true">✦</span> Meno messaggi.<br>Più serate da ricordare.</div></div>
+        <form id="home-search" class="search-panel">
+          <div class="panel-heading"><span class="eyebrow">LA TUA PROSSIMA SERATA</span><span class="pill">Si parte da qui</span></div>
+          <label for="home-location">Città o indirizzo di partenza</label><div class="input-wrap"><span aria-hidden="true">⌕</span><input id="home-location" name="city" placeholder="Es. Bologna, Piazza Maggiore" autocomplete="address-level2" required><button type="button" class="icon-button home-gps" aria-label="Usa la mia posizione">◎</button></div>
+          <p class="field-note">La posizione è facoltativa. Puoi scrivere la città.</p>
+          <div class="label-row"><label for="home-radius">Distanza dal ritrovo</label><output id="home-radius-label" for="home-radius">5 km</output></div><input id="home-radius" type="range" min="1" max="50" value="5"><div class="radius-options" aria-label="Raggi rapidi"><button type="button" data-radius="2">2 km</button><button type="button" data-radius="5" class="active">5 km</button><button type="button" data-radius="10">10 km</button><button type="button" data-radius="20">20 km</button></div>
+          <div class="label-row"><span>Cosa vi va di fare?</span><span class="field-note">Puoi scegliere più idee</span></div><div id="home-categories" class="category-chips" aria-label="Categorie della serata"></div>
+          <button type="submit" class="button primary wide">Esplora la serata <span aria-hidden="true">→</span></button>
+          <p id="home-status" class="status" role="status" aria-live="polite"></p>
+        </form>
       </div>
+      <section class="inspiration" aria-labelledby="ideas-title"><div class="section-heading"><div><span class="eyebrow">A OGNUNO LA SUA SERATA</span><h2 id="ideas-title">Da cosa cominciamo?</h2></div><span class="field-note">Scegli un’idea e trova i posti nella tua zona</span></div><div class="idea-grid"><button class="idea-card aperitivo" data-idea="bar"><span class="idea-art" aria-hidden="true">◒</span><span class="pill">APERITIVO & CHIACCHIERE</span><h3>Un brindisi,<br>senza guardare l’ora.</h3><span>Bar, pub e nuovi posti da provare ↗</span></button><button class="idea-card music" data-idea="live_music"><span class="idea-art" aria-hidden="true">♫</span><span class="pill">MUSICA & NOTTE</span><h3>La colonna sonora<br>di stasera.</h3><span>Musica dal vivo e piste da ballo ↗</span></button><button class="idea-card games" data-idea="arcade"><span class="idea-art" aria-hidden="true">⚄</span><span class="pill">GIOCHI & SFIDE</span><h3>La rivincita?<br>Ci vediamo lì.</h3><span>Bowling e sale giochi con gli amici ↗</span></button></div></section>
+      <section id="how" class="how-panel" aria-labelledby="how-title"><span class="eyebrow">DALLA CHAT ALLA SERATA</span><h2 id="how-title">Decidere diventa la parte facile.</h2><div class="how-grid"><article><b>1</b><h3>Definisci il ritrovo</h3><p>Una città, un indirizzo o il GPS. Decidi quanto lontano andare.</p></article><article><b>2</b><h3>Esplora insieme</h3><p>Guarda mappa e lista, confronta le idee e salva i tuoi preferiti.</p></article><article><b>3</b><h3>Passa il posto al gruppo</h3><p>Condividi il locale su WhatsApp o copia il link. Poi apri le indicazioni e parti.</p></article></div></section>
+      <a class="favorites-banner" href="#favorites"><span class="banner-heart">♡</span><span><strong>I posti da tenere a mente.</strong><small>Ritrova qui i tuoi preferiti, salvati su questo dispositivo.</small></span><span aria-hidden="true">→</span></a>
+      <footer><a class="brand" href="#home">✦ Serata</a><p>Una buona serata comincia con un’idea.</p><a href="https://github.com/Leonardo-Lalli/Cosa-facciamo-stasera-" target="_blank" rel="noopener noreferrer">Codice e segnalazioni ↗</a><p class="field-note">Dati dei locali da OpenStreetMap e fonti aggiuntive quando disponibili. Copertura e orari possono essere incompleti.</p></footer>
+    </section>
 
-      <div class="search-box">
-        <input type="text" id="location-input" placeholder="Dove ti trovi? (es. Milano, Roma...)" autocomplete="off">
-        <button id="locate-btn" title="Usa posizione attuale">📍</button>
-      </div>
-
-      <div id="weather-widget" class="weather-widget hidden"></div>
-
-      <div class="filters" id="filters-wrap">
-        <button id="filters-toggle" class="filters-toggle hidden">⚙️ Filtri ▾</button>
-        <div class="filters-inner">
-        <div class="filter-group">
-          <label class="filter-advanced-toggle" id="advanced-toggle">⚙️ Distanza e mezzi ▸</label>
-          <div class="filter-advanced" id="filter-advanced">
-            <div class="range-wrap" style="margin-bottom:8px">
-              <label style="font-size:11px;display:block;margin-bottom:2px">Raggio (km)</label>
-              <input type="range" id="radius-slider" min="1" max="50" value="10">
-              <span id="radius-value">10 km</span>
-            </div>
-            <label style="font-size:11px;display:block;margin-bottom:4px">Mezzo di trasporto</label>
-            <div class="transport-options" style="margin-bottom:8px">
-              <button class="transport-btn active" data-mode="walking">🚶</button>
-              <button class="transport-btn" data-mode="cycling">🚲</button>
-              <button class="transport-btn" data-mode="transit">🚌</button>
-              <button class="transport-btn" data-mode="driving">🚗</button>
-            </div>
-            <div class="range-wrap">
-              <label style="font-size:11px;display:block;margin-bottom:2px">Tempo massimo (minuti)</label>
-              <input type="range" id="time-slider" min="5" max="120" value="60">
-              <span id="time-value">60 min</span>
-            </div>
-          </div><!-- filter-advanced -->
-        </div>
-        <div class="filter-group">
-          <label>Tipo locale</label>
-          <div class="chip-container" id="type-filters">
-            <button class="chip active" data-type="nightclub">Discoteche</button>
-            <button class="chip active" data-type="bar">Bar</button>
-            <button class="chip active" data-type="pub">Pub</button>
-            <button class="chip active" data-type="cinema">Cinema</button>
-            <button class="chip active" data-type="theatre">Teatri</button>
-            <button class="chip active" data-type="restaurant">Ristoranti</button>
-            <button class="chip" data-type="live_music">Musica dal vivo</button>
-            <button class="chip" data-type="bowling">Bowling</button>
-            <button class="chip" data-type="events_venue">Sale eventi</button>
-            <button class="chip" data-type="dance_hall">Ballo</button>
-            <button class="chip" data-type="casino">Casinò</button>
-            <button class="chip" data-type="arcade">Sale giochi</button>
-            <button class="chip" data-type="karaoke">Karaoke</button>
-          </div>
-        </div>
-        <div class="filter-group">
-          <label>Opzioni rapide</label>
-          <div class="chip-container">
-            <button id="chip-opennow" class="chip special-chip">🕐 Aperto ora</button>
-            <button id="chip-weekend" class="chip special-chip">🗓️ Weekend</button>
-            <button id="chip-favorites" class="chip special-chip">⭐ Preferiti</button>
-          </div>
-        </div>
-        </div>
-      </div>
-
-      <div class="action-bar">
-        <button id="search-btn" class="btn-primary">🔍 Cerca locali</button>
-      </div>
-
-      <div id="planner-section" class="planner-section hidden">
-        <div class="planner-header">
-          <span>🤖 Programma per stasera</span>
-          <button id="planner-btn" class="planner-generate-btn">Nascondi</button>
-        </div>
-        <div id="planner-output" class="planner-output"></div>
-      </div>
-
-      <div id="heatmap-toggle" class="heatmap-toggle hidden">
-        <button id="heatmap-btn">📊 Mostra heatmap</button>
-      </div>
-
-      <!-- Mobile drawer -->
-      <div id="results-drawer">
-        <div class="drawer-handle"></div>
-        <div id="results-header" class="results-header hidden">
-          <div class="results-header-inner">
-            <button id="back-btn">←</button>
-            <span id="results-count">0 locali</span>
-            <button id="random-btn" class="btn-random-small" title="A caso">🎰</button>
-            <select id="sort-select">
-              <option value="distance">Più vicini</option>
-              <option value="time">Tempo minore</option>
-              <option value="name">A-Z</option>
-            </select>
-          </div>
-        </div>
-        <div id="venue-list" class="venue-list"></div>
-      </div>
-
-      <div id="loading" class="loading hidden">Cercando i locali migliori...</div>
-    </aside>
-
-    <main id="map-container">
-      <div id="map"></div>
-      <button id="heatmap-fab" class="heatmap-fab hidden">🔥</button>
-      <button id="mobile-fab" class="mobile-fab" style="display:none">📋 Lista locali</button>
-    </main>
-
-    <div id="venue-detail" class="venue-detail hidden">
-      <button id="close-detail" class="close-btn">✕</button>
-      <div id="detail-content"></div>
-    </div>
-  </div>
-
-  <div id="landing">
-    <nav class="landing-nav">
-      <button class="landing-hamburger" id="landing-hamburger" aria-label="Menu">☰</button>
-      <div class="landing-nav-tabs" id="landing-tabs">
-        <button class="landing-tab active" data-tab="info">ℹ️ Come funziona</button>
-        <button class="landing-tab" data-tab="docs">📄 Documentazione</button>
-        <button class="landing-tab" data-tab="concerti">🎟️ Concerti</button>
-      </div>
-      <div class="landing-nav-actions">
-        <button class="landing-theme-toggle" id="landing-theme-toggle" title="Tema scuro/chiaro">🌙</button>
-        <button class="landing-share-btn" id="landing-share-btn" title="Condividi">📤</button>
-        <a href="https://github.com/Leonardo-Lalli/Cosa-facciamo-stasera-" target="_blank" class="landing-github" title="GitHub">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.73.083-.73 1.205.085 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.604-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg>
-        </a>
-      </div>
-    </nav>
-    <div class="landing-card">
-      <div class="landing-hero">
-        <div class="landing-logo-wrap">
-          <h1 class="landing-logo">Cosa <span id="landing-verb">facciamo</span><br><span class="landing-highlight">stasera?</span></h1>
-          <div class="landing-cursor"></div>
-        </div>
-        <p class="landing-sub">Scopri locali, eventi e serate vicino a te</p>
-        <button id="landing-cta" class="landing-cta">🎯 Cosa fare stasera?</button>
-      </div>
-      <div class="landing-panels">
-        <div class="landing-panel active" id="panel-info">
-          <h2>🤷 Quante volte...</h2>
-          <div class="landing-story">
-            <p>Quante volte ti sei chiesto <em>"che facciamo stasera?"</em> con gli amici, senza trovare una risposta?</p>
-            <p>Gruppi WhatsApp pieni di <strong>"boh"</strong>, ricerche su Google che durano un'ora, e alla fine si finisce sempre nello stesso posto.</p>
-            <p><strong>Cosa facciamo stasera?</strong> risolve questo problema.</p>
-          </div>
-          <div class="landing-info-grid">
-            <div class="landing-info-card"><span class="landing-info-icon">📍</span><strong>Scegli la città</strong><p>Inserisci il nome o usa il GPS</p></div>
-            <div class="landing-info-card"><span class="landing-info-icon">🎯</span><strong>Filtra</strong><p>Tipo locale, distanza, mezzi, orari</p></div>
-            <div class="landing-info-card"><span class="landing-info-icon">🗺️</span><strong>Esplora la mappa</strong><p>Locali geolocalizzati con dettagli</p></div>
-            <div class="landing-info-card"><span class="landing-info-icon">🤖</span><strong>AI Planner</strong><p>Un programma per la tua serata</p></div>
-          </div>
-        </div>
-        <div class="landing-panel" id="panel-docs">
-          <h2>📄 Documentazione</h2>
-          <div class="landing-docs-list">
-            <a href="https://github.com/Leonardo-Lalli/Cosa-facciamo-stasera-" target="_blank" class="landing-doc-link">📂 Codice sorgente</a>
-            <a href="https://github.com/Leonardo-Lalli/Cosa-facciamo-stasera-/blob/main/README.md" target="_blank" class="landing-doc-link">📖 README</a>
-            <a href="https://github.com/Leonardo-Lalli/Cosa-facciamo-stasera-/issues" target="_blank" class="landing-doc-link">🐛 Segnala un bug / Richiedi feature</a>
-          </div>
-        </div>
-        <div class="landing-panel" id="panel-concerti">
-          <h2>🎟️ Concerti in Italia</h2>
-          <div id="landing-events-list" class="landing-events-list"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/safe.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/routing.js"></script>
-  <script src="js/describer.js"></script>
-  <script src="js/planner.js"></script>
-  <script src="js/map.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/app.js"></script>
+    <section id="explore-view" aria-label="Esplora locali" hidden>
+      <div class="explore-toolbar"><form id="explore-search" class="toolbar-search"><label class="sr-only" for="location-input">Città o indirizzo</label><div class="input-wrap"><span aria-hidden="true">⌕</span><input id="location-input" placeholder="Dove usciamo stasera?" autocomplete="address-level2" required><button type="button" id="locate-btn" class="icon-button" aria-label="Usa la mia posizione">◎</button></div><button id="search-btn" class="button primary" type="submit">Cerca</button></form><button id="filters-toggle" class="button secondary" aria-haspopup="dialog">☷ Filtri <span id="filter-count"></span></button><div class="view-options" aria-label="Vista risultati"><button data-layout="split" aria-pressed="true">◫ Mappa e lista</button><button data-layout="list" aria-pressed="false">☷ Lista</button><button data-layout="map" aria-pressed="false">◇ Mappa</button></div></div>
+      <div class="category-bar"><div id="explore-categories" class="category-chips" aria-label="Categorie della serata"></div><span id="radius-summary" class="field-note">Nel raggio di 5 km</span></div>
+      <div id="search-status" class="search-feedback" role="status" aria-live="polite">Scegli la città per iniziare a esplorare.</div>
+      <div id="explore-workspace" data-layout="split"><aside id="results-panel" aria-label="Locali trovati"><div class="results-toolbar"><div><span class="eyebrow" id="results-label">I POSTI PER STASERA</span><h2 id="results-count">Da dove partiamo?</h2></div><label class="sr-only" for="sort-select">Ordina risultati</label><select id="sort-select"><option value="distance">Più vicini</option><option value="name">Nome A–Z</option></select></div><div id="venue-list" class="venue-list"><div class="empty-state"><span aria-hidden="true">✦</span><h3>La serata è tutta da scegliere.</h3><p>Inserisci una città e trova i posti vicino al vostro ritrovo.</p></div></div></aside><div id="map-container"><div id="map" role="region" aria-label="Mappa dei locali"></div><button id="search-area" class="button secondary search-area" hidden>⌕ Cerca in questa zona</button><p id="map-status" class="map-status" role="status" hidden></p><div class="map-legend">● Ritrovo <span>● Locali</span></div></div></div>
+    </section>
+  </main>
+  <nav class="mobile-nav" aria-label="Navigazione mobile"><a href="#home" data-nav="home">⌂ <span>Home</span></a><a href="#explore" data-nav="explore">◎ <span>Esplora</span></a><a href="#favorites" data-nav="favorites">♡ <span>Preferiti</span></a></nav>
+  <dialog id="filters-dialog" aria-labelledby="filters-title"><form id="filters-form"><div class="dialog-heading"><div><span class="eyebrow">LA SERATA, A MODO VOSTRO</span><h2 id="filters-title">Affina la ricerca</h2></div><button type="button" class="icon-button" data-close="filters-dialog" aria-label="Chiudi filtri">✕</button></div><label for="radius-slider">Raggio di ricerca <output id="radius-value">5 km</output></label><input id="radius-slider" type="range" min="1" max="50" value="5"><fieldset><legend>Tipo di locale</legend><div id="filter-categories" class="category-chips"></div></fieldset><fieldset><legend>Come vi muovete?</legend><label for="transport">Mezzo di trasporto</label><select id="transport"><option value="walking">A piedi</option><option value="cycling">In bici</option><option value="driving">In auto</option><option value="transit">Mezzi pubblici (stima)</option></select><label for="max-time">Tempo massimo indicativo</label><select id="max-time"><option value="0">Qualsiasi durata</option><option value="15">15 minuti</option><option value="30">30 minuti</option><option value="60">60 minuti</option><option value="120">120 minuti</option></select><p class="field-note">Stime in linea d’aria, non orari o percorsi reali. Verifica nell’app di navigazione.</p></fieldset><label class="checkbox-row"><input id="only-open" type="checkbox"> Solo posti con apertura attuale verificabile</label><p class="field-note">Gli orari mancanti o non interpretabili vengono esclusi con questo filtro.</p><div class="dialog-actions"><button class="button secondary" id="reset-filters" type="button">Ripristina</button><button class="button primary" type="submit">Applica filtri →</button></div><p id="filter-status" role="status"></p></form></dialog>
+  <dialog id="venue-detail" aria-labelledby="detail-title"><div class="dialog-heading"><span class="eyebrow">IL PROSSIMO POSTO?</span><button type="button" class="icon-button" data-close="venue-detail" aria-label="Chiudi dettagli">✕</button></div><div id="detail-content"></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <noscript><p class="noscript">La home è disponibile, ma ricerca e mappa richiedono JavaScript.</p></noscript>
+  <script src="vendor/leaflet/leaflet.js" defer></script><script src="js/safe.js" defer></script><script src="js/api.js" defer></script><script src="js/routing.js" defer></script><script src="js/model.js" defer></script><script src="js/map.js" defer></script><script src="js/ui.js" defer></script><script src="js/app.js" defer></script>
 </body>
 </html>
