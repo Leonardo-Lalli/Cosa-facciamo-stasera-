@@ -880,6 +880,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZdFdk",
+    "name": "Fabo Herons Montecatini - Pallacanestro Roseto",
+    "type": "events_venue",
+    "date": "2026-10-24",
+    "time": "20:45:00",
+    "venue": "PalaTerme",
+    "city": "Montecatini Terme",
+    "lat": 43.877773,
+    "lng": 10.77823,
+    "url": "https://www.ticketmaster.it/biglietti/fabo-herons-montecatini-pallacanestro-roseto-montecatini-terme-24-10-2026/event/cl8zi9euwvyr",
+    "image": "https://s1.ticketm.net/dam/a/2d1/f8a4ac2c-3270-4271-b939-58b79c3b42d1_RETINA_PORTRAIT_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "Z59rmIYnyZ16A",
     "name": "FABIO DE LUIGI - BIOL - In Carne e Ossa Tour",
     "type": "events_venue",
