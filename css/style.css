@@ -1424,3 +1424,15 @@ input[type=checkbox] {
   }
 }
 @media(max-width:768px){h1{font-size:32px}.hero-copy>p{font-size:14px}.search-panel .panel-heading{display:none}.search-panel{padding:18px}}
+/* Theme only the raster tiles: markers, labels in popups and controls keep their colors. */
+#map.leaflet-container { background: var(--bg); }
+[data-theme="dark"] #map .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(.78) saturate(.55) contrast(.95);
+}
+#map .leaflet-bar { border: 1px solid var(--border); }
+#map .leaflet-bar a { background: var(--surface); color: var(--text); border-color: var(--border); }
+#map .leaflet-bar a:hover { background: var(--raised); }
+#map .leaflet-control-attribution { background: var(--surface); color: var(--muted); }
+#map .leaflet-control-attribution a { color: var(--lilac); }
+.events-section summary { cursor: pointer; min-height: 44px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--lilac); }
+.events-section[open] summary { margin-bottom: 12px; }

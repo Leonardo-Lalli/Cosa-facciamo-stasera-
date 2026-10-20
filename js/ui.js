@@ -63,7 +63,8 @@ function renderResults() {
   S('results-count').textContent=`${visible.length} ${favorites?'preferiti':'locali trovati'}`;
   S('radius-summary').textContent=`Nel raggio di ${state.filters.radius} km`;
   if(!favorites && state.events.length) {
-    const events=el('section','events-section');events.append(el('h3','','Eventi in zona'));
+    const events=el('details','events-section');events.open=!visible.length;
+    events.append(el('summary','',`Eventi in zona (${state.events.length})`));
     state.events.slice(0,10).forEach(event=>{
       const card=el('article','event-card');card.append(el('strong','',String(event.name||'Evento')),el('p','field-note',`${new Date(event.date).toLocaleDateString('it-IT')} · ${String(event.venue||event.city||'')}`));
       const url=safeURL(event.url);if(url)card.append(link('Info e biglietti ↗',url));events.append(card);
@@ -80,6 +81,23 @@ function renderResults() {
     appendPage();
   }
   if(initMap())addVenueMarkers(visible,selectVenue);
+}
+function renderSearchLoading() {
+  state.venues=[];state.events=[];state.visible=[];state.selected=null;state.hasSearched=false;state.searchError=null;
+  S('venue-detail').close();
+  S('results-count').textContent='Cerco i locali…';
+  const loading=el('div','empty-state');
+  loading.append(el('span','','⌕'),el('h3','','Una nuova zona da scoprire.'),el('p','','Cerco i locali. Gli eventi saranno caricati separatamente.'));
+  S('venue-list').replaceChildren(loading);
+  if(map){map.closePopup();addVenueMarkers([],selectVenue);}
+}
+function renderSearchFailure(message) {
+  const error=el('div','empty-state');
+  error.append(el('span','','!'),el('h3','','La ricerca non è disponibile.'),el('p','',message),action('Riprova',()=>searchVenues(undefined,{force:true})));
+  if(state.events.length){
+    renderResults();S('venue-list').querySelector('.empty-state')?.remove();S('venue-list').append(error);
+    S('results-count').textContent=`Locali non disponibili · ${state.events.length} eventi`;
+  }else {S('venue-list').replaceChildren(error);S('results-count').textContent='Ricerca non completata';}
 }
 function showVenueDetail(venue) {
   const content=S('detail-content');content.replaceChildren();
@@ -109,7 +127,7 @@ function renderCategories() {
         const target=id==='filter-categories'?state.draft:state.filters;
         target.types=target.types.includes(type)?target.types.filter(t=>t!==type):[...target.types,type];
         renderCategories();
-        if(id==='explore-categories' && state.origin)searchVenues();
+        if(id==='explore-categories' && state.origin)scheduleSearch();
       },'category-chip');
       button.dataset.type=type;button.setAttribute('aria-pressed',String(types.includes(type)));container.append(button);
     });

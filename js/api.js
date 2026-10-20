@@ -1,8 +1,9 @@
 // ===== Overpass API – fetch venues from OpenStreetMap =====
 const OVERPASS_URLS = [
-  'https://overpass-api.de/api/interpreter',
   'https://overpass.private.coffee/api/interpreter',
+  'https://overpass-api.de/api/interpreter',
 ];
+const OVERPASS_COOLDOWN = new Map();
 
 const VENUE_TYPES = {
   nightclub:     { tags: ['["amenity"="nightclub"]'],                                   icon: '🪩', label: 'Discoteca' },
@@ -22,6 +23,7 @@ const VENUE_TYPES = {
 
 function buildOverpassQuery(center, radiusMeters, types) {
   const blocks = [];
+  const selectors = new Map();
   const lat = center.lat.toFixed(5);
   const lng = center.lng.toFixed(5);
 
@@ -29,44 +31,23 @@ function buildOverpassQuery(center, radiusMeters, types) {
     const def = VENUE_TYPES[t];
     if (!def) return;
     def.tags.forEach(tag => {
-      const selector = `[${tag.replace(/[\[\]]/g, '')}]`;
-      blocks.push(`nwr${selector}(around:${radiusMeters},${lat},${lng});`);
+      const match = tag.match(/"([^"]+)"="([^"]+)"/);
+      if (!match) return;
+      if (!selectors.has(match[1])) selectors.set(match[1], new Set());
+      selectors.get(match[1]).add(match[2]);
     });
   });
 
-  return `[out:json][timeout:20];(\n${blocks.join('\n')}\n);out center;`;
+  selectors.forEach((values, key) => {
+    const list = [...values];
+    const selector = list.length === 1 ? `["${key}"="${list[0]}"]` : `["${key}"~"^(${list.join('|')})$"]`;
+    blocks.push(`nwr${selector}(around:${radiusMeters},${lat},${lng});`);
+  });
+  return `[out:json][timeout:8];(\n${blocks.join('\n')}\n);out center qt;`;
 }
 
 async function fetchVenues(center, radiusKm, selectedTypes, signal) {
   const radiusMeters = Math.min(radiusKm * 1000, 50000);
-
-  const BATCH = 6;
-  if (selectedTypes.length > BATCH) {
-    const batches = [];
-    for (let i = 0; i < selectedTypes.length; i += BATCH) {
-      batches.push(selectedTypes.slice(i, i + BATCH));
-    }
-
-    const results = await Promise.allSettled(
-      batches.map(b => fetchVenuesBatch(center, radiusMeters, b, signal))
-    );
-
-    const allResults = [];
-    if (results.every(r => r.status === 'rejected')) throw results[0].reason;
-    window._venueSearchPartial = results.some(r => r.status === 'rejected');
-    for (const r of results) {
-      if (r.status === 'fulfilled') allResults.push(...r.value);
-    }
-
-    const seen = new Set();
-    const venues = allResults.filter(v => {
-      if (seen.has(v.id)) return false;
-      seen.add(v.id);
-      return true;
-    });
-    venues.partial = window._venueSearchPartial;
-    return venues;
-  }
 
   return fetchVenuesBatch(center, radiusMeters, selectedTypes, signal);
 }
@@ -78,32 +59,35 @@ async function fetchVenuesBatch(center, radiusMeters, types, signal) {
 
   for (const url of OVERPASS_URLS) {
     if (signal?.aborted) throw new DOMException('Ricerca annullata', 'AbortError');
+    if ((OVERPASS_COOLDOWN.get(url) || 0) > Date.now()) continue;
     let timeout;
     const controller = new AbortController();
     const abort = () => controller.abort();
     signal?.addEventListener('abort', abort, { once: true });
     try {
-      timeout = setTimeout(() => controller.abort(), 25000);
+      timeout = setTimeout(() => controller.abort(), 9000);
       const resp = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: query,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'data=' + encodeURIComponent(query),
         signal: controller.signal,
       });
 
       if (!resp.ok) {
+        if ([406, 429, 502, 503, 504].includes(resp.status)) OVERPASS_COOLDOWN.set(url, Date.now() + 30000);
         lastError = new Error(`Overpass API error ${resp.status}`);
         continue;
       }
 
       const data = await resp.json();
-      if (data.remark) throw new Error('Risposta Overpass incompleta: riprova con un raggio minore');
+      if (!Array.isArray(data.elements)) throw new Error('Risposta non valida dal servizio dei locali');
+      if (data.remark && !data.elements?.length) throw new Error('Il server non ha completato la ricerca. Prova un raggio minore.');
 
       if (!data.elements || data.elements.length === 0) return [];
 
       const seen = new Set();
 
-      return data.elements
+      const venues = data.elements
         .filter(el => {
           const key = `${el.type}/${el.id}`;
           if (seen.has(key)) return false;
@@ -131,10 +115,13 @@ async function fetchVenuesBatch(center, radiusMeters, types, signal) {
           return venue;
         })
         .filter(v => v.lat != null && v.lng != null);
+      venues.partial = !!data.remark;
+      return venues;
 
     } catch (err) {
       if (err.name === 'AbortError') {
-        lastError = new Error('Overpass API timeout (25s)');
+        if (signal?.aborted) throw new DOMException('Ricerca annullata', 'AbortError');
+        lastError = new Error('Il servizio dei locali non risponde entro 9 secondi');
       } else {
         lastError = err;
       }

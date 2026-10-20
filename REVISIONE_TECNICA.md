@@ -26,3 +26,14 @@ L’indice data/cities/index.json di partenza è vuoto. Per verificare la copert
 
 Fonti tecniche: https://operations.osmfoundation.org/policies/tiles/ e https://wiki.openstreetmap.org/wiki/Overpass_API .
 
+
+## Aggiornamento del 20 ottobre 2026
+- Ricerca con eventi non bloccanti, timeout separati per geocoding (5 s), fonti locali (3 s), eventi (3,5 s) e Overpass (9 s per istanza). Limite complessivo 22 s; nessun risultato vecchio lasciato sotto una nuova città quando la ricerca fallisce.
+- Query Overpass raggruppate per tag in una sola richiesta, inviata nel formato data= URL-encoded. Risposte parziali utilizzabili; rispetto del cooldown di 30 s dopo HTTP 406/429 e guasti del server. Non vengono più lanciate query di categorie in parallelo.
+- Cache di più ricerche su dispositivo: risultati recenti subito disponibili; riutilizzo di un raggio maggiore e di categorie già scaricate per filtri locali. Una richiesta vecchia non può sovrascrivere l’ultima. Riprova forza una nuova richiesta.
+- Tessere OSM adattate al tema scuro con un filtro sul solo layer raster. Marker, popup e attribuzione restano leggibili; nessuna nuova chiave o dipendenza cartografica. Anche i controlli seguono il tema.
+- Cache PWA incrementata a v6 per distribuire i file aggiornati.
+
+Verifica del 20 ottobre: 21 test automatici superati e controlli di sintassi/asset. Le richieste dirette a Overpass hanno restituito 406 o timeout: queste modifiche correggono attese, formato e aggiornamento dell’interfaccia, ma non garantiscono disponibilità delle fonti pubbliche. Riferimento sui limiti e sugli errori 406/429: https://wiki.openstreetmap.org/wiki/Overpass_API .
+
+Nel collaudo browser della revisione, la cartografia OSM scura è stata verificata e il toggle tema rimuove immediatamente il filtro in modalità chiara. La fixture locale ha restituito 95 locali e il riuso della cache è stato verificato dopo un reload. La ricerca reale a Bologna ha invece confermato l’indisponibilità dei server Overpass, ora segnalata nella lista anziché lasciare dati vecchi o attese indefinite. Gli eventi raccolti restano consultabili anche in caso di errore della fonte locali; quando i locali sono disponibili la sezione eventi è comprimibile per non nasconderli sotto molti eventi futuri.

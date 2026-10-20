@@ -3,6 +3,19 @@ const state={view:'home',origin:null,venues:[],events:[],visible:[],selected:nul
   filters:{types:[...DEFAULT_TYPES],radius:5,transport:'walking',maxTime:0,onlyOpen:false,sort:'distance'},draft:{types:[...DEFAULT_TYPES]}};
 let searchController=null,searchRevision=0,categoryTimer,installPrompt;
 const sessionCache=new Map();
+const geocodeCache=new Map();
+async function fetchJSON(url, signal, timeoutMs=5000) {
+  const controller=new AbortController();
+  const abort=()=>controller.abort();
+  if(signal?.aborted)abort();
+  signal?.addEventListener('abort',abort,{once:true});
+  const timer=setTimeout(abort,timeoutMs);
+  try {
+    const response=await fetch(url,{signal:controller.signal});
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  } finally {clearTimeout(timer);signal?.removeEventListener('abort',abort);}
+}
 function setTheme(theme) { document.documentElement.dataset.theme=theme;S('theme-toggle').textContent=theme==='dark'?'☀':'☾';S('theme-toggle').setAttribute('aria-label',theme==='dark'?'Attiva tema chiaro':'Attiva tema scuro');document.querySelector('meta[name=theme-color]').content=theme==='dark'?'#0d1322':'#f8fafc'; }
 function setLayout(layout) {
   S('explore-workspace').dataset.layout=layout;
@@ -10,9 +23,11 @@ function setLayout(layout) {
   if(layout!=='list')initMap();
 }
 function showView() {
+  clearTimeout(categoryTimer);
   const route=location.hash.slice(1);
   const view=route==='favorites'?'favorites':['explore','map','list'].includes(route)?'explore':'home';
   const old=state.view;state.view=view;
+  if(view==='favorites'){searchController?.abort();++searchRevision;setBusy(false);}
   document.body.dataset.view=view;S('home-view').hidden=view!=='home';S('explore-view').hidden=view==='home';
   document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===view)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
   if(view!=='home') {
@@ -33,20 +48,24 @@ function updateRadius(radius) {
   document.querySelectorAll('[data-radius]').forEach(button=>button.classList.toggle('active',Number(button.dataset.radius)===Number(radius)));
 }
 async function geocode(query,signal) {
+  const key=query.trim().toLocaleLowerCase('it');
+  if(geocodeCache.has(key))return {...geocodeCache.get(key),display:query};
   const url=`https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&accept-language=it&q=${encodeURIComponent(query)}`;
-  const response=await fetch(url,{signal});if(!response.ok)throw new Error('Ricerca città non disponibile. Riprova tra poco.');
-  const places=await response.json();if(!places.length)throw new Error('Città non trovata. Prova con comune e provincia.');
-  const place=places[0];return {lat:Number(place.lat),lng:Number(place.lon),city:place.address?.city||place.address?.town||place.address?.village||query,display:query};
+  let places;
+  try {places=await fetchJSON(url,signal);}catch(error){if(signal?.aborted)throw error;throw new Error('Ricerca città non disponibile. Riprova tra poco.');}
+  if(!places.length)throw new Error('Città non trovata. Prova con comune e provincia.');
+  const place=places[0];const origin={lat:Number(place.lat),lng:Number(place.lon),city:place.address?.city||place.address?.town||place.address?.village||query,display:query};
+  geocodeCache.set(key,origin);if(geocodeCache.size>20)geocodeCache.delete(geocodeCache.keys().next().value);
+  return origin;
 }
 async function fetchCityData(city,signal) {
   if(!city)return [];
   const slug=city.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'-');
-  try{const response=await fetch(`data/cities/${slug}.json`,{signal});return response.ok?(await response.json()).venues||[]:[];}catch{return [];}
+  try{const venues=(await fetchJSON(`data/cities/${slug}.json`,signal,3000)).venues;return Array.isArray(venues)?venues:[];}catch{return [];}
 }
 async function loadUpcomingEvents(origin,radius,signal) {
   try {
-    const response=await fetch('data/events.json',{signal});if(!response.ok)return [];
-    const events=await response.json();if(!Array.isArray(events))return [];
+    const events=await fetchJSON('data/events.json',signal,3500);if(!Array.isArray(events))return [];
     const today=new Date();today.setHours(0,0,0,0);const limit=new Date(today);limit.setDate(limit.getDate()+60);
     return events.filter(event=>{
       const date=new Date(event.date);if(!event.date || !Number.isFinite(date.getTime()) || date<today || date>limit)return false;
@@ -57,47 +76,91 @@ async function loadUpcomingEvents(origin,radius,signal) {
   } catch {return [];}
 }
 function cacheKey(origin,filters) { return `${origin.lat.toFixed(4)}|${origin.lng.toFixed(4)}|${filters.radius}|${[...filters.types].sort().join(',')}`; }
-async function searchVenues(originOverride) {
+function findSearchCache(origin,filters,key) {
+  const saved=readStored('serata_recent_searches',[]);
+  const records=[...sessionCache.values(),...(Array.isArray(saved)?saved:[])];
+  const legacy=readStored('serata_last_search',null);if(legacy)records.push(legacy);
+  return records.filter(record=>{
+    if(!Array.isArray(record?.venues) || !Number.isFinite(record.time))return false;
+    if(record.key===key)return true;
+    return record.origin && Number.isFinite(record.radius) && Array.isArray(record.types) &&
+      haversineKm(record.origin,origin)+filters.radius<=record.radius && filters.types.every(type=>record.types.includes(type));
+  }).sort((a,b)=>b.time-a.time)[0];
+}
+function saveSearchCache(record) {
+  sessionCache.set(record.key,record);if(sessionCache.size>8)sessionCache.delete(sessionCache.keys().next().value);
+  const previous=readStored('serata_recent_searches',[]);
+  writeStored('serata_recent_searches',[record,...(Array.isArray(previous)?previous:[]).filter(item=>item?.key!==record.key)].slice(0,4));
+}
+function scheduleSearch() {
+  clearTimeout(categoryTimer);searchController?.abort();++searchRevision;
+  renderSearchLoading();setBusy(true);S('search-status').textContent='Aggiorno i filtri…';
+  categoryTimer=setTimeout(()=>searchVenues(),250);
+}
+async function searchVenues(originOverride,{force=false}={}) {
+  clearTimeout(categoryTimer);
   const input=S('location-input').value.trim();
   if(!state.filters.types.length){S('search-status').textContent='Scegli almeno una categoria prima di cercare.';return;}
   if(!input && !state.origin && !originOverride){S('search-status').textContent='Inserisci una città oppure usa la posizione.';S('location-input').focus();return;}
   if(state.view==='favorites'){location.hash='explore';state.view='explore';}
   searchController?.abort();searchController=new AbortController();const controller=searchController;
   const revision=++searchRevision,filters={...state.filters,types:[...state.filters.types]};
-  const timeout=setTimeout(()=>controller.abort(),45000);setBusy(true);S('search-status').textContent='Cerco i posti nella tua zona…';
+  const timeout=setTimeout(()=>controller.abort(),22000);
+  renderSearchLoading();setBusy(true);S('search-status').textContent='Cerco i posti nella tua zona…';
+  let cachedVenues=[],origin;
   try {
-    let origin=originOverride || state.origin;
+    origin=originOverride || state.origin;
     if(!originOverride && (!origin || (input && input!==origin.display)))origin=await geocode(input,controller.signal);
     if(revision!==searchRevision)return;
     state.origin=origin;S('location-input').value=origin.display;S('home-location').value=origin.display;
     setSearchOrigin(origin,filters.radius);
-    const key=cacheKey(origin,filters);let cached=sessionCache.get(key);
-    let venues,partial=false,offline=false;
-    if(cached && Date.now()-cached.time<300000) {venues=cached.venues;partial=!!cached.partial;state.events=cached.events||[];}
-    else {
-      window._venueSearchPartial=false;
-      const [osm,extra,events]=await Promise.all([
-        fetchVenues(origin,filters.radius,filters.types,controller.signal).then(venues=>({venues})).catch(error=>({venues:[],error})),fetchCityData(origin.city,controller.signal),loadUpcomingEvents(origin,filters.radius,controller.signal)]);
-      if(controller.signal.aborted)throw new DOMException('Ricerca interrotta','AbortError');
-      state.events=events;
-      partial=!!osm.error || !!osm.venues.partial;
-      venues=mergeNearby(osm.venues,extra,origin,filters.radius,filters.types);
-      if(osm.error && !venues.length) {
-        const last=readStored('serata_last_search',null);
-        if(last?.key===key && Array.isArray(last.venues)){venues=last.venues.map(normalizeVenue).filter(Boolean);offline=true;partial=true;}
-        else throw new Error('Le fonti dei locali non rispondono. Riprova tra poco oppure consulta i preferiti.');
-      }
-      if(!offline){const record={key,venues,events:state.events,time:Date.now(),partial};sessionCache.set(key,record);if(sessionCache.size>8)sessionCache.delete(sessionCache.keys().next().value);writeStored('serata_last_search',record);}
+    const key=cacheKey(origin,filters),cached=findSearchCache(origin,filters,key);
+    let osmVenues=[],extraVenues=[],liveComplete=false,livePartial=false,liveError=null;
+    const current=()=>revision===searchRevision && !controller.signal.aborted;
+    function paint(venues,message) {
+      if(!current())return;
+      state.venues=venues;state.hasSearched=true;state.selected=null;
+      S('search-status').textContent=message;renderResults();
     }
-    if(revision!==searchRevision)return;
-    state.venues=venues;state.hasSearched=true;state.selected=null;
-    S('search-status').textContent=offline?'Sei offline o la fonte non risponde: mostro l’ultima ricerca salvata. Dati da verificare.':partial?'Risultati parziali: una fonte non risponde. Puoi riprovare la ricerca.':`${origin.city || 'Zona selezionata'} · ${filters.radius} km · Dati OpenStreetMap, copertura non garantita. Tempi indicativi.`;
-    renderResults();setSearchOrigin(origin,filters.radius);
+    const summary=`${origin.city||'Zona selezionata'} · ${filters.radius} km · Tempi indicativi.`;
+    // Events never hold up the venue search, including when local venues are cached.
+    loadUpcomingEvents(origin,filters.radius,controller.signal).then(events=>{
+      if(!current() || state.view!=='explore')return;
+      state.events=events;
+      if(state.hasSearched){const scroll=S('venue-list').scrollTop;if(state.searchError)renderSearchFailure(state.searchError);else renderResults();S('venue-list').scrollTop=scroll;}
+    });
+    if(cached && Date.now()-cached.time<7*86400000) {
+      cachedVenues=mergeNearby(cached.venues,[],origin,filters.radius,filters.types);
+      const fresh=Date.now()-cached.time<300000 && !cached.partial;
+      state.events=cached.events||[];
+      paint(cachedVenues,fresh?`${summary} Risultati recenti già disponibili.`:'Risultati salvati: aggiorno i locali in background…');
+      if(fresh && !force)return;
+    }
+    function applyLive() {
+      const venues=mergeNearby(osmVenues,extraVenues,origin,filters.radius,filters.types);
+      if(!current())return;
+      if(venues.length || (liveComplete && !liveError)) {
+        paint(venues,liveError?'Risultati dalle fonti aggiuntive. OpenStreetMap non risponde.':livePartial?'Risultati parziali: il server non ha completato tutta la ricerca.':liveComplete?summary:'Primi locali disponibili. Completo la ricerca…');
+        if(liveComplete && !liveError)saveSearchCache({key,origin,radius:filters.radius,types:filters.types,venues,events:state.events,time:Date.now(),partial:livePartial});
+      }
+      return venues;
+    }
+    const extraTask=fetchCityData(origin.city,controller.signal).then(extra=>{if(current()){extraVenues=extra;applyLive();}});
+    try {osmVenues=await fetchVenues(origin,filters.radius,filters.types,controller.signal);livePartial=!!osmVenues.partial;}
+    catch(error){liveError=error;}
+    if(!current()) {if(controller.signal.aborted)throw new DOMException('Ricerca interrotta','AbortError');return;}
+    liveComplete=true;
+    // Only on total OSM failure do we wait for the bounded (3 s) local fallback.
+    if(liveError)await extraTask;
+    const venues=applyLive();
+    if(liveError && !venues?.length)throw new Error('Il servizio dei locali non risponde. Riprova tra poco o consulta i preferiti.');
     if(window.innerWidth>768 && state.visible.length)fitVenueBounds(state.visible);
   } catch(error) {
     if(revision!==searchRevision)return;
     const message=error.name==='AbortError'?'La ricerca impiega troppo tempo. Riprova con un raggio più piccolo.':error.message;
-    S('search-status').replaceChildren(document.createTextNode(`${message} `),action('Riprova',()=>searchVenues(),'button secondary retry-button'));
+    if(cachedVenues.length){state.venues=cachedVenues;state.hasSearched=true;renderResults();}
+    else {state.venues=[];state.hasSearched=true;state.searchError=message;renderSearchFailure(message);}
+    S('search-status').replaceChildren(document.createTextNode(cachedVenues.length?'Mostro i risultati salvati: aggiornamento non riuscito. ':`${message} `),action('Riprova',()=>searchVenues(undefined,{force:true}),'button secondary retry-button'));
   } finally {clearTimeout(timeout);if(revision===searchRevision)setBusy(false);}
 }
 async function useGPS(fromHome=false) {

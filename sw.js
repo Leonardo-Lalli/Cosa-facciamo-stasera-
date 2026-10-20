@@ -1,4 +1,4 @@
-const CACHE = 'stasera-v5-stitch';
+const CACHE = 'stasera-v6-fast-search-dark-map';
 const ASSETS = ['./', 'index.html', 'css/style.css', 'js/safe.js', 'js/api.js',
   'js/routing.js', 'js/model.js', 'js/map.js', 'js/ui.js', 'js/app.js',
   'vendor/leaflet/leaflet.js', 'vendor/leaflet/leaflet.css', 'manifest.json', 'icon.svg'];
