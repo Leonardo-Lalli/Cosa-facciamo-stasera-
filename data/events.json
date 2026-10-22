@@ -304,6 +304,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZFFaF",
+    "name": "Cimiano Calcio - Giovanili | 24/10/2026",
+    "type": "events_venue",
+    "date": "2026-10-24",
+    "time": "09:30:00",
+    "venue": "Centro Sportivo M. Casadei",
+    "city": "Milano",
+    "lat": 45.500658,
+    "lng": 9.2434,
+    "url": "https://www.ticketmaster.it/biglietti/cimiano-calcio-giovanili-24102026-milano-24-10-2026/event/rnr3skf6g8li",
+    "image": "https://s1.ticketm.net/dam/a/d5d/1af17704-baba-4ecb-b087-de64c584ad5d_TABLET_LANDSCAPE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "Z59rmIYnyZ6A6",
     "name": "Visita Collezione Arte Ambientale e Giardini Storici",
     "type": "events_venue",
@@ -363,6 +379,22 @@
     "lng": 9.077099,
     "url": "https://www.ticketmaster.it/biglietti/campionati-figc-attivita-di-base-pero-milano-24-10-2026/event/fz6ny8zihiqw",
     "image": "https://s1.ticketm.net/dam/a/4a5/5941b14b-80f6-471d-a172-1fa733bc24a5_RETINA_LANDSCAPE_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZFFa1",
+    "name": "Club Milano (Corsico) - Campionato FIGC 2019 vs Vighignolo",
+    "type": "events_venue",
+    "date": "2026-10-24",
+    "time": "10:00:00",
+    "venue": "Centro Sportivo \"Sport Time\"",
+    "city": "Corsico (Milano)",
+    "lat": 45.529182,
+    "lng": 9.327084,
+    "url": "https://www.ticketmaster.it/biglietti/club-milano-corsico-campionato-figc-2019-vs-vighignolo-corsico-milano-24-10-2026/event/eybhrtaji4ze",
+    "image": "https://s1.ticketm.net/dam/a/594/49ba001a-440e-4015-8418-a52814079594_TABLET_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -672,6 +704,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZFFaa",
+    "name": "Cimiano Calcio - Giovanili | 25/10/2026",
+    "type": "events_venue",
+    "date": "2026-10-25",
+    "time": "09:30:00",
+    "venue": "Centro Sportivo M. Casadei",
+    "city": "Milano",
+    "lat": 45.500658,
+    "lng": 9.2434,
+    "url": "https://www.ticketmaster.it/biglietti/cimiano-calcio-giovanili-25102026-milano-25-10-2026/event/94bwdndxpobz",
+    "image": "https://s1.ticketm.net/dam/a/d5d/1af17704-baba-4ecb-b087-de64c584ad5d_TABLET_LANDSCAPE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZ6F67",
     "name": "MARTIN PARR",
     "type": "events_venue",
@@ -699,6 +747,22 @@
     "lng": 7.67883,
     "url": "https://www.ticketmaster.it/biglietti/banksy-street-is-the-museum-weekend-e-festivi-torino-25-10-2026/event/u7btv7yp41kx",
     "image": "https://s1.ticketm.net/dam/a/85a/2a8eac44-3562-4329-9bf3-1524a04c985a_TABLET_LANDSCAPE_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZFF1v",
+    "name": "Club Milano (Corsico) - Triangolare 2018 e Triangolare 2016",
+    "type": "events_venue",
+    "date": "2026-10-25",
+    "time": "10:00:00",
+    "venue": "Centro Sportivo \"Sport Time\"",
+    "city": "Corsico (Milano)",
+    "lat": 45.529182,
+    "lng": 9.327084,
+    "url": "https://www.ticketmaster.it/biglietti/club-milano-corsico-triangolare-2018-e-triangolare-2016-corsico-milano-25-10-2026/event/ktbvr2oai0ny",
+    "image": "https://s1.ticketm.net/dam/a/594/49ba001a-440e-4015-8418-a52814079594_TABLET_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -5505,7 +5569,7 @@
   },
   {
     "id": "ZG9rmIYnyZFAav",
-    "name": "AMARBARÌ",
+    "name": "AMARBARI",
     "type": "events_venue",
     "date": "2026-11-22",
     "time": "16:00:00",
@@ -9851,6 +9915,22 @@
     "lng": 7.651973,
     "url": "https://www.ticketmaster.it/biglietti/live-lounge-sotto-le-grandi-volte-torino-21-12-2026/event/dw1uq80sfs4i",
     "image": "https://s1.ticketm.net/dam/a/fbe/fefdd5b9-f14a-4b30-9bcb-8bb010ae6fbe_TABLET_LANDSCAPE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZFFF7",
+    "name": "Samuele Rizzuto - Note di Lavanda",
+    "type": "live_music",
+    "date": "2026-12-21",
+    "time": "20:30:00",
+    "venue": "Sala dei Giganti - Palazzo Liviano",
+    "city": "Padova",
+    "lat": 45.408029,
+    "lng": 11.871887,
+    "url": "https://www.ticketmaster.it/biglietti/samuele-rizzuto-note-di-lavanda-padova-21-12-2026/event/7q5kgomapthi",
+    "image": "https://s1.ticketm.net/dam/a/51b/fcdec216-860c-4b5c-8470-4af64b98551b_SOURCE",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
