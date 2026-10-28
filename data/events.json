@@ -592,6 +592,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZFaA6",
+    "name": "Cimiano Calcio - Giovanili | 31/10/2026",
+    "type": "events_venue",
+    "date": "2026-10-31",
+    "time": "09:30:00",
+    "venue": "Centro Sportivo M. Casadei",
+    "city": "Milano",
+    "lat": 45.500658,
+    "lng": 9.2434,
+    "url": "https://www.ticketmaster.it/biglietti/cimiano-calcio-giovanili-31102026-milano-31-10-2026/event/d2t6ho2756ra",
+    "image": "https://s1.ticketm.net/dam/a/d5d/1af17704-baba-4ecb-b087-de64c584ad5d_TABLET_LANDSCAPE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "Z59rmIYnyZ6ke",
     "name": "Visita Collezione Arte Ambientale e Giardini Storici",
     "type": "events_venue",
@@ -1024,6 +1040,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZFaAF",
+    "name": "Cimiano Calcio - Giovanili | 01/11/2026",
+    "type": "events_venue",
+    "date": "2026-11-01",
+    "time": "09:30:00",
+    "venue": "Centro Sportivo M. Casadei",
+    "city": "Milano",
+    "lat": 45.500658,
+    "lng": 9.2434,
+    "url": "https://www.ticketmaster.it/biglietti/cimiano-calcio-giovanili-01112026-milano-01-11-2026/event/amjs2y4jm5lo",
+    "image": "https://s1.ticketm.net/dam/a/d5d/1af17704-baba-4ecb-b087-de64c584ad5d_TABLET_LANDSCAPE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZFad1",
     "name": "Programma gare domenica 01/11 ore 9:30/10:00",
     "type": "events_venue",
@@ -1147,6 +1179,22 @@
     "lng": 11.879655,
     "url": "https://www.ticketmaster.it/biglietti/arabella-trio-padova-01-11-2026/event/5n9zdav2akjr",
     "image": "https://s1.ticketm.net/dam/a/dda/1d1d09d9-68a5-4898-8ced-b0c7c8c64dda_1161581_CUSTOM.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZFFv6",
+    "name": "U.S. Folgore Caratese - Union Brescia",
+    "type": "events_venue",
+    "date": "2026-11-01",
+    "time": "12:30:00",
+    "venue": "Stadio Sportitalia Arena",
+    "city": "Carate Brianza",
+    "lat": 45.676668,
+    "lng": 9.226873,
+    "url": "https://www.ticketmaster.it/biglietti/us-folgore-caratese-union-brescia-01-11-2026/event/4a76vzwk2wsq",
+    "image": "https://s1.ticketm.net/dam/a/0b5/c48e8e12-ac19-415f-b21c-30cc19c350b5_ARTIST_PAGE_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -2682,7 +2730,7 @@
     "lat": 45.4415,
     "lng": 9.252462,
     "url": "https://ticketmasterita.queue-it.net/?c=ticketmasterita&e=p20261109iuqm",
-    "image": "https://s1.ticketm.net/dam/a/918/bd324c03-b456-4cb9-87b2-fe8664cb1918_TABLET_LANDSCAPE_LARGE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/918/bd324c03-b456-4cb9-87b2-fe8664cb1918_SOURCE",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -2698,7 +2746,7 @@
     "lat": 45.4415,
     "lng": 9.252462,
     "url": "https://ticketmasterita.queue-it.net/?c=ticketmasterita&e=pmc20261109onrn",
-    "image": "https://s1.ticketm.net/dam/a/918/bd324c03-b456-4cb9-87b2-fe8664cb1918_TABLET_LANDSCAPE_LARGE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/918/bd324c03-b456-4cb9-87b2-fe8664cb1918_SOURCE",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
