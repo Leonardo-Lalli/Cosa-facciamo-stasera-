@@ -192,6 +192,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZF1AA",
+    "name": "Cadetti 2014",
+    "type": "events_venue",
+    "date": "2026-11-05",
+    "time": "19:25:00",
+    "venue": "Centro Sportivo Accademia I.C.",
+    "city": "Milano",
+    "lat": 45.502927,
+    "lng": 9.094347,
+    "url": "https://www.ticketmaster.it/biglietti/cadetti-2014-milano-05-11-2026/event/kz3d9zjg5j3j",
+    "image": "https://s1.ticketm.net/dam/a/a90/8d918d8e-f1f3-4a6f-aee0-cc57dd1fba90_1518601_RETINA_LANDSCAPE_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZeaAv",
     "name": "A New Sketches of Spain | JAZZMI 2026",
     "type": "live_music",
@@ -203,6 +219,22 @@
     "lng": 9.174798,
     "url": "https://www.ticketmaster.it/biglietti/a-new-sketches-of-spain-jazzmi-2026-milano-05-11-2026/event/3nh75kgje87l",
     "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZF1Ak",
+    "name": "Cadetti 2014",
+    "type": "events_venue",
+    "date": "2026-11-05",
+    "time": "20:10:00",
+    "venue": "Centro Sportivo Accademia I.C.",
+    "city": "Milano",
+    "lat": 45.502927,
+    "lng": 9.094347,
+    "url": "https://www.ticketmaster.it/biglietti/cadetti-2014-milano-05-11-2026/event/0p8ealez2xwi",
+    "image": "https://s1.ticketm.net/dam/a/a90/8d918d8e-f1f3-4a6f-aee0-cc57dd1fba90_1518601_RETINA_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -282,7 +314,7 @@
     "lat": 45.41262,
     "lng": 11.93423,
     "url": "https://www.ticketmaster.it/biglietti/aiello-padova-05-11-2026/event/dy8kcj69i8eu",
-    "image": "https://s1.ticketm.net/dam/a/667/46cfb355-d45d-4178-a4af-761bca58f667_TABLET_LANDSCAPE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/667/46cfb355-d45d-4178-a4af-761bca58f667_RETINA_PORTRAIT_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -458,7 +490,7 @@
     "lat": 45.116422,
     "lng": 7.623183,
     "url": "https://www.ticketmaster.it/biglietti/aiello-venaria-reale-06-11-2026/event/emfgx6bzw4jj",
-    "image": "https://s1.ticketm.net/dam/a/667/46cfb355-d45d-4178-a4af-761bca58f667_TABLET_LANDSCAPE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/667/46cfb355-d45d-4178-a4af-761bca58f667_RETINA_PORTRAIT_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -640,6 +672,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZF1Aa",
+    "name": "Programma gare ore 14:00",
+    "type": "events_venue",
+    "date": "2026-11-07",
+    "time": "14:00:00",
+    "venue": "Centro Sportivo Accademia I.C.",
+    "city": "Milano",
+    "lat": 45.502927,
+    "lng": 9.094347,
+    "url": "https://www.ticketmaster.it/biglietti/programma-gare-ore-1400-milano-07-11-2026/event/fhoh504zkspt",
+    "image": "https://s1.ticketm.net/dam/a/a90/8d918d8e-f1f3-4a6f-aee0-cc57dd1fba90_1518601_RETINA_LANDSCAPE_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZF1e6",
     "name": "Il Festival dello Spettacolo 2026 | La Domenica Sportiva Experience",
     "type": "events_venue",
@@ -656,6 +704,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZF1A1",
+    "name": "Programma gare ore 15:30",
+    "type": "events_venue",
+    "date": "2026-11-07",
+    "time": "15:30:00",
+    "venue": "Centro Sportivo Accademia I.C.",
+    "city": "Milano",
+    "lat": 45.502927,
+    "lng": 9.094347,
+    "url": "https://www.ticketmaster.it/biglietti/programma-gare-ore-1530-milano-07-11-2026/event/3ik6n4lcju2o",
+    "image": "https://s1.ticketm.net/dam/a/a90/8d918d8e-f1f3-4a6f-aee0-cc57dd1fba90_1518601_RETINA_LANDSCAPE_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZeaAk",
     "name": "Enzo Favata “Atlantico\" | JAZZMI 2026",
     "type": "live_music",
@@ -667,6 +731,22 @@
     "lng": 9.174798,
     "url": "https://www.ticketmaster.it/biglietti/enzo-favata-atlantico-jazzmi-2026-milano-07-11-2026/event/xh6nj5djbk6m",
     "image": "https://s1.ticketm.net/dam/a/a8a/1df07a9c-769f-44a2-864c-b6102aaa0a8a_RETINA_PORTRAIT_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZF1k7",
+    "name": "Il Festival dello Spettacolo 2026 | BUY IT NOW EXPERIENCE ",
+    "type": "events_venue",
+    "date": "2026-11-07",
+    "time": "17:00:00",
+    "venue": "Superstudio Più",
+    "city": "Milano",
+    "lat": 45.451938,
+    "lng": 9.16333,
+    "url": "https://www.ticketmaster.it/biglietti/il-festival-dello-spettacolo-2026-buy-it-now-experience-milano-07-11-2026/event/veb5qonbnh6x",
+    "image": "https://s1.ticketm.net/dam/a/2c8/8305454e-3a91-49a1-be62-4b0c6f9db2c8_RETINA_PORTRAIT_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -1178,7 +1258,7 @@
     "lat": 45.513876,
     "lng": 10.21349,
     "url": "https://www.ticketmaster.it/biglietti/j-ax-non-aprite-quel-teatro-brescia-08-11-2026/event/x4uqh903pf4z",
-    "image": "https://s1.ticketm.net/dam/a/daf/cb1c962b-413a-4905-bc43-62dea2753daf_RETINA_PORTRAIT_3_2.jpg",
+    "image": "https://s1.ticketm.net/dam/a/daf/cb1c962b-413a-4905-bc43-62dea2753daf_SOURCE",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -1210,7 +1290,7 @@
     "lat": 44.521897,
     "lng": 11.370966,
     "url": "https://www.ticketmaster.it/biglietti/aiello-bologna-08-11-2026/event/r5c5yvpc9php",
-    "image": "https://s1.ticketm.net/dam/a/667/46cfb355-d45d-4178-a4af-761bca58f667_TABLET_LANDSCAPE_16_9.jpg",
+    "image": "https://s1.ticketm.net/dam/a/667/46cfb355-d45d-4178-a4af-761bca58f667_RETINA_PORTRAIT_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
