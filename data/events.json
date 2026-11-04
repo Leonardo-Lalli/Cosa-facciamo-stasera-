@@ -1120,6 +1120,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZFFvF",
+    "name": "U.S. Folgore Caratese - Carpi",
+    "type": "events_venue",
+    "date": "2026-11-08",
+    "time": "17:30:00",
+    "venue": "Stadio Sportitalia Arena",
+    "city": "Carate Brianza",
+    "lat": 45.676668,
+    "lng": 9.226873,
+    "url": "https://www.ticketmaster.it/biglietti/us-folgore-caratese-carpi-carate-brianza-08-11-2026/event/gc2gevni8u48",
+    "image": "https://s1.ticketm.net/dam/a/0b5/c48e8e12-ac19-415f-b21c-30cc19c350b5_ARTIST_PAGE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZd6ak",
     "name": "SAE Scientifica-Soevis Legnano - Ferrara",
     "type": "events_venue",
@@ -6091,6 +6107,22 @@
     "lng": 9.252277,
     "url": "https://www.ticketmaster.it/biglietti/giuse-the-lizia-milano-10-12-2026/event/efgkm60ka4po",
     "image": "https://s1.ticketm.net/dam/a/0e3/8bd316a8-64d5-4a43-8d39-53c1694be0e3_TABLET_LANDSCAPE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZF1Fe",
+    "name": "MARIELLA NAVA - Note di Donna",
+    "type": "live_music",
+    "date": "2026-12-10",
+    "time": "21:20:00",
+    "venue": "Teatro Apollo",
+    "city": "Lecce",
+    "lat": 40.353644,
+    "lng": 18.176664,
+    "url": "https://www.ticketmaster.it/biglietti/mariella-nava-note-di-donna-lecce-10-12-2026/event/2t2s1uc3yfi3",
+    "image": "https://s1.ticketm.net/dam/a/a4d/6dcc2d0b-11f8-4100-bb48-babd9ba9ca4d_CUSTOM.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
