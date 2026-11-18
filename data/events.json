@@ -282,7 +282,7 @@
     "lat": 45.452124,
     "lng": 9.252277,
     "url": "https://www.ticketmaster.it/biglietti/artemas-milano-20-11-2026/event/dct3j4c0sm5a",
-    "image": "https://s1.ticketm.net/dam/a/111/a071a9d6-91ff-4137-89a1-736bd7cb5111_SOURCE",
+    "image": "https://s1.ticketm.net/dam/a/2b3/582e1878-b5db-4fcb-b173-4dd64ec8d2b3_TABLET_LANDSCAPE_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -496,6 +496,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZav1A",
+    "name": "Club Milano (Corsico) | Campionato 2016/17 vs. Baranzatese",
+    "type": "events_venue",
+    "date": "2026-11-21",
+    "time": "14:30:00",
+    "venue": "Centro Sportivo \"Sport Time\"",
+    "city": "Corsico (Milano)",
+    "lat": 45.529182,
+    "lng": 9.327084,
+    "url": "https://www.ticketmaster.it/biglietti/club-milano-corsico-campionato-201617-vs-baranzatese-corsico-milano-21-11-2026/event/8t0uol9dm7z1",
+    "image": "https://s1.ticketm.net/dam/a/594/49ba001a-440e-4015-8418-a52814079594_TABLET_LANDSCAPE_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZavaF",
     "name": "Programma gare ore 15:30",
     "type": "events_venue",
@@ -555,6 +571,22 @@
     "lng": 9.077188,
     "url": "https://www.ticketmaster.it/biglietti/milano-hc-vs-vienna-capitals-rho-21-11-2026/event/ezmb2xvz31m4",
     "image": "https://s1.ticketm.net/dam/a/f2e/3e245a0d-c264-40c2-9df7-57b047843f2e_RETINA_LANDSCAPE_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZFFva",
+    "name": "U.S. Folgore Caratese - Arzignano Valchiampo",
+    "type": "events_venue",
+    "date": "2026-11-21",
+    "time": "17:30:00",
+    "venue": "Stadio Sportitalia Arena",
+    "city": "Carate Brianza",
+    "lat": 45.676668,
+    "lng": 9.226873,
+    "url": "https://www.ticketmaster.it/biglietti/us-folgore-caratese-arzignano-valchiampo-carate-brianza-22-11-2026/event/84sbqrgb1vjn",
+    "image": "https://s1.ticketm.net/dam/a/0b5/c48e8e12-ac19-415f-b21c-30cc19c350b5_ARTIST_PAGE_3_2.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
@@ -779,6 +811,22 @@
     "lng": 18.256397,
     "url": "https://www.ticketmaster.it/biglietti/castello-volante-domenica-corigliano-dotranto-22-11-2026/event/ze6senpy5v3i",
     "image": "https://s1.ticketm.net/dam/a/18e/3a9ed6f3-495e-4195-b4f5-b789a94fa18e_RETINA_LANDSCAPE_16_9.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZav1k",
+    "name": "Club Milano (Corsico) | Triangolare 2016 e 2018 e Quadrangolare 2016",
+    "type": "events_venue",
+    "date": "2026-11-22",
+    "time": "09:30:00",
+    "venue": "Centro Sportivo \"Sport Time\"",
+    "city": "Corsico (Milano)",
+    "lat": 45.529182,
+    "lng": 9.327084,
+    "url": "https://www.ticketmaster.it/biglietti/club-milano-corsico-triangolare-2016-e-2018-e-quadrangolare-2016-corsico-milano-22-11-2026/event/jmjdmxagofa8",
+    "image": "https://s1.ticketm.net/dam/a/594/49ba001a-440e-4015-8418-a52814079594_TABLET_LANDSCAPE_16_9.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
