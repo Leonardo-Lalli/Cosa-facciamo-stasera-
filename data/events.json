@@ -1376,6 +1376,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZaeed",
+    "name": "CONDIZIONI DI INTERNO",
+    "type": "events_venue",
+    "date": "2026-11-26",
+    "time": "18:30:00",
+    "venue": "Auditorium Dialma Ruggiero",
+    "city": "La Spezia",
+    "lat": 44.115008,
+    "lng": 9.809262,
+    "url": "https://www.ticketmaster.it/biglietti/condizioni-di-interno-la-spezia-26-11-2026/event/1l9yibv0rt6u",
+    "image": "https://s1.ticketm.net/dam/a/40b/44ad3633-c957-47ed-aa43-ba34ea4f640b_CUSTOM.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZe7ev",
     "name": "Ludovico Einaudi",
     "type": "events_venue",
@@ -1403,6 +1419,22 @@
     "lng": 9.193779,
     "url": "https://www.ticketmaster.it/biglietti/marco-mengoni-residency-allo-sbagliato-milano-26-11-2026/event/omn3qj2eia7e",
     "image": "https://s1.ticketm.net/dam/a/2ec/dfa11329-fcd1-49a1-917a-14d9a061b2ec_SOURCE",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
+    "id": "ZG9rmIYnyZaee7",
+    "name": "CONDIZIONI DI INTERNO",
+    "type": "events_venue",
+    "date": "2026-11-26",
+    "time": "20:30:00",
+    "venue": "Auditorium Dialma Ruggiero",
+    "city": "La Spezia",
+    "lat": 44.115008,
+    "lng": 9.809262,
+    "url": "https://www.ticketmaster.it/biglietti/condizioni-di-interno-la-spezia-26-11-2026/event/yqtsd34o1nos",
+    "image": "https://s1.ticketm.net/dam/a/40b/44ad3633-c957-47ed-aa43-ba34ea4f640b_CUSTOM.jpg",
     "priceMin": null,
     "priceMax": null,
     "source": "ticketmaster"
