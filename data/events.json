@@ -4352,6 +4352,22 @@
     "source": "ticketmaster"
   },
   {
+    "id": "ZG9rmIYnyZ1eA6",
+    "name": "MISTER X - Sempre in Piedi Show",
+    "type": "events_venue",
+    "date": "2026-12-23",
+    "time": "21:00:00",
+    "venue": "Teatro degli Animosi",
+    "city": "Carrara",
+    "lat": 44.079003,
+    "lng": 10.097287,
+    "url": "https://www.ticketmaster.it/biglietti/mister-x-sempre-in-piedi-show-carrara-23-12-2026/event/dk083plfa4y3",
+    "image": "https://s1.ticketm.net/dam/a/049/0d5122ea-83f7-4c38-abbf-b29ab0849049_ARTIST_PAGE_3_2.jpg",
+    "priceMin": null,
+    "priceMax": null,
+    "source": "ticketmaster"
+  },
+  {
     "id": "ZG9rmIYnyZ7k6a",
     "name": "Lo Schiaccianoci - Balletto di Siena",
     "type": "events_venue",
